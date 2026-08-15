@@ -6,13 +6,15 @@ import {
   type FlowerSlot,
   NOW_ORIGIN,
   THEN_ORIGIN,
+  cubicAngle,
+  cubicPath,
+  cubicPoint,
   leafSlot,
   nowApproach,
-  nowNode,
   thenApproach,
-  thenLeaf,
 } from "@/lib/garden-layout";
 import type { Conversation, Memory, Pair } from "@/lib/types";
+import { GroundPlanting } from "./GroundPlanting";
 import { NowLeaf, ThenLeaf } from "./Leaf";
 import { NowRoot, ThenRoot } from "./RootSystem";
 import { SharedFlower } from "./SharedFlower";
@@ -98,6 +100,9 @@ export function GardenCanvas({
           />
         </g>
 
+        {/* The bed both of them are standing in. */}
+        <GroundPlanting />
+
         {/* Everything each person has told so far, rooted in their own ground.
            A garden with nothing shared in it yet shows its two named seedlings
            instead — one plant per person, not two (node 05). */}
@@ -125,12 +130,12 @@ export function GardenCanvas({
         {flowers.map(({ conversation, slot, index }) => {
           const active = hovered === conversation.id;
           const fresh = conversation.id === justBloomedId;
-          const leaf = thenLeaf(slot, index);
-          const node = nowNode(slot, index);
+          const thenCurve = thenApproach(slot, index);
+          const nowCurve = nowApproach(slot, index);
           return (
             <g key={conversation.id}>
               <path
-                d={thenApproach(slot, index)}
+                d={cubicPath(thenCurve)}
                 stroke="#40382f"
                 strokeWidth={active ? 2.2 : 1.7}
                 strokeLinecap="round"
@@ -146,7 +151,7 @@ export function GardenCanvas({
                 }}
               />
               <path
-                d={nowApproach(slot, index)}
+                d={cubicPath(nowCurve)}
                 stroke="#2d302f"
                 strokeWidth={active ? 1.4 : 1}
                 strokeLinecap="round"
@@ -162,20 +167,37 @@ export function GardenCanvas({
                 }}
               />
 
-              <ThenLeaf
-                x={leaf.x}
-                y={leaf.y}
-                width={leaf.size * 2.4}
-                rotation={leaf.rotation}
-                opacity={active ? 1 : 0.82}
-              />
-              <NowLeaf
-                x={node.x}
-                y={node.y}
-                width={node.size * 1.1}
-                rotation={node.rotation}
-                opacity={active ? 1 : 0.78}
-              />
+              {/* Leaves sit on the branch and turn to face along it. */}
+              {[0.34, 0.66].map((t, i) => {
+                const at = cubicPoint(thenCurve, t);
+                const along = cubicAngle(thenCurve, t);
+                return (
+                  <ThenLeaf
+                    key={t}
+                    x={at.x}
+                    y={at.y}
+                    length={30 - i * 5}
+                    angle={along - 52}
+                    flip={i === 1}
+                    opacity={active ? 1 : 0.85}
+                  />
+                );
+              })}
+              {[0.4, 0.72].map((t, i) => {
+                const at = cubicPoint(nowCurve, t);
+                const along = cubicAngle(nowCurve, t);
+                return (
+                  <NowLeaf
+                    key={t}
+                    x={at.x}
+                    y={at.y}
+                    length={24 - i * 4}
+                    angle={along + 128}
+                    flip={i === 1}
+                    opacity={active ? 1 : 0.8}
+                  />
+                );
+              })}
             </g>
           );
         })}
@@ -185,24 +207,24 @@ export function GardenCanvas({
         {leaves.map((memory, i) => {
           const side = memory.personId === pair.then.id ? "then" : "now";
           const at = leafSlot(side, i);
-          return side === "then" ? (
-            <ThenLeaf
-              key={memory.id}
-              x={at.x}
-              y={at.y}
-              width={30}
-              rotation={-26 - i * 15}
-              opacity={0.7}
-            />
-          ) : (
-            <NowLeaf
-              key={memory.id}
-              x={at.x}
-              y={at.y}
-              width={13}
-              rotation={18 + i * 11}
-              opacity={0.7}
-            />
+          /* A shoot of its own, standing in the bed. A leaf with nothing
+             under it reads as debris rather than as a memory. */
+          const stem = 52 + (i % 3) * 12;
+          return (
+            <g key={memory.id} opacity={0.85}>
+              <path
+                d={`M ${at.x} ${at.y + stem} Q ${at.x + (side === "then" ? -7 : 6)} ${at.y + stem * 0.45}, ${at.x} ${at.y}`}
+                stroke={side === "then" ? "#40382f" : "#747c79"}
+                strokeWidth={side === "then" ? 1.4 : 1}
+                strokeLinecap="round"
+                fill="none"
+              />
+              {side === "then" ? (
+                <ThenLeaf x={at.x} y={at.y} length={32} angle={-118 - i * 10} />
+              ) : (
+                <NowLeaf x={at.x} y={at.y} length={26} angle={-84 + i * 10} />
+              )}
+            </g>
           );
         })}
       </svg>

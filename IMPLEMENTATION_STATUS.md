@@ -48,7 +48,8 @@ Legend: ✅ done · ◐ partial · ✗ not started
 
 - `nav/Navigation`, `nav/ProfilePair` — one bar, three places; bottom tabs on mobile ✅
 - `garden/GardenCanvas`, `SharedFlower`, `RootSystem`, `QuestionBud`, `StoryPreview` ✅
-- `garden/Leaf` (drawn THEN / ruled NOW) ✅
+- `garden/Leaf` — the specimen table and its attachment maths ✅
+- `garden/GroundPlanting` — the bed both people stand in ✅
 - `botanical/Seedling` (organic + geometric), `Seed`, `Bud`, `Vine` ✅
 - `answer/AnswerOverlay`, `lib/voice/use-recorder` ✅
 - `audio/AudioPlayer`, `audio/Waveform` ✅
@@ -86,24 +87,38 @@ Legend: ✅ done · ◐ partial · ✗ not started
 ## Botanical art direction
 
 The shapes exported from the design file were primitives — ellipses, rounded
-rectangles and straight lines — which read as crude at real sizes. They were
-redrawn with Recraft under one art direction (pressed botanical specimen, flat
-fills, hand-inked contour, the Then & Now palette) and split into single
-assets, with the generated colours snapped onto the design tokens.
+rectangles and straight lines — which read as crude at real sizes. Everything
+botanical is now drawn artwork, in one of two hands:
 
-| Asset | Source | Used by |
-|---|---|---|
-| `then/petal.svg` | Recraft | the THEN half of every shared flower |
-| `now/petal.svg` | Recraft | the NOW half of every shared flower |
-| `then/leaf.svg` | Recraft | branches, roots, Grandma's seedling |
-| `now/leaf.svg` | Recraft | branches, roots, Ann's seedling |
-| `shared/bud.svg` | Recraft | today's question, every follow-up bar |
-| `vine/*.svg` | Figma | the climbing vine on Meet Her at My Age |
+- **THEN** — an old botanical plate. Heavy uneven inked contour, solid fill,
+  visible veining.
+- **NOW** — a lighter, simpler hand. One calm thin contour sitting exactly on the
+  edge of a pale fill, with far fewer marks.
 
-What stayed programmatic, and why: every branch and stem is an SVG path drawn
-by `stroke-dashoffset`, so it can grow on screen — the signature bloom depends
-on it. The flower's fan, its per-flower variation and its bloom are code for
-the same reason. Recraft draws the specimen; the garden arranges it.
+Both are finished drawings by hand. The contrast is the hand, not the geometry.
+Two earlier passes were wrong in opposite directions: NOW as ruled facets and
+angular diagrams read as technical rather than as a garden, and NOW as an offset
+outline floating away from its fill read as an unfinished sketch.
+
+| Asset | Used by |
+|---|---|
+| `then/petal` · `now/petal` | the two halves of every shared flower |
+| `then/leaf` · `now/leaf` | branches, roots, seedlings, lone memories |
+| `then/grass` · `fern` · `sprig` · `pods` | THEN's bed, and the ground both stand in |
+| `now/grass` · `sprig` · `pods` | NOW's bed |
+| `shared/bud` | today's question, every follow-up bar |
+| `vine/*` | the climbing vine on Meet Her at My Age |
+
+Placement is the other half of the work. Each specimen declares where it
+attaches and which way it points, so a leaf joins a branch at its stalk and a
+plant stands on its base. Branch leaves are placed on the curve itself and
+turned to face along it — leaves positioned near a line instead of growing out
+of it is what made the first attempt look like scattered debris.
+
+What stayed programmatic, and why: every branch, trunk and stem is an SVG path
+drawn by `stroke-dashoffset`, so it can grow on screen — the signature bloom
+depends on it. The flower's fan, its per-flower variation and its bloom are code
+for the same reason. Recraft draws the specimen; the garden plants it.
 
 ## Known limitations
 

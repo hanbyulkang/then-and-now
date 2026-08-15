@@ -51,7 +51,7 @@ export function OrganicSeedling({
           transition: "opacity 600ms ease 1.4s",
         }}
       >
-        <ThenLeaf x={20} y={10} width={34} rotation={-15} />
+        <ThenLeaf x={32} y={6} length={38} angle={-142} />
       </g>
       {/* Lower leaf, smaller, on the other side. */}
       <g
@@ -60,7 +60,7 @@ export function OrganicSeedling({
           transition: "opacity 600ms ease 900ms",
         }}
       >
-        <ThenLeaf x={44} y={height * 0.42} width={24} rotation={35} />
+        <ThenLeaf x={33} y={height * 0.44} length={30} angle={-24} flip />
       </g>
     </svg>
   );
@@ -106,7 +106,7 @@ export function GeometricSeedling({
           transition: "opacity 600ms ease 1.4s",
         }}
       >
-        <NowLeaf x={12} y={9} width={14} rotation={0} />
+        <NowLeaf x={12} y={11} length={26} angle={-96} />
       </g>
       <g
         style={{
@@ -114,7 +114,7 @@ export function GeometricSeedling({
           transition: "opacity 600ms ease 300ms",
         }}
       >
-        <NowLeaf x={12} y={height - 6} width={10} rotation={18} />
+        <NowLeaf x={12} y={height * 0.52} length={20} angle={-28} flip />
       </g>
     </svg>
   );

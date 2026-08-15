@@ -71,14 +71,19 @@ lib/
 
 ### The botanical artwork
 
-One art direction throughout: a pressed botanical specimen, flat fills, a
-hand-inked contour of uneven weight, in the Then & Now palette. The petals,
-leaves and bud are drawn artwork; the arrangement, the variation and the growth
-are code, because branches have to be able to draw themselves on screen.
+Everything botanical is finished drawn artwork, in one of two hands. THEN is an
+old botanical plate: a heavy uneven inked contour, solid fill, visible veining.
+NOW is a lighter, simpler hand: one calm thin contour sitting exactly on the edge
+of a pale fill, with far fewer marks. Two people drawing the same garden, both of
+them finishing what they started.
 
-The shared flower is the clearest case. Its left petals are drawn by hand and
-its right petals are the same petal ruled into flat facets — one bloom in two
-hands, belonging to neither person alone.
+The shared flower is the clearest case — its left petals in one hand, its right
+petals in the other, meeting at a gold centre that belongs to neither of them.
+
+Placement is the other half. Each specimen declares where it attaches and which
+way it points, so a leaf joins a branch at its stalk rather than floating beside
+it. The arrangement and the growth are code, because a branch has to be able to
+draw itself on screen.
 
 ### The garden
 
