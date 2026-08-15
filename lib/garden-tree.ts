@@ -16,10 +16,11 @@ export const TREE_BASE: Point = { x: 720, y: 712 };
 /** Where the trunk divides. Above this line the tree has two hands. */
 export const CROWN: Point = { x: 720, y: 318 };
 
+/** The trunk leans out and settles back — no tree grows up a plumb line. */
 export const TRUNK: Cubic = {
   p0: TREE_BASE,
-  p1: { x: 756, y: 614 },
-  p2: { x: 684, y: 452 },
+  p1: { x: 788, y: 604 },
+  p2: { x: 646, y: 430 },
   p3: CROWN,
 };
 
@@ -30,24 +31,6 @@ export interface Limb {
   weight: number;
 }
 
-function limb(
-  hand: "then" | "now",
-  bend: Point,
-  tip: Point,
-  weight: number,
-): Limb {
-  return {
-    hand,
-    weight,
-    curve: {
-      p0: CROWN,
-      p1: { x: CROWN.x + (bend.x - CROWN.x) * 0.4, y: CROWN.y - 54 },
-      p2: bend,
-      p3: tip,
-    },
-  };
-}
-
 /**
  * Four boughs, not a thicket.
  *
@@ -56,14 +39,56 @@ function limb(
  * work that way: a few boughs carry many flowers each, and it is the clusters
  * along a bough that make it read as blossom rather than as decoration.
  *
+ * Each is written out as its own curve rather than generated from a bend point.
+ * A bough that leaves the crown, swings out and only then turns up has a shape;
+ * one interpolated toward a target is a straight run with a kink at the end.
+ *
  * Two boughs in each hand, interleaved at the crown so the canopies overlap in
- * the middle instead of splitting the tree down its centre line.
+ * the middle instead of splitting the tree down its centre line. The bark is
+ * the same on all of them — a tree has one bark, and which hand drew what is
+ * carried by the leaves.
  */
 export const LIMBS: Limb[] = [
-  limb("then", { x: 606, y: 208 }, { x: 532, y: 78 }, 18),
-  limb("now", { x: 838, y: 202 }, { x: 922, y: 70 }, 16),
-  limb("then", { x: 524, y: 236 }, { x: 348, y: 132 }, 14),
-  limb("now", { x: 922, y: 228 }, { x: 1104, y: 124 }, 13),
+  {
+    hand: "then",
+    weight: 20,
+    curve: {
+      p0: CROWN,
+      p1: { x: 704, y: 244 },
+      p2: { x: 588, y: 226 },
+      p3: { x: 524, y: 82 },
+    },
+  },
+  {
+    hand: "now",
+    weight: 17,
+    curve: {
+      p0: CROWN,
+      p1: { x: 742, y: 238 },
+      p2: { x: 858, y: 216 },
+      p3: { x: 926, y: 74 },
+    },
+  },
+  {
+    hand: "then",
+    weight: 15,
+    curve: {
+      p0: CROWN,
+      p1: { x: 650, y: 300 },
+      p2: { x: 502, y: 304 },
+      p3: { x: 336, y: 146 },
+    },
+  },
+  {
+    hand: "now",
+    weight: 14,
+    curve: {
+      p0: CROWN,
+      p1: { x: 794, y: 294 },
+      p2: { x: 944, y: 296 },
+      p3: { x: 1112, y: 138 },
+    },
+  },
 ];
 
 export interface Blossom {

@@ -8,15 +8,19 @@ import { NowLeaf, ThenLeaf } from "./Leaf";
  * One tree, drawn by two people.
  *
  * The trunk is shared and belongs to neither of them; above the crown it
- * divides, and each side is drawn in its own hand — THEN's limbs inked heavy
- * and leafy, NOW's lighter and sparer. The canopies overlap in the middle,
+ * divides, and each side carries its own foliage — THEN's leaves inked heavy
+ * and plentiful, NOW's lighter and sparer. The wood itself is the same
+ * throughout, because a tree has one bark. The canopies overlap in the middle,
  * which is exactly where the flowers open.
  */
+/** One tree, one bark. Which hand drew what is carried by the leaves. */
+const BARK = "#43392f";
+
 export function Tree({ growth = 1 }: { growth?: number }) {
   return (
     <g>
       {/* The trunk. Warm ink, because it is the part they share. */}
-      <path d={taperedStem(TRUNK, 40, 17)} fill="#4a4136" />
+      <path d={taperedStem(TRUNK, 58, 22)} fill={BARK} />
 
       {LIMBS.map((limb, i) => {
         const leafy = limb.hand === "then";
@@ -28,13 +32,10 @@ export function Tree({ growth = 1 }: { growth?: number }) {
               transition: `opacity 900ms ease ${i * 90}ms`,
             }}
           >
-            <path
-              d={taperedStem(limb.curve, limb.weight, 1.2)}
-              fill={leafy ? "#40382f" : "#6f7873"}
-            />
+            <path d={taperedStem(limb.curve, limb.weight, 1.4)} fill={BARK} />
 
             {/* THEN's side carries more leaves; NOW's keeps more air. */}
-            {(leafy ? [0.34, 0.56, 0.78, 0.92] : [0.4, 0.68, 0.9]).map((t, j) => {
+            {(leafy ? [0.36, 0.58, 0.8, 0.97] : [0.42, 0.72, 0.96]).map((t, j) => {
               const at = cubicPoint(limb.curve, t);
               const along = cubicAngle(limb.curve, t);
               const angle = along + (j % 2 ? 58 : -62);
