@@ -23,7 +23,7 @@ export const DEMO_PAIR: Pair = {
     city: "Seoul",
     preferredLanguage: "ko",
     avatar: "/assets/avatars/grandma.png",
-    portrait: "/assets/photos/grandma-portrait-1974.png",
+    portrait: "/assets/photos/grandma-portrait-1974.jpg",
   },
   now: {
     id: ANN_ID,
@@ -34,7 +34,7 @@ export const DEMO_PAIR: Pair = {
     city: "Seattle",
     preferredLanguage: "en",
     avatar: "/assets/avatars/ann.png",
-    portrait: "/assets/photos/ann-portrait-2026.png",
+    portrait: "/assets/photos/ann-portrait-2026.jpg",
   },
 };
 
@@ -88,7 +88,7 @@ const grandmaHappiness = thenMemory(EVERYDAY_JOY_ID, {
     "그때는 학교 끝나고 친구들이랑 떡볶이 먹으러 가는 게 제일 행복했지. 돈은 별로 없었어도 같이 웃고 수다 떨던 그 시간 자체가 꽃 같았단다.",
   translation:
     "Back then, going for tteokbokki with my friends after school was what made me happiest. We had almost no money, but the time we spent laughing and talking together — that was the flower.",
-  photoUrl: "/assets/photos/grandma-tteokbokki-1974.png",
+  photoUrl: "/assets/photos/grandma-tteokbokki-1974.jpg",
   context: "Autumn Semester",
   entities: [
     { kind: "place", value: "Seoul" },
@@ -105,7 +105,7 @@ const annHappiness = nowMemory(EVERYDAY_JOY_ID, {
   durationSec: 75,
   transcript:
     "For me, just getting food with my friends after class is probably one of my favorite things. We find this small taco spot near campus and just decompress.",
-  photoUrl: "/assets/photos/ann-seattle-2026.png",
+  photoUrl: "/assets/photos/ann-seattle-2026.jpg",
   context: "Sophomore Year",
   entities: [
     { kind: "place", value: "Seattle" },
@@ -139,6 +139,7 @@ const conversations: Conversation[] = [
     memories: {
       [GRANDMA_ID]: thenMemory(LEAVING_HOME_ID, {
         id: "m_grandma_leaving",
+        photoUrl: "/assets/photos/grandma-portrait-1974.jpg",
         transcript:
           "열두 살에 부산에서 서울로 이사 왔어. 기차 안에서 엄마가 싸준 김밥을 먹었는데, 창밖으로 부산이 점점 작아지는 걸 계속 봤단다. 무섭기도 하고 설레기도 했지.",
         translation:
@@ -159,6 +160,7 @@ const conversations: Conversation[] = [
       }),
       [ANN_ID]: nowMemory(LEAVING_HOME_ID, {
         id: "m_ann_leaving",
+        photoUrl: "/assets/photos/ann-portrait-2026.jpg",
         transcript:
           "The first night in my dorm in Seattle I couldn't sleep at all. I kept refreshing the weather app back home like that would help. It was exciting but I felt very far away from everyone.",
         year: 2024,
@@ -248,6 +250,7 @@ const conversations: Conversation[] = [
     memories: {
       [GRANDMA_ID]: thenMemory(BECOMING_ID, {
         id: "m_grandma_becoming",
+        photoUrl: "/assets/photos/grandma-library-1974.jpg",
         transcript:
           "선생님이 되고 싶었어. 아이들이 무슨 생각을 하는지 알고 싶었거든. 결국 다른 길로 갔지만 그 마음은 안 변했어.",
         translation:
@@ -264,6 +267,7 @@ const conversations: Conversation[] = [
       }),
       [ANN_ID]: nowMemory(BECOMING_ID, {
         id: "m_ann_becoming",
+        photoUrl: "/assets/photos/ann-living-2026.jpg",
         transcript:
           "I think I want to do research. Not the lab kind — more like figuring out why people do what they do. I don't really know what that job is called yet.",
         year: 2026,

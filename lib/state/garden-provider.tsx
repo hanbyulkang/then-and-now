@@ -9,7 +9,7 @@ import {
   useReducer,
   type ReactNode,
 } from "react";
-import { EVERYDAY_JOY_CONNECTION, freshGarden, grownGarden } from "../demo-data";
+import { freshGarden, grownGarden } from "../demo-data";
 import type {
   Connection,
   Conversation,

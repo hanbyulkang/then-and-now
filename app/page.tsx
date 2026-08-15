@@ -25,7 +25,7 @@ export default function LandingPage() {
           <figure className="rounded-[4px] border border-bloom-gold bg-canvas p-3 shadow-[0_16px_16px_rgba(64,56,47,0.07)] md:p-4">
             <div className="relative h-[260px] w-[200px] overflow-hidden rounded-[2px] md:h-[360px] md:w-[280px]">
               <Image
-                src="/assets/photos/grandma-library-1974.png"
+                src="/assets/photos/grandma-library-1974.jpg"
                 alt="A young woman reading in a Seoul library, 1974"
                 fill
                 sizes="(max-width: 768px) 200px, 280px"
@@ -59,7 +59,7 @@ export default function LandingPage() {
           <figure className="rounded-[8px] border border-black/[0.03] bg-white p-2.5 shadow-[0_8px_12px_rgba(0,0,0,0.02)] md:p-3">
             <div className="relative h-[260px] w-[200px] overflow-hidden rounded-[4px] md:h-[360px] md:w-[280px]">
               <Image
-                src="/assets/photos/ann-living-2026.png"
+                src="/assets/photos/ann-living-2026.jpg"
                 alt="A young woman at home in Seattle, 2026"
                 fill
                 sizes="(max-width: 768px) 200px, 280px"

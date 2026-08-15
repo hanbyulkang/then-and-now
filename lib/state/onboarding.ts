@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useSyncExternalStore } from "react";
 
 export interface OnboardingDraft {
   relationship: string;
@@ -17,31 +17,55 @@ const EMPTY: OnboardingDraft = {
 };
 
 /**
- * Three short screens share one draft. Kept in session storage so a refresh
- * mid-onboarding does not lose the two things we asked for.
+ * Three short screens share one draft.
+ *
+ * Session storage is the source of truth rather than React state, so a refresh
+ * part-way through onboarding does not lose the two things we asked for. It is
+ * read through useSyncExternalStore, which is what that hook is for — an effect
+ * that copies storage into state would just cause a second render.
  */
-export function useOnboardingDraft() {
-  const [draft, setDraft] = useState<OnboardingDraft>(EMPTY);
 
-  useEffect(() => {
+let cached: OnboardingDraft = EMPTY;
+let cachedRaw: string | null = null;
+const listeners = new Set<() => void>();
+
+function read(): OnboardingDraft {
+  let raw: string | null = null;
+  try {
+    raw = window.sessionStorage.getItem(KEY);
+  } catch {
+    /* Storage blocked — the defaults still let onboarding finish. */
+  }
+  /* Re-parsing on every read would return a new object and loop the store. */
+  if (raw !== cachedRaw) {
+    cachedRaw = raw;
     try {
-      const raw = window.sessionStorage.getItem(KEY);
-      if (raw) setDraft({ ...EMPTY, ...JSON.parse(raw) });
+      cached = raw ? { ...EMPTY, ...JSON.parse(raw) } : EMPTY;
     } catch {
-      /* Nothing saved yet. */
+      cached = EMPTY;
     }
-  }, []);
+  }
+  return cached;
+}
+
+function subscribe(listener: () => void) {
+  listeners.add(listener);
+  return () => listeners.delete(listener);
+}
+
+export function useOnboardingDraft() {
+  const draft = useSyncExternalStore(subscribe, read, () => EMPTY);
 
   const update = useCallback((patch: Partial<OnboardingDraft>) => {
-    setDraft((prev) => {
-      const next = { ...prev, ...patch };
-      try {
-        window.sessionStorage.setItem(KEY, JSON.stringify(next));
-      } catch {
-        /* Session storage unavailable — the flow still works in memory. */
-      }
-      return next;
-    });
+    const next = { ...read(), ...patch };
+    try {
+      window.sessionStorage.setItem(KEY, JSON.stringify(next));
+    } catch {
+      /* Fall back to memory only. */
+    }
+    cachedRaw = JSON.stringify(next);
+    cached = next;
+    listeners.forEach((listener) => listener());
   }, []);
 
   return [draft, update] as const;
