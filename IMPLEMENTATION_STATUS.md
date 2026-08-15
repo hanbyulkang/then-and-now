@@ -71,6 +71,15 @@ Legend: ✅ done · ◐ partial · ✗ not started
 | Design assets | ✅ exported from Figma into `public/assets` |
 | Typecheck · lint · build | ✅ |
 
+## Deployment
+
+| | |
+|---|---|
+| Live | https://then-and-now-olive.vercel.app |
+| Repo | https://github.com/hanbyulkang/then-and-now (private) |
+| Production env | `ANTHROPIC_API_KEY`, `AI_MODEL` set on Vercel |
+| Verified in production | garden renders, `/api/connection` returns a real thread |
+
 ## Known limitations
 
 - Seeded memories have no audio files, so their player runs on a clock. Anything

@@ -1,36 +1,91 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Then & Now
 
-## Getting Started
+**A shared memory garden for two generations.**
+One question at a time, discover the stories you never knew to ask.
 
-First, run the development server:
+Two people from different generations answer the same question without seeing
+each other's answer. When both have spoken, they open them together — and where
+their two stories turn out to share something real, a flower grows between them.
+
+Live: https://then-and-now-olive.vercel.app
+
+## The idea
+
+Families don't lack stories. They lack the questions that uncover them.
+
+So the product's job is not to store memories, it is to find the next question
+worth asking. That principle decides most of the design:
+
+- **The original voice is the story.** Nothing is rewritten, summarised, or
+  improved. A transcript is shown in the language it was spoken in; translation
+  is optional and always secondary.
+- **Answers are blind.** What the other person said is never on screen until
+  both have answered. The reveal is the whole point of the wait.
+- **A flower has to be earned.** Two people answering the same question does not
+  produce one. There has to be a real shared thread — a feeling, a need, a
+  relationship — and when there isn't, the garden says so and leaves two
+  separate leaves standing side by side.
+- **AI is infrastructure, not the product.** No confidence scores, no "semantic
+  match", no generated prose competing with what a grandmother actually said.
+
+## Running it
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+It works with no configuration: the app ships with one family's story and falls
+back to it when no model is reachable.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+To enable real connection discovery, copy `.env.example` to `.env.local` and add
+an Anthropic API key.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## How it is built
 
-## Learn More
+Next.js 16 (App Router) · TypeScript · Tailwind CSS v4 · Claude via the AI SDK.
 
-To learn more about Next.js, take a look at the following resources:
+```
+app/
+  page.tsx                 Landing — two generations, nothing between them yet
+  onboarding/              Who · Names · Garden created
+  garden/                  Home. The garden is the product; there is no dashboard
+  reveal/[id]/             Both stories, then the signature bloom
+  memory/[id]/             A shared memory in full
+  stories/                 Editorial archive of every memory, both generations
+  between-us/              Only what the two of them share
+  meet-her/                The same age, half a century apart
+  api/connection/          Looks for a shared thread; returns nothing if there isn't one
+components/
+  garden/                  The botanical composition, flowers, question bud
+  reveal/                  Story panels, bloom sequence, phase timing
+  botanical/               Seedlings, seed, climbing vine
+  answer/ audio/ nav/ ui/
+lib/
+  types.ts                 The domain, written in the garden's vocabulary
+  garden-layout.ts         Curated slots and the stem grammar
+  demo-data.ts             One family, told consistently across every screen
+  ai/                      The model boundary and its house rules
+  voice/                   Recording and browser transcription
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### The garden
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Drawn as a single botanical composition, not a node graph. Positions come from
+curated slots rather than a force-directed layout — a garden that rearranges
+itself on every load does not read as a place. THEN's lines wander and carry
+soft leaves; NOW's are drafted, with small square joints. Each person's history
+grows as a root system out of their own corner, and the lower middle is left
+empty because that is where today's question sits.
 
-## Deploy on Vercel
+### The bloom
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The reveal opens with both stories alone for the first few seconds, untouched.
+Then the shared phrases come forward, two branches descend from opposite corners
+and meet, and a flower opens where they meet — followed by the two short lines
+and the question the discovery opened up. About five seconds end to end, and it
+collapses to plain fades under `prefers-reduced-motion`.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Status
+
+See [IMPLEMENTATION_STATUS.md](./IMPLEMENTATION_STATUS.md).

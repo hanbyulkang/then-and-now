@@ -97,13 +97,23 @@ export function GardenCanvas({
           />
         </g>
 
-        {/* Everything each person has told so far, rooted in their own ground. */}
-        <ThenRoot
-          x={THEN_ORIGIN.x}
-          y={THEN_ORIGIN.y}
-          memories={thenMemories}
-        />
-        <NowRoot x={NOW_ORIGIN.x} y={NOW_ORIGIN.y} memories={nowMemories} />
+        {/* Everything each person has told so far, rooted in their own ground.
+           A garden with nothing shared in it yet shows its two named seedlings
+           instead — one plant per person, not two (node 05). */}
+        {flowers.length > 0 ? (
+          <>
+            <ThenRoot
+              x={THEN_ORIGIN.x}
+              y={THEN_ORIGIN.y}
+              memories={thenMemories}
+            />
+            <NowRoot
+              x={NOW_ORIGIN.x}
+              y={NOW_ORIGIN.y}
+              memories={nowMemories}
+            />
+          </>
+        ) : null}
 
         <g
           style={{
