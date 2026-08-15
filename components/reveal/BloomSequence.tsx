@@ -147,7 +147,7 @@ export function BloomSequence({
         style={{ top: `${(392 / H) * 100}%` }}
       >
         <p
-          className="text-[14px] font-semibold uppercase tracking-wide text-bloom-gold"
+          className="font-serif text-[19px] italic text-bloom-gold md:text-[22px]"
           style={{
             opacity: atLeast(phase, "theme") ? 1 : 0,
             transform: atLeast(phase, "theme")
@@ -159,7 +159,7 @@ export function BloomSequence({
           {connection.theme}
         </p>
         <p
-          className="font-serif text-[28px] leading-[1.1] text-then-ink md:text-[32px]"
+          className="text-[20px] font-semibold uppercase tracking-[0.16em] text-then-ink md:text-[24px]"
           style={{
             opacity: atLeast(phase, "headline") ? 1 : 0,
             transform: atLeast(phase, "headline")
@@ -168,10 +168,10 @@ export function BloomSequence({
             transition: "opacity 900ms ease, transform 900ms var(--ease-settle)",
           }}
         >
-          {connection.headline || `${yearsApart} years apart.`}
+          {(connection.headline || `${yearsApart} years apart.`).replace(/\.$/, "")}
         </p>
         <p
-          className="font-memory text-[20px] italic leading-snug text-then-faded md:text-[22px]"
+          className="text-[20px] font-semibold uppercase tracking-[0.16em] text-bloom-rose md:text-[24px]"
           style={{
             opacity: atLeast(phase, "statement") ? 1 : 0,
             transform: atLeast(phase, "statement")
@@ -180,7 +180,7 @@ export function BloomSequence({
             transition: "opacity 900ms ease, transform 900ms var(--ease-settle)",
           }}
         >
-          {connection.statement}
+          {connection.statement.replace(/\.$/, "")}
         </p>
       </div>
     </div>

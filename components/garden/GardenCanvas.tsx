@@ -2,10 +2,12 @@
 
 import { useMemo, useState } from "react";
 import { CANVAS, GROUND_Y, cubicPoint } from "@/lib/garden-layout";
+import type { GardenProgress } from "@/lib/garden-stage";
 import { BLOSSOMS, LIMBS, TREE_BASE } from "@/lib/garden-tree";
 import type { Conversation, Memory, Pair } from "@/lib/types";
 import { GroundPlanting } from "./GroundPlanting";
 import { NowLeaf, ThenLeaf } from "./Leaf";
+import { SeedVessel } from "./SeedVessel";
 import { SharedFlower } from "./SharedFlower";
 import { StoryPreview } from "./StoryPreview";
 import { Tree } from "./Tree";
@@ -18,16 +20,18 @@ export interface PlacedFlower {
 /**
  * The garden.
  *
- * One tree, grown from a trunk that belongs to both of them and dividing above
- * the crown into two canopies, each drawn in its own hand. Every conversation
- * the two of them turned out to share hangs on it as a flower. Memories that
- * have not met anything yet stand as small shoots in the bed around its foot.
+ * It begins as one closed seed with two sleeping traces in it, and comes apart
+ * only when the two of them turn out to share something. What grows out is a
+ * single tree: a trunk that belongs to both, dividing at the crown into two
+ * canopies whose leaves are drawn in two different hands. Every discovery hangs
+ * on it as blossom. The two halves of the shell stay at its foot.
  *
  * The composition is fixed rather than generated: a garden that rearranges
  * itself on every visit is not a place you can come back to.
  */
 export function GardenCanvas({
   pair,
+  progress,
   flowers,
   leaves,
   justBloomedId,
@@ -35,17 +39,18 @@ export function GardenCanvas({
   children,
 }: {
   pair: Pair;
+  progress: GardenProgress;
   flowers: PlacedFlower[];
   leaves: Memory[];
   /** Marks a flower that has only just opened. */
   justBloomedId?: string;
   onOpenFlower(conversation: Conversation): void;
-  /** The question card and bud, positioned by the caller. */
+  /** The question card, positioned by the caller. */
   children?: React.ReactNode;
 }) {
   const [hovered, setHovered] = useState<string | null>(null);
+  const grown = progress.stage === "grown";
 
-  /* Where each blossom hangs on the tree. */
   const placed = useMemo(
     () =>
       flowers.slice(0, BLOSSOMS.length).map((flower, i) => {
@@ -76,7 +81,7 @@ export function GardenCanvas({
           </filter>
         </defs>
 
-        {/* The ground it stands in — warm under THEN, cooler out toward NOW. */}
+        {/* The ground it rests in — warm under THEN, cooler out toward NOW. */}
         <g filter="url(#ground-blur)">
           <ellipse
             cx={TREE_BASE.x - 120}
@@ -84,7 +89,7 @@ export function GardenCanvas({
             rx={760}
             ry={120}
             fill="#e8ddc8"
-            opacity={0.9}
+            opacity={grown ? 0.9 : 0.66}
           />
           <ellipse
             cx={TREE_BASE.x + 460}
@@ -92,20 +97,43 @@ export function GardenCanvas({
             rx={520}
             ry={104}
             fill="#daddd8"
-            opacity={0.5}
+            opacity={grown ? 0.5 : 0.34}
           />
         </g>
 
-        <Tree />
-        <GroundPlanting />
+        {grown ? (
+          <>
+            <Tree />
+            <GroundPlanting />
+            {/* The shell it came out of, still lying at the foot of it. */}
+            <SeedVessel
+              stage={progress.stage}
+              opened={1}
+              size={62}
+              x={TREE_BASE.x}
+              y={GROUND_Y + 4}
+            />
+          </>
+        ) : (
+          /* Before anything is shared the seed is the entire garden, so it is
+             given the middle of the page rather than the floor of it. It brings
+             its own shadow, which is enough to seat it. */
+          <SeedVessel
+            stage={progress.stage}
+            opened={progress.opened}
+            size={116}
+            x={CANVAS.width / 2}
+            y={GROUND_Y - 250}
+          />
+        )}
 
         {/* Memories that have not met anything yet: their own small shoots. */}
         {leaves.map((memory, i) => {
           const side = memory.personId === pair.then.id ? "then" : "now";
           const x =
             side === "then"
-              ? 196 + (i % 3) * 78
-              : CANVAS.width - 236 - (i % 3) * 78;
+              ? (grown ? 196 : 452) + (i % 3) * 78
+              : CANVAS.width - (grown ? 236 : 492) - (i % 3) * 78;
           const y = GROUND_Y - 104 - (i % 2) * 28;
           const stem = GROUND_Y - y;
           return (
@@ -143,7 +171,7 @@ export function GardenCanvas({
             onClick={() => onOpenFlower(conversation)}
             onFocus={() => setHovered(conversation.id)}
             onBlur={() => setHovered((h) => (h === conversation.id ? null : h))}
-            className="flex flex-col items-center gap-1.5 rounded-2xl p-1 transition-transform duration-300 hover:-translate-y-1"
+            className="group flex flex-col items-center gap-1.5 rounded-2xl p-1 transition-transform duration-300 hover:-translate-y-1"
             aria-label={`${conversation.connection?.theme}. ${conversation.connection?.headline} ${conversation.connection?.statement}`}
           >
             <SharedFlower
@@ -151,12 +179,12 @@ export function GardenCanvas({
               variant={index}
               glow={conversation.id === justBloomedId}
             />
+            {/* The name arrives when you lean toward it, not before. */}
             <span
-              className={`whitespace-nowrap rounded-[12px] border border-bloom-gold px-2.5 py-1 text-[11px] ${
-                index === 0
-                  ? "bg-then-paper font-semibold text-then-ink"
-                  : "bg-white/90 font-medium text-then-ink"
-              }`}
+              className="whitespace-nowrap font-serif text-[15px] italic text-then-ink opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100"
+              style={{
+                opacity: hovered === conversation.id ? 1 : undefined,
+              }}
             >
               {conversation.connection?.theme}
             </span>

@@ -36,7 +36,7 @@ export function FollowUpBar({
         <Bud width={26} className="shrink-0" />
         <div className="flex flex-col gap-0.5">
           <p className="text-[11px] font-semibold uppercase tracking-wide text-then-faded">
-            Next conversation waiting to bloom
+            A conversation is waiting to bloom
           </p>
           <p
             className="font-memory text-[15px] text-then-ink md:text-[16px]"

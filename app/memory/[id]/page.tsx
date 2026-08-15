@@ -32,7 +32,7 @@ export default function SharedMemoryPage() {
         <Navigation />
         <main className="flex flex-1 flex-col items-center justify-center gap-4 p-8 text-center">
           <p className="font-memory text-[20px] italic text-then-faded">
-            Nothing has bloomed here yet.
+            This page is still waiting for its first story.
           </p>
           <Link
             href="/garden"
@@ -113,7 +113,7 @@ export default function SharedMemoryPage() {
           <section className="flex flex-1 flex-col justify-center gap-4 bg-now-canvas p-8 md:p-16">
             <p className="text-[14px] font-semibold text-now-slate">NOW</p>
             <p className="font-memory text-[19px] italic leading-relaxed text-now-charcoal">
-              {pair.now.name} hasn&apos;t answered this one yet.
+              {pair.now.name} hasn&apos;t told this one yet.
             </p>
           </section>
         )}
@@ -124,7 +124,7 @@ export default function SharedMemoryPage() {
           <Bud width={26} className="shrink-0" />
           <div className="flex flex-col gap-0.5">
             <p className="text-[11px] font-semibold uppercase tracking-wide text-bloom-rose">
-              Continue this conversation
+              A conversation is waiting to bloom
             </p>
             <p className="font-memory text-[16px] text-then-ink">
               &ldquo;{connection.followUp}&rdquo;
@@ -139,7 +139,7 @@ export default function SharedMemoryPage() {
           }}
           className="shrink-0 rounded-[20px] bg-then-ink px-5 py-2.5 text-[13px] font-semibold text-white transition-colors hover:bg-then-faded"
         >
-          Reflect Together →
+          Ask her this →
         </button>
       </footer>
 

@@ -58,7 +58,7 @@ export default function RevealPage() {
         <Navigation />
         <main className="flex flex-1 items-center justify-center p-8">
           <p className="font-memory text-[20px] italic text-then-faded">
-            That conversation isn&apos;t in your garden.
+            This page is still waiting for its first story.
           </p>
         </main>
       </div>
@@ -159,7 +159,7 @@ export default function RevealPage() {
       {looked && !connection ? (
         <footer className="border-t border-black/5 bg-then-paper px-6 py-5 text-center md:px-12">
           <p className="font-memory text-[17px] italic text-then-ink">
-            Two separate memories, kept side by side.
+            Two stories, kept side by side.
           </p>
           <button
             type="button"
@@ -169,7 +169,7 @@ export default function RevealPage() {
             }}
             className="mt-3 rounded-[20px] bg-then-ink px-5 py-2.5 text-[13px] font-semibold text-white"
           >
-            Back to the garden
+            Back to the garden →
           </button>
         </footer>
       ) : null}

@@ -36,20 +36,20 @@ export function QuestionBud({
            state did: this is an occasion, not a task. */
         <article className="flex w-[min(420px,calc(100vw-40px))] flex-col items-center gap-4 rounded-[24px] border-[1.5px] border-bloom-gold bg-white p-6 text-center shadow-[0_12px_16px_rgba(64,56,47,0.06)] md:p-7">
           <span className="rounded-[12px] bg-bloom-rose/[0.12] px-3 py-1 text-[12px] font-semibold uppercase tracking-wide text-bloom-rose">
-            Both stories are ready
+            You have both spoken
           </span>
           <h2 className="font-serif text-[26px] leading-tight text-then-ink md:text-[32px]">
             &ldquo;{question.text}&rdquo;
           </h2>
           <p className="text-[14px] leading-[1.5] text-now-slate">
-            Take a quiet moment to reveal each other&apos;s memories together.
+            Take a quiet moment. Read each other&apos;s at the same time.
           </p>
           <button
             type="button"
             onClick={onReveal}
             className="rounded-[24px] bg-bloom-green px-6 py-3 text-[14px] font-semibold text-white transition-colors duration-200 hover:bg-then-sage"
           >
-            Reveal together
+            Open them together →
           </button>
         </article>
       ) : (
@@ -58,7 +58,7 @@ export function QuestionBud({
             <p className="text-[12px] font-semibold uppercase tracking-wide text-bloom-gold">
               {question.origin === "follow-up"
                 ? "A conversation waiting to bloom"
-                : "Today's Question"}
+                : "Today"}
             </p>
             {partnerAnswered ? (
               <span className="shrink-0 rounded-[12px] bg-then-sage/[0.08] px-2 py-1 text-[11px] text-then-sage">
@@ -75,20 +75,20 @@ export function QuestionBud({
             {viewerAnswered ? (
               /* Spec §14: the story stays private until both have spoken. */
               <p className="text-[13px] leading-[1.5] text-now-slate">
-                {partner.name} hasn&apos;t answered yet. We&apos;ll keep your
-                story private until she does.
+                {partner.name} hasn&apos;t spoken yet. Yours stays
+                private until she has.
               </p>
             ) : (
               <>
                 <p className="text-[13px] text-now-slate">
-                  Waiting for your answer
+                  Waiting for yours
                 </p>
                 <button
                   type="button"
                   onClick={onAnswer}
                   className="shrink-0 rounded-[20px] bg-bloom-green px-4 py-2 text-[13px] font-semibold text-white transition-colors duration-200 hover:bg-then-sage"
                 >
-                  Answer
+                  Tell yours →
                 </button>
               </>
             )}
@@ -101,7 +101,7 @@ export function QuestionBud({
       <div className="flex flex-col items-center gap-2">
         <Bud width={ready ? 62 : 46} ready={ready} />
         <p className="text-[12px] text-then-faded md:text-[13px]">
-          {ready ? "Ready to Bloom" : "Bud of Memory"}
+          {ready ? "Ready to open" : "Still closed"}
         </p>
       </div>
     </div>

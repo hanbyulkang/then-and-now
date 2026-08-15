@@ -143,7 +143,7 @@ export function AnswerOverlay({
 
         <div className="mt-8 flex flex-col gap-3">
           <p className="text-[12px] uppercase tracking-wide text-then-faded">
-            {partner.relationship} is waiting for your story
+            {partner.relationship} is waiting to hear yours
           </p>
           <h2 className="font-memory text-[26px] leading-[1.3] text-then-ink md:text-[32px]">
             &ldquo;{question.text}&rdquo;
@@ -175,7 +175,7 @@ export function AnswerOverlay({
                 onClick={() => setWriting(false)}
                 className="text-[14px] text-then-faded underline"
               >
-                Use my voice instead
+                I&apos;d rather say it →
               </button>
               <button
                 type="button"
@@ -183,7 +183,7 @@ export function AnswerOverlay({
                 disabled={written.trim().length < 4}
                 className="rounded-full bg-bloom-rose px-6 py-3 text-[15px] font-semibold text-white transition-opacity disabled:opacity-40"
               >
-                Save my story
+                Plant this story →
               </button>
             </div>
           </div>
@@ -202,8 +202,8 @@ export function AnswerOverlay({
                 {phase === "denied"
                   ? "We couldn't reach your microphone"
                   : recording
-                    ? "Recording Audio"
-                    : "Hold nothing, take your time"}
+                    ? "Listening"
+                    : "Take your time"}
               </p>
               <p className="text-[24px] font-semibold tabular-nums text-then-ink">
                 {formatTime(elapsed)}
@@ -224,7 +224,7 @@ export function AnswerOverlay({
                 }}
                 className="rounded-full border-2 border-bloom-gold bg-bloom-rose px-6 py-4 text-[15px] font-semibold text-white"
               >
-                Write your story instead
+                Write it instead →
               </button>
             ) : (
               <button
@@ -233,7 +233,7 @@ export function AnswerOverlay({
                 className="flex min-h-[56px] items-center gap-2 rounded-full border-2 border-bloom-gold bg-bloom-rose px-8 py-4 text-[15px] font-semibold text-white shadow-[0_6px_6px_rgba(184,131,121,0.19)] transition-transform duration-200 hover:scale-[1.02]"
               >
                 <Icon name="mic" size={18} />
-                {recording ? "Finish Recording" : "Tell your story"}
+                {recording ? "That&apos;s the story" : "Tell your story"}
               </button>
             )}
           </div>
@@ -294,7 +294,7 @@ function SavedPanel({
             aria-hidden
           />
           <p className="font-memory text-[22px] italic text-then-ink">
-            Saving your story…
+            Planting your story…
           </p>
         </>
       ) : (
@@ -308,7 +308,7 @@ function SavedPanel({
             Your story is in the garden.
           </p>
           <p className="animate-rise-in text-[14px] leading-[1.6] text-then-faded">
-            {partnerName} has answered too — you can open them together.
+            {partnerName} has told hers too. You can open them together.
           </p>
         </>
       )}

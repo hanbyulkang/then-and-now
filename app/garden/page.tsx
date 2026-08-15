@@ -6,6 +6,7 @@ import { AnswerOverlay } from "@/components/answer/AnswerOverlay";
 import { GardenCanvas, type PlacedFlower } from "@/components/garden/GardenCanvas";
 import { QuestionBud } from "@/components/garden/QuestionBud";
 import { MobileNavSpacer, Navigation } from "@/components/nav/Navigation";
+import { gardenLine, gardenProgress } from "@/lib/garden-stage";
 import { BLOSSOMS } from "@/lib/garden-tree";
 import { useGarden } from "@/lib/state/garden-provider";
 import { flowersOf, loneLeaves, yearsBetween } from "@/lib/types";
@@ -49,7 +50,7 @@ function Garden() {
   }, [state]);
 
   const leaves = useMemo(() => loneLeaves(state), [state]);
-  const young = flowers.length === 0;
+  const progress = useMemo(() => gardenProgress(state), [state]);
   const justBloomed = params.get("bloomed") ?? undefined;
 
   return (
@@ -60,26 +61,22 @@ function Garden() {
         <h1 className="font-serif text-[28px] text-then-ink md:text-[36px]">
           {pair.then.name} &amp; {pair.now.name}
         </h1>
-        <p className="text-[13px] uppercase tracking-wide text-then-faded md:text-[14px]">
-          {yearsBetween(pair)} years between you
-          {flowers.length > 0
-            ? ` • ${flowers.length} shared ${flowers.length === 1 ? "story" : "stories"}`
-            : null}
+        <p className="text-[13px] text-then-faded md:text-[14px]">
+          {gardenLine(yearsBetween(pair), progress)}
         </p>
       </header>
 
       <GardenCanvas
         pair={pair}
+        progress={progress}
         flowers={flowers}
         leaves={leaves}
         justBloomedId={justBloomed}
         onOpenFlower={(conversation) => router.push(`/memory/${conversation.id}`)}
       >
-        {/* Nothing has been shared yet: the tree is there, and bare. Naming
-            that is kinder than leaving the screen looking broken. */}
-        {young ? (
-          <p className="absolute inset-x-0 top-[8%] text-center text-[13px] text-then-faded md:text-[14px]">
-            Nothing has bloomed here yet.
+        {progress.stage === "dormant" ? (
+          <p className="absolute inset-x-0 top-[10%] px-8 text-center font-serif text-[19px] italic text-then-faded md:text-[22px]">
+            Every garden begins with a story.
           </p>
         ) : null}
 

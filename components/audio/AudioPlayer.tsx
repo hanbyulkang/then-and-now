@@ -81,7 +81,7 @@ export function AudioPlayer({
         aria-label={
           playing
             ? "Pause"
-            : label ?? `Play the original recording (${formatTime(duration)})`
+            : `${label ?? "Hear it"} (${formatTime(duration)})`
         }
         className={`flex shrink-0 items-center justify-center rounded-full transition-transform duration-200 hover:scale-105 ${
           compact ? "size-7" : "size-[40px]"
@@ -106,10 +106,8 @@ export function AudioPlayer({
     return (
       <div className="flex items-center gap-2">
         {player}
-        <span className="text-[12px] text-now-slate">
-          {playing
-            ? `Playing · ${formatTime(elapsed)}`
-            : "Play original audio recording"}
+        <span className="text-[12px] italic text-now-slate">
+          {playing ? `Listening · ${formatTime(elapsed)}` : `${label ?? "Hear it"} →`}
         </span>
       </div>
     );
