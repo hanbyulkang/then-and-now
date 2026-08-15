@@ -105,13 +105,13 @@ export function GardenCanvas({
           <>
             <Tree />
             <GroundPlanting />
-            {/* The shell it came out of, still lying at the foot of it. */}
+            {/* The shell it came out of, fallen to one side of the trunk. */}
             <SeedVessel
               stage={progress.stage}
               opened={1}
-              size={62}
-              x={TREE_BASE.x}
-              y={GROUND_Y + 4}
+              size={54}
+              x={TREE_BASE.x - 142}
+              y={GROUND_Y + 6}
             />
           </>
         ) : (
