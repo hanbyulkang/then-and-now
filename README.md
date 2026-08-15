@@ -90,8 +90,8 @@ draw itself on screen.
 The garden is one tree. A trunk that belongs to both of them rises out of the
 bed and divides at the crown; above that line the left canopy is drawn in
 THEN's hand and the right in NOW's, and the two interleave rather than splitting
-the tree down the middle. Every conversation they turned out to share hangs on
-it as a flower, clustered where the two canopies overlap. Memories that have not
+the tree down the middle. Four boughs carry every conversation they turned out to share as blossom,
+several to a bough, clustered where the two canopies overlap. Memories that have not
 met anything yet stand as small shoots in the bed at its foot.
 
 Positions are fixed rather than generated — a garden that rearranges itself on

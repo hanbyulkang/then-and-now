@@ -3,10 +3,6 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useMemo, useState } from "react";
 import { AnswerOverlay } from "@/components/answer/AnswerOverlay";
-import {
-  GeometricSeedling,
-  OrganicSeedling,
-} from "@/components/botanical/Seedling";
 import { GardenCanvas, type PlacedFlower } from "@/components/garden/GardenCanvas";
 import { QuestionBud } from "@/components/garden/QuestionBud";
 import { MobileNavSpacer, Navigation } from "@/components/nav/Navigation";
@@ -79,34 +75,12 @@ function Garden() {
         justBloomedId={justBloomed}
         onOpenFlower={(conversation) => router.push(`/memory/${conversation.id}`)}
       >
-        {/* A garden with nothing in it yet names its two seedlings, so the
-            emptiness reads as a beginning rather than as a missing state. */}
+        {/* Nothing has been shared yet: the tree is there, and bare. Naming
+            that is kinder than leaving the screen looking broken. */}
         {young ? (
-          <>
-            <figure className="absolute bottom-[6%] left-[4%] hidden w-[280px] flex-col items-start gap-4 md:flex">
-              <figcaption className="flex flex-col gap-2">
-                <span className="font-serif text-[22px] italic text-then-ink">
-                  {pair.then.name}&apos;s seedling
-                </span>
-                <span className="text-[12px] text-then-faded">
-                  Originated in {pair.then.city}, 1974
-                </span>
-              </figcaption>
-              <OrganicSeedling height={170} />
-            </figure>
-
-            <figure className="absolute bottom-[6%] right-[4%] hidden w-[280px] flex-col items-end gap-4 md:flex">
-              <figcaption className="flex flex-col items-end gap-2">
-                <span className="text-[18px] font-medium text-now-charcoal">
-                  {pair.now.name}&apos;s seedling
-                </span>
-                <span className="text-[12px] text-now-slate">
-                  {pair.now.city}, 2026
-                </span>
-              </figcaption>
-              <GeometricSeedling height={170} />
-            </figure>
-          </>
+          <p className="absolute inset-x-0 top-[8%] text-center text-[13px] text-then-faded md:text-[14px]">
+            Nothing has bloomed here yet.
+          </p>
         ) : null}
 
         <div className="absolute inset-x-0 bottom-[3%] flex justify-center px-5">

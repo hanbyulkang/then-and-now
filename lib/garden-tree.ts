@@ -14,12 +14,12 @@ import { type Cubic, type Point } from "./garden-layout";
 
 export const TREE_BASE: Point = { x: 720, y: 712 };
 /** Where the trunk divides. Above this line the tree has two hands. */
-export const CROWN: Point = { x: 720, y: 400 };
+export const CROWN: Point = { x: 720, y: 318 };
 
 export const TRUNK: Cubic = {
   p0: TREE_BASE,
-  p1: { x: 752, y: 636 },
-  p2: { x: 690, y: 512 },
+  p1: { x: 756, y: 614 },
+  p2: { x: 684, y: 452 },
   p3: CROWN,
 };
 
@@ -41,7 +41,7 @@ function limb(
     weight,
     curve: {
       p0: CROWN,
-      p1: { x: CROWN.x + (bend.x - CROWN.x) * 0.45, y: CROWN.y - 38 },
+      p1: { x: CROWN.x + (bend.x - CROWN.x) * 0.4, y: CROWN.y - 54 },
       p2: bend,
       p3: tip,
     },
@@ -49,19 +49,21 @@ function limb(
 }
 
 /**
- * The canopy: a rounded crown rather than a spread of horizontal arms, which
- * read as wires. Ordered from the centre outward, alternating hands so the two
- * canopies interleave instead of splitting the tree down the middle.
+ * Four boughs, not a thicket.
+ *
+ * An earlier version grew one limb per discovery, which turned the crown into a
+ * tangle the moment the garden had anything in it. A tree in blossom does not
+ * work that way: a few boughs carry many flowers each, and it is the clusters
+ * along a bough that make it read as blossom rather than as decoration.
+ *
+ * Two boughs in each hand, interleaved at the crown so the canopies overlap in
+ * the middle instead of splitting the tree down its centre line.
  */
 export const LIMBS: Limb[] = [
-  limb("then", { x: 678, y: 286 }, { x: 692, y: 150 }, 13),
-  limb("now", { x: 776, y: 278 }, { x: 800, y: 142 }, 11),
-  limb("then", { x: 604, y: 306 }, { x: 546, y: 178 }, 10),
-  limb("now", { x: 848, y: 300 }, { x: 916, y: 176 }, 9),
-  limb("then", { x: 566, y: 344 }, { x: 468, y: 246 }, 9),
-  limb("now", { x: 882, y: 340 }, { x: 986, y: 244 }, 8),
-  limb("then", { x: 558, y: 378 }, { x: 424, y: 332 }, 7),
-  limb("now", { x: 890, y: 376 }, { x: 1024, y: 328 }, 6),
+  limb("then", { x: 606, y: 208 }, { x: 532, y: 78 }, 18),
+  limb("now", { x: 838, y: 202 }, { x: 922, y: 70 }, 16),
+  limb("then", { x: 524, y: 236 }, { x: 348, y: 132 }, 14),
+  limb("now", { x: 922, y: 228 }, { x: 1104, y: 124 }, 13),
 ];
 
 export interface Blossom {
@@ -73,19 +75,20 @@ export interface Blossom {
 }
 
 /**
- * Where blossoms open, newest first. They cluster toward the middle of the
- * canopy, where the two hands overlap, and thin out toward the tips.
+ * Where blossoms open, newest first — so the most recent discovery takes the
+ * crown of the tree and the older ones sit further out along their bough.
+ * Several to a bough, which is what a tree in blossom actually looks like.
  */
 export const BLOSSOMS: Blossom[] = [
-  { limb: 0, t: 0.95, size: 74 },
-  { limb: 3, t: 0.94, size: 60 },
-  { limb: 2, t: 0.95, size: 58 },
-  { limb: 5, t: 0.94, size: 52 },
-  { limb: 4, t: 0.95, size: 50 },
-  { limb: 1, t: 0.96, size: 46 },
-  { limb: 7, t: 0.95, size: 44 },
-  { limb: 6, t: 0.95, size: 42 },
+  { limb: 0, t: 0.96, size: 84 },
+  { limb: 1, t: 0.96, size: 72 },
+  { limb: 0, t: 0.62, size: 58 },
+  { limb: 3, t: 0.95, size: 56 },
+  { limb: 2, t: 0.95, size: 54 },
+  { limb: 1, t: 0.6, size: 48 },
+  { limb: 3, t: 0.58, size: 44 },
+  { limb: 2, t: 0.56, size: 44 },
 ];
 
 /** Where the unopened question hangs: low and central, under the canopy. */
-export const BUD_ON_TREE = { limb: 0, t: 0.42 };
+export const BUD_ON_TREE = { limb: 0, t: 0.34 };

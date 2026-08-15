@@ -16,7 +16,7 @@ export function Tree({ growth = 1 }: { growth?: number }) {
   return (
     <g>
       {/* The trunk. Warm ink, because it is the part they share. */}
-      <path d={taperedStem(TRUNK, 30, 13)} fill="#4a4136" />
+      <path d={taperedStem(TRUNK, 40, 17)} fill="#4a4136" />
 
       {LIMBS.map((limb, i) => {
         const leafy = limb.hand === "then";
@@ -34,10 +34,7 @@ export function Tree({ growth = 1 }: { growth?: number }) {
             />
 
             {/* THEN's side carries more leaves; NOW's keeps more air. */}
-            {(leafy
-              ? [0.26, 0.4, 0.52, 0.64, 0.75, 0.85, 0.94]
-              : [0.32, 0.48, 0.63, 0.77, 0.9]
-            ).map((t, j) => {
+            {(leafy ? [0.34, 0.56, 0.78, 0.92] : [0.4, 0.68, 0.9]).map((t, j) => {
               const at = cubicPoint(limb.curve, t);
               const along = cubicAngle(limb.curve, t);
               const angle = along + (j % 2 ? 58 : -62);
@@ -46,7 +43,7 @@ export function Tree({ growth = 1 }: { growth?: number }) {
                   key={t}
                   x={at.x}
                   y={at.y}
-                  length={42 - j * 3}
+                  length={48 - j * 4}
                   angle={angle}
                   flip={j % 2 === 0}
                 />
@@ -55,7 +52,7 @@ export function Tree({ growth = 1 }: { growth?: number }) {
                   key={t}
                   x={at.x}
                   y={at.y}
-                  length={38 - j * 3}
+                  length={44 - j * 4}
                   angle={angle}
                   flip={j % 2 === 1}
                 />
@@ -66,8 +63,8 @@ export function Tree({ growth = 1 }: { growth?: number }) {
       })}
 
       {/* A little foliage at the crown, so the fork is not a bare joint. */}
-      <ThenLeaf x={CROWN.x - 24} y={CROWN.y + 8} length={34} angle={-158} />
-      <NowLeaf x={CROWN.x + 26} y={CROWN.y + 12} length={30} angle={-22} />
+      <ThenLeaf x={CROWN.x - 28} y={CROWN.y + 10} length={42} angle={-158} />
+      <NowLeaf x={CROWN.x + 30} y={CROWN.y + 14} length={38} angle={-22} />
     </g>
   );
 }

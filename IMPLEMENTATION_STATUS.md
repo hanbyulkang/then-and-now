@@ -119,8 +119,8 @@ strokes — a stroke of even weight is what makes a branch read as wire.
 The garden is one tree. A trunk that belongs to both of them rises from the bed
 and divides at the crown; above that line the left canopy is drawn in THEN's
 hand and the right in NOW's, and they interleave rather than splitting the tree
-down the middle. Every discovered connection hangs on it as a flower, clustered
-where the two canopies overlap. Earlier passes scattered a plant per flower
+down the middle. Four boughs carry every discovered connection as blossom, several to a
+bough, clustered where the two canopies overlap. Earlier passes scattered a plant per flower
 across the full width, which read as busy and unplaced rather than as somewhere
 you are standing.
 
