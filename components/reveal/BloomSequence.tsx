@@ -7,7 +7,7 @@ import { atLeast } from "./phases";
 
 const W = 480;
 const H = 620;
-const FLOWER = { x: W / 2, y: 250 };
+const FLOWER = { x: W / 2, y: 214 };
 
 /**
  * The signature moment.
@@ -30,29 +30,28 @@ export function BloomSequence({
 
   return (
     <div className="relative flex h-full w-full flex-col items-center">
+      {/* The seam between the two worlds. It runs the whole height of the
+          column, so it sits outside the drawing rather than inside its box. */}
+      <span
+        aria-hidden
+        className="absolute inset-y-0 left-1/2 w-px -translate-x-1/2 bg-bloom-gold"
+        style={{
+          opacity: branches ? 0.5 : 0.16,
+          transition: "opacity 1.2s ease",
+        }}
+      />
+
       <svg
         viewBox={`0 0 ${W} ${H}`}
         preserveAspectRatio="xMidYMin meet"
         className="absolute inset-0 size-full"
         aria-hidden
       >
-        {/* The seam between the two worlds. */}
-        <line
-          x1={W / 2}
-          y1={0}
-          x2={W / 2}
-          y2={H}
-          stroke="#c5a768"
-          strokeWidth="1"
-          opacity={branches ? 0.5 : 0.16}
-          style={{ transition: "opacity 1.2s ease" }}
-        />
-
         {/* The two branches descend from opposite corners and meet at the
             flower. THEN's line wanders on its way down; NOW's is drawn with a
             straighter hand. Together they close a V, which is the whole point. */}
         <path
-          d={`M -8 96 C 66 118, 74 168, 128 190 S ${FLOWER.x - 62} ${FLOWER.y - 40}, ${FLOWER.x - 12} ${FLOWER.y - 6}`}
+          d={`M -8 66 C 66 88, 74 138, 128 160 S ${FLOWER.x - 62} ${FLOWER.y - 40}, ${FLOWER.x - 12} ${FLOWER.y - 6}`}
           stroke="#40382f"
           strokeWidth="2"
           strokeLinecap="round"
@@ -66,11 +65,11 @@ export function BloomSequence({
         />
         <ellipse
           cx="46"
-          cy="112"
+          cy="82"
           rx="8"
           ry="3.6"
           fill="#7c876a"
-          transform="rotate(18 46 112)"
+          transform="rotate(18 46 82)"
           style={{
             opacity: branches ? 1 : 0,
             transition: "opacity 600ms ease 700ms",
@@ -78,11 +77,11 @@ export function BloomSequence({
         />
         <ellipse
           cx="140"
-          cy="196"
+          cy="166"
           rx="10"
           ry="4.4"
           fill="#7c876a"
-          transform="rotate(-26 140 196)"
+          transform="rotate(-26 140 166)"
           style={{
             opacity: branches ? 1 : 0,
             transition: "opacity 600ms ease 1000ms",
@@ -90,7 +89,7 @@ export function BloomSequence({
         />
 
         <path
-          d={`M ${W + 8} 112 C ${W - 74} 132, ${W - 96} 178, ${W - 148} 202 S ${FLOWER.x + 58} ${FLOWER.y - 34}, ${FLOWER.x + 14} ${FLOWER.y + 4}`}
+          d={`M ${W + 8} 82 C ${W - 74} 102, ${W - 96} 148, ${W - 148} 172 S ${FLOWER.x + 58} ${FLOWER.y - 34}, ${FLOWER.x + 14} ${FLOWER.y + 4}`}
           stroke="#2d302f"
           strokeWidth="1"
           strokeLinecap="round"
@@ -104,12 +103,12 @@ export function BloomSequence({
         />
         <rect
           x={W - 60}
-          y={126}
+          y={96}
           width="9"
           height="9"
           rx="4.5"
           fill="#9aaa94"
-          transform={`rotate(20 ${W - 56} 130)`}
+          transform={`rotate(20 ${W - 56} 100)`}
           style={{
             opacity: branches ? 1 : 0,
             transition: "opacity 600ms ease 1100ms",
@@ -117,7 +116,7 @@ export function BloomSequence({
         />
         <rect
           x={W - 156}
-          y={198}
+          y={168}
           width="8"
           height="8"
           rx="4"
@@ -145,7 +144,7 @@ export function BloomSequence({
       {/* The words arrive one at a time, after the picture has said it. */}
       <div
         className="absolute inset-x-0 flex flex-col items-center gap-2 px-6 text-center"
-        style={{ top: `${(492 / H) * 100}%` }}
+        style={{ top: `${(392 / H) * 100}%` }}
       >
         <p
           className="text-[14px] font-semibold uppercase tracking-wide text-bloom-gold"

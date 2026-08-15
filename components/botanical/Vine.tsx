@@ -24,8 +24,10 @@ const FLOWERS = [
  * were standing there.
  */
 export function Vine({ className = "" }: { className?: string }) {
+  /* Positioning comes from the caller — adding `relative` here would collide
+     with an `absolute` passed in and collapse the column to zero height. */
   return (
-    <div className={`pointer-events-none relative ${className}`} aria-hidden>
+    <div className={`pointer-events-none ${className}`} aria-hidden>
       <Image
         src="/assets/botanical/vine/stem-main.svg"
         alt=""
