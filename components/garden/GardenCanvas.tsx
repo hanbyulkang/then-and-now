@@ -62,7 +62,9 @@ export function GardenCanvas({
     `${(value / (axis === "x" ? CANVAS.width : CANVAS.height)) * 100}%`;
 
   return (
-    <div className="relative w-full flex-1 overflow-hidden">
+    // --fy pulls the flowers up on short screens so the question card never
+    // lands on one of their labels. It scales the stems and heads together.
+    <div className="relative w-full flex-1 overflow-hidden [--fy:0.84] md:[--fy:1]">
       <svg
         viewBox={`0 0 ${CANVAS.width} ${CANVAS.height}`}
         preserveAspectRatio="none"
@@ -103,6 +105,12 @@ export function GardenCanvas({
         />
         <NowRoot x={NOW_ORIGIN.x} y={NOW_ORIGIN.y} memories={nowMemories} />
 
+        <g
+          style={{
+            transform: "scaleY(var(--fy))",
+            transformOrigin: "0 0",
+          }}
+        >
         {flowers.map(({ conversation, slot, index }) => {
           const active = hovered === conversation.id;
           const fresh = conversation.id === justBloomedId;
@@ -167,6 +175,7 @@ export function GardenCanvas({
             </g>
           );
         })}
+        </g>
 
         {/* Memories that have not met anything in the middle: leaves, not flowers. */}
         {leaves.map((memory, i) => {
@@ -205,7 +214,10 @@ export function GardenCanvas({
         <div
           key={conversation.id}
           className="absolute -translate-x-1/2 -translate-y-1/2"
-          style={{ left: pct(slot.x, "x"), top: pct(slot.y, "y") }}
+          style={{
+            left: pct(slot.x, "x"),
+            top: `calc(${pct(slot.y, "y")} * var(--fy))`,
+          }}
           onMouseEnter={() => setHovered(conversation.id)}
           onMouseLeave={() =>
             setHovered((h) => (h === conversation.id ? null : h))

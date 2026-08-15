@@ -78,24 +78,26 @@ export function SharedFlower({
         ) : null}
       </circle>
 
-      {/* THEN — petals that lean. */}
+      {/* THEN — petals that lean. Proportions follow the drawn flower in the
+          design file, where the rose reads as two overlapping strokes rather
+          than one mass. */}
       {full ? (
         <ellipse
-          cx={36}
-          cy={20}
-          rx={12}
-          ry={17}
-          transform={`rotate(${petalTilt - 34} 36 20)`}
+          cx={33.9}
+          cy={17.5}
+          rx={10.7}
+          ry={15.5}
+          transform={`rotate(${petalTilt} 33.9 17.5)`}
           fill="#a77d75"
           style={{ opacity: bloom, transition: "opacity 700ms ease" }}
         />
       ) : null}
       <ellipse
-        cx={full ? 27 : 31.4}
-        cy={full ? 27 : 23.6}
-        rx={petalRx}
-        ry={petalRy}
-        transform={`rotate(${petalTilt} ${full ? 27 : 31.4} ${full ? 27 : 23.6})`}
+        cx={full ? 25.6 : 31.4}
+        cy={full ? 25.6 : 23.6}
+        rx={full ? 9.6 : petalRx}
+        ry={full ? 14.3 : petalRy}
+        transform={`rotate(${full ? petalTilt + 60 : petalTilt} ${full ? 25.6 : 31.4} ${full ? 25.6 : 23.6})`}
         fill="#a77d75"
         style={{
           opacity: bloom,
@@ -105,15 +107,15 @@ export function SharedFlower({
 
       {/* NOW — forms with corners, even when they are soft. */}
       <rect
-        x={22}
-        y={22}
-        width={20}
-        height={20}
-        rx={4}
-        transform={`rotate(${panelTilt} 32 32)`}
+        x={full ? 23.9 : 22}
+        y={full ? 27.6 : 22}
+        width={full ? 16.2 : 20}
+        height={full ? 16.2 : 20}
+        rx={full ? 2.6 : 4}
+        transform={`rotate(${full ? panelTilt + 35 : panelTilt} 32 ${full ? 35.7 : 32})`}
         fill="#9aaa94"
         stroke={full ? "#c5a768" : undefined}
-        strokeWidth={full ? 0.6 : undefined}
+        strokeWidth={full ? 0.5 : undefined}
         style={{
           opacity: bloom,
           transition: "opacity 700ms ease 180ms",
@@ -121,15 +123,15 @@ export function SharedFlower({
       />
       {full ? (
         <rect
-          x={26}
-          y={18}
-          width={16}
-          height={16}
-          rx={2.6}
-          transform={`rotate(${panelTilt + 32} 34 26)`}
+          x={22.9}
+          y={19.2}
+          width={13.9}
+          height={13.9}
+          rx={1.7}
+          transform={`rotate(${panelTilt} 29.8 26.1)`}
           fill="#9aaa94"
           stroke="#c5a768"
-          strokeWidth="0.6"
+          strokeWidth="0.5"
           style={{ opacity: bloom, transition: "opacity 700ms ease 260ms" }}
         />
       ) : null}
@@ -139,13 +141,13 @@ export function SharedFlower({
         <circle
           cx={c}
           cy={c}
-          r={8.4}
+          r={5.4}
           fill="#c5a768"
           stroke="#fff"
-          strokeWidth={1.1}
+          strokeWidth={0.72}
         />
       ) : null}
-      <circle cx={c} cy={c} r={full ? 3.8 : 6} fill="#40382f" />
+      <circle cx={c} cy={c} r={full ? 2.4 : 6} fill="#40382f" />
     </svg>
   );
 }

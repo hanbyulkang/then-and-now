@@ -97,23 +97,25 @@ function EditorialStoryEntry({
   return (
     <article className="flex flex-col gap-8">
       <div className="flex flex-col gap-6 md:flex-row md:gap-12">
-        <header className="flex w-full shrink-0 flex-col gap-1 md:w-[160px]">
+        {/* Mobile puts the year and the byline on one line; desktop stands the
+            year up as a column of its own (nodes 11 and M6). */}
+        <header className="flex w-full shrink-0 items-end justify-between gap-4 md:w-[160px] md:flex-col md:items-start md:justify-start md:gap-1">
           <p
-            className={`font-serif text-[48px] leading-none md:text-[64px] ${
+            className={`font-serif text-[40px] leading-none md:text-[64px] ${
               isThen ? "text-bloom-rose" : "text-bloom-green"
             }`}
           >
             {memory.year}
           </p>
-          <p className="text-[12px] font-semibold uppercase tracking-wide text-now-slate">
+          <p className="text-[11px] font-semibold uppercase tracking-wide text-now-slate md:text-[12px]">
             {person.name} • {memory.place}
           </p>
         </header>
 
-        <div className="flex flex-1 flex-col items-start gap-6 md:flex-row md:items-center md:gap-8">
+        <div className="flex flex-1 items-start gap-4 md:items-center md:gap-8">
           {memory.photoUrl ? (
             <div
-              className={`relative h-[220px] w-[180px] shrink-0 overflow-hidden rounded-[4px] border ${
+              className={`relative h-[88px] w-[70px] shrink-0 overflow-hidden rounded-[4px] border md:h-[220px] md:w-[180px] ${
                 isThen ? "border-bloom-gold" : "border-black/5"
               }`}
             >
@@ -121,7 +123,7 @@ function EditorialStoryEntry({
                 src={memory.photoUrl}
                 alt={`${person.name} in ${memory.place}, ${memory.year}`}
                 fill
-                sizes="180px"
+                sizes="(max-width: 768px) 70px, 180px"
                 className={`object-cover ${isThen ? "archival-photo" : ""}`}
               />
             </div>
@@ -140,6 +142,7 @@ function EditorialStoryEntry({
             <AudioPlayer
               memory={memory}
               side={person.side}
+              compact
               label={`Play ${person.name}'s original recording from ${memory.year}`}
             />
           </div>

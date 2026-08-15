@@ -60,6 +60,16 @@ export function StoryPanel({
         </p>
       </header>
 
+      {/* Once the panel goes compact the place and age move up beside the name,
+          so nothing about who is speaking is ever lost (node M4). */}
+      {compact ? (
+        <p
+          className={`-mt-4 text-[12px] ${isThen ? "text-then-faded" : "text-now-slate"}`}
+        >
+          {memory.year} · {memory.place} · Age {memory.age}
+        </p>
+      ) : null}
+
       <div
         className={`flex items-center gap-6 md:gap-8 ${compact ? "md:flex-col md:items-start md:gap-4" : ""}`}
       >

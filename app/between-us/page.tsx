@@ -41,8 +41,18 @@ export default function BetweenUsPage() {
     [state],
   );
 
+  /* The map crops to the slots actually in use, so three themes do not sit in
+     the top third of an empty field. */
+  const mapHeight = Math.max(
+    360,
+    Math.min(
+      MAP.height,
+      Math.max(...themes.map((t) => t.slot.y + t.slot.size / 2), 200) + 120,
+    ),
+  );
+
   const pct = (v: number, axis: "x" | "y") =>
-    `${(v / (axis === "x" ? MAP.width : MAP.height)) * 100}%`;
+    `${(v / (axis === "x" ? MAP.width : mapHeight)) * 100}%`;
 
   return (
     <div className="flex min-h-dvh flex-col bg-canvas">
@@ -60,9 +70,12 @@ export default function BetweenUsPage() {
 
       <main className="relative w-full flex-1 px-4 pb-24 md:px-0">
         {/* Desktop: the map. The lines only ever join things that are joined. */}
-        <div className="relative hidden aspect-[1440/600] w-full md:block">
+        <div
+          className="relative hidden w-full md:block"
+          style={{ aspectRatio: `${MAP.width} / ${mapHeight}` }}
+        >
           <svg
-            viewBox={`0 0 ${MAP.width} ${MAP.height}`}
+            viewBox={`0 0 ${MAP.width} ${mapHeight}`}
             preserveAspectRatio="none"
             className="absolute inset-0 size-full"
             aria-hidden

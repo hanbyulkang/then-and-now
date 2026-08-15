@@ -21,10 +21,13 @@ export function AudioPlayer({
   memory,
   side,
   label,
+  compact = false,
 }: {
   memory: Memory;
   side: Side;
   label?: string;
+  /** The archive shows a single quiet line rather than a player panel. */
+  compact?: boolean;
 }) {
   const src = memory.localAudioUrl;
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -68,12 +71,8 @@ export function AudioPlayer({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [playing, src, duration]);
 
-  return (
-    <div
-      className={`flex w-full items-center gap-4 rounded-[12px] p-4 ${
-        side === "then" ? "bg-white/25" : "bg-white/45"
-      }`}
-    >
+  const player = (
+    <>
       {src ? <audio ref={audioRef} src={src} preload="metadata" /> : null}
 
       <button
@@ -84,7 +83,9 @@ export function AudioPlayer({
             ? "Pause"
             : label ?? `Play the original recording (${formatTime(duration)})`
         }
-        className="flex size-[40px] shrink-0 items-center justify-center rounded-full transition-transform duration-200 hover:scale-105"
+        className={`flex shrink-0 items-center justify-center rounded-full transition-transform duration-200 hover:scale-105 ${
+          compact ? "size-7" : "size-[40px]"
+        }`}
         style={{ background: ink }}
       >
         {playing ? (
@@ -98,6 +99,29 @@ export function AudioPlayer({
           </svg>
         )}
       </button>
+    </>
+  );
+
+  if (compact) {
+    return (
+      <div className="flex items-center gap-2">
+        {player}
+        <span className="text-[12px] text-now-slate">
+          {playing
+            ? `Playing · ${formatTime(elapsed)}`
+            : "Play original audio recording"}
+        </span>
+      </div>
+    );
+  }
+
+  return (
+    <div
+      className={`flex w-full items-center gap-4 rounded-[12px] p-4 ${
+        side === "then" ? "bg-white/25" : "bg-white/45"
+      }`}
+    >
+      {player}
 
       <Waveform
         seed={memory.id}

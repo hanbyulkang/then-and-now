@@ -61,7 +61,7 @@ function Garden() {
     <div className="flex min-h-dvh flex-col bg-canvas">
       <Navigation />
 
-      <header className="flex shrink-0 flex-col items-center px-6 pt-6 text-center">
+      <header className="flex shrink-0 flex-col items-start px-5 pt-5 text-left md:items-center md:px-6 md:pt-6 md:text-center">
         <h1 className="font-serif text-[28px] text-then-ink md:text-[36px]">
           {pair.then.name} &amp; {pair.now.name}
         </h1>

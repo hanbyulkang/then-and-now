@@ -230,8 +230,9 @@ export function AnswerOverlay({
               <button
                 type="button"
                 onClick={recording ? finishRecording : start}
-                className="min-h-[56px] rounded-full border-2 border-bloom-gold bg-bloom-rose px-8 py-4 text-[15px] font-semibold text-white transition-transform duration-200 hover:scale-[1.02]"
+                className="flex min-h-[56px] items-center gap-2 rounded-full border-2 border-bloom-gold bg-bloom-rose px-8 py-4 text-[15px] font-semibold text-white shadow-[0_6px_6px_rgba(184,131,121,0.19)] transition-transform duration-200 hover:scale-[1.02]"
               >
+                <Icon name="mic" size={18} />
                 {recording ? "Finish Recording" : "Tell your story"}
               </button>
             )}
