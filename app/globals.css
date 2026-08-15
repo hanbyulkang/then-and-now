@@ -155,6 +155,18 @@ body {
   }
 }
 
+/* A filled stem cannot be drawn by a dash offset, so it grows from its root. */
+@keyframes stem-rise {
+  from {
+    transform: scaleY(0.05);
+    opacity: 0;
+  }
+  to {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
+
 @keyframes rise-in {
   from {
     opacity: 0;

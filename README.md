@@ -87,12 +87,15 @@ draw itself on screen.
 
 ### The garden
 
-Drawn as a single botanical composition, not a node graph. Positions come from
-curated slots rather than a force-directed layout — a garden that rearranges
-itself on every load does not read as a place. THEN's lines wander and carry
-soft leaves; NOW's are drafted, with small square joints. Each person's history
-grows as a root system out of their own corner, and the lower middle is left
-empty because that is where today's question sits.
+The garden is one tree. A trunk that belongs to both of them rises out of the
+bed and divides at the crown; above that line the left canopy is drawn in
+THEN's hand and the right in NOW's, and the two interleave rather than splitting
+the tree down the middle. Every conversation they turned out to share hangs on
+it as a flower, clustered where the two canopies overlap. Memories that have not
+met anything yet stand as small shoots in the bed at its foot.
+
+Positions are fixed rather than generated — a garden that rearranges itself on
+every visit is not a place you can come back to.
 
 ### The bloom
 

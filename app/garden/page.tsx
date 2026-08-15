@@ -10,7 +10,7 @@ import {
 import { GardenCanvas, type PlacedFlower } from "@/components/garden/GardenCanvas";
 import { QuestionBud } from "@/components/garden/QuestionBud";
 import { MobileNavSpacer, Navigation } from "@/components/nav/Navigation";
-import { FLOWER_SLOTS } from "@/lib/garden-layout";
+import { BLOSSOMS } from "@/lib/garden-tree";
 import { useGarden } from "@/lib/state/garden-provider";
 import { flowersOf, loneLeaves, yearsBetween } from "@/lib/types";
 
@@ -43,12 +43,11 @@ function Garden() {
 
   const pair = state.pair;
   const flowers = useMemo<PlacedFlower[]>(() => {
-    /* Newest discovery takes the centre slot, so the garden reads as growing
-       rather than as a list. */
+    /* Newest discovery takes the crown of the tree, so the garden reads as
+       growing rather than as a list. */
     const found = [...flowersOf(state)].reverse();
-    return found.slice(0, FLOWER_SLOTS.length).map((conversation, index) => ({
+    return found.slice(0, BLOSSOMS.length).map((conversation, index) => ({
       conversation,
-      slot: FLOWER_SLOTS[index],
       index,
     }));
   }, [state]);
@@ -110,7 +109,7 @@ function Garden() {
           </>
         ) : null}
 
-        <div className="absolute inset-x-0 bottom-[6%] flex justify-center px-5">
+        <div className="absolute inset-x-0 bottom-[3%] flex justify-center px-5">
           <QuestionBud
             question={active.question}
             pair={pair}

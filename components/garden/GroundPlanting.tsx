@@ -1,72 +1,110 @@
 "use client";
 
+import { GROUND_Y } from "@/lib/garden-layout";
 import { Botanical, GROUND, type Specimen } from "./Leaf";
 
 /**
  * What grows along the bottom of the garden.
  *
- * Without it the two root systems stand on nothing and the screen reads as a
- * diagram of a garden rather than a garden. The planting is denser at each
- * person's own edge and thins toward the middle, where the ground still belongs
- * to today's question.
+ * Planted in clumps, not in a row. An evenly spaced line of specimens reads as
+ * a repeating band — busy and mechanical — where two or three plants leaning
+ * into each other read as a bed someone tends. Each clump has one tall plant, a
+ * shorter one beside it and something small at its feet, and there are real
+ * gaps between clumps for the eye to rest in.
  *
  * Positions are fixed rather than random, for the same reason the flowers are:
  * a garden that rearranges itself on every load is not a place.
  */
 
-interface Plant {
-  spec: Specimen;
+interface Clump {
+  /** Where the clump sits along the bed. */
   x: number;
-  /** Height above the ground line. */
-  length: number;
-  flip?: boolean;
-  /** Further back in the bed, so it sits quieter. */
-  depth?: number;
+  /** Its members, offset from that point. */
+  of: Array<{
+    spec: Specimen;
+    dx: number;
+    length: number;
+    flip?: boolean;
+    /** Further back in the bed, so it sits quieter. */
+    back?: number;
+  }>;
 }
 
-const GROUND_Y = 706;
+const CLUMPS: Clump[] = [
+  /* THEN's side. Fullest at the edge, easing inward. */
+  {
+    x: 62,
+    of: [
+      { spec: GROUND.thenFern, dx: -18, length: 104 },
+      { spec: GROUND.thenGrass, dx: 30, length: 66, flip: true },
+      { spec: GROUND.thenSprig, dx: 8, length: 44, back: 0.55 },
+    ],
+  },
+  {
+    x: 258,
+    of: [
+      { spec: GROUND.thenPods, dx: 0, length: 84 },
+      { spec: GROUND.thenGrass, dx: -34, length: 52 },
+      { spec: GROUND.thenGrass, dx: 26, length: 38, flip: true, back: 0.6 },
+    ],
+  },
+  {
+    x: 452,
+    of: [
+      { spec: GROUND.thenSprig, dx: 0, length: 68 },
+      { spec: GROUND.thenGrass, dx: 28, length: 40, flip: true, back: 0.65 },
+    ],
+  },
 
-const PLANTS: Plant[] = [
-  /* THEN's bed — the left edge, thinning as it travels inward. */
-  { spec: GROUND.thenFern, x: 34, length: 96 },
-  { spec: GROUND.thenGrass, x: 92, length: 62, flip: true },
-  { spec: GROUND.thenPods, x: 232, length: 78, depth: 0.5 },
-  { spec: GROUND.thenGrass, x: 300, length: 48, depth: 0.6 },
-  { spec: GROUND.thenSprig, x: 372, length: 70 },
-  { spec: GROUND.thenGrass, x: 448, length: 40, flip: true, depth: 0.7 },
-  { spec: GROUND.thenFern, x: 520, length: 54, depth: 0.75 },
-  { spec: GROUND.thenGrass, x: 588, length: 32, depth: 0.85 },
+  /* The middle keeps almost nothing: the ground here belongs to the question. */
+  { x: 646, of: [{ spec: GROUND.thenGrass, dx: 0, length: 26, back: 0.75 }] },
+  { x: 806, of: [{ spec: GROUND.nowGrass, dx: 0, length: 28, flip: true, back: 0.75 }] },
 
-  /* The middle keeps almost nothing: this is where the question stands. */
-  { spec: GROUND.thenGrass, x: 676, length: 24, depth: 0.9 },
-  { spec: GROUND.nowGrass, x: 792, length: 26, flip: true, depth: 0.9 },
-
-  /* NOW's bed — mirrored, and drawn in the other hand. */
-  { spec: GROUND.nowGrass, x: 872, length: 34, depth: 0.85 },
-  { spec: GROUND.nowSprig, x: 946, length: 56, depth: 0.75 },
-  { spec: GROUND.nowGrass, x: 1024, length: 44, flip: true, depth: 0.7 },
-  { spec: GROUND.nowPods, x: 1112, length: 68 },
-  { spec: GROUND.nowGrass, x: 1206, length: 52, depth: 0.55 },
-  { spec: GROUND.nowSprig, x: 1330, length: 84, flip: true },
-  { spec: GROUND.nowGrass, x: 1404, length: 62 },
+  /* NOW's side, mirrored, in the other hand. */
+  {
+    x: 986,
+    of: [
+      { spec: GROUND.nowSprig, dx: 0, length: 62 },
+      { spec: GROUND.nowGrass, dx: -30, length: 40, back: 0.65 },
+    ],
+  },
+  {
+    x: 1178,
+    of: [
+      { spec: GROUND.nowPods, dx: 0, length: 78 },
+      { spec: GROUND.nowGrass, dx: 32, length: 48, flip: true },
+      { spec: GROUND.nowGrass, dx: -28, length: 34, back: 0.6 },
+    ],
+  },
+  {
+    x: 1372,
+    of: [
+      { spec: GROUND.nowSprig, dx: 12, length: 92, flip: true },
+      { spec: GROUND.nowGrass, dx: -26, length: 58 },
+      { spec: GROUND.nowPods, dx: 40, length: 44, back: 0.55 },
+    ],
+  },
 ];
 
-export function GroundPlanting({ opacity = 1 }: { opacity?: number }) {
+export function GroundPlanting() {
   return (
-    <g opacity={opacity}>
-      {PLANTS.map((plant, i) => (
-        <Botanical
-          key={i}
-          spec={plant.spec}
-          x={plant.x}
-          y={GROUND_Y + (plant.depth ? (1 - plant.depth) * 10 : 0)}
-          length={plant.length}
-          flip={plant.flip}
-          /* Plants set further back sit quieter, the way distance works. */
-          opacity={plant.depth ?? 1}
-          angle={-90 + ((i * 37) % 11) - 5}
-        />
-      ))}
+    <g>
+      {CLUMPS.flatMap((clump, c) =>
+        clump.of.map((plant, i) => (
+          <Botanical
+            key={`${c}-${i}`}
+            spec={plant.spec}
+            x={clump.x + plant.dx}
+            /* Anything set back sits a little lower and a little quieter,
+               which is all it takes to read as depth. */
+            y={GROUND_Y + (plant.back ? (1 - plant.back) * 14 : 0)}
+            length={plant.length}
+            flip={plant.flip}
+            opacity={plant.back ?? 1}
+            angle={-90 + ((c * 23 + i * 41) % 13) - 6}
+          />
+        )),
+      )}
     </g>
   );
 }

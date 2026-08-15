@@ -48,6 +48,7 @@ Legend: ✅ done · ◐ partial · ✗ not started
 
 - `nav/Navigation`, `nav/ProfilePair` — one bar, three places; bottom tabs on mobile ✅
 - `garden/GardenCanvas`, `SharedFlower`, `RootSystem`, `QuestionBud`, `StoryPreview` ✅
+- `garden/Tree` — one tree, two hands ✅
 - `garden/Leaf` — the specimen table and its attachment maths ✅
 - `garden/GroundPlanting` — the bed both people stand in ✅
 - `botanical/Seedling` (organic + geometric), `Seed`, `Bud`, `Vine` ✅
@@ -62,7 +63,7 @@ Legend: ✅ done · ◐ partial · ✗ not started
 |---|---|
 | Design tokens (THEN / NOW / BETWEEN) | ✅ `app/globals.css` |
 | Typography (Instrument Serif · Fraunces · Geist) | ✅ |
-| Garden layout grammar | ✅ `lib/garden-layout.ts`, curated slots |
+| Garden composition | ✅ `lib/garden-tree.ts` — one tree, fixed limbs and blossom slots |
 | Bloom sequence, 4–6s | ✅ `components/reveal/phases.ts` |
 | `prefers-reduced-motion` | ✅ animations collapse to fades |
 | Blind answering | ✅ partner's story never rendered before both exist |
@@ -110,10 +111,18 @@ outline floating away from its fill read as an unfinished sketch.
 | `vine/*` | the climbing vine on Meet Her at My Age |
 
 Placement is the other half of the work. Each specimen declares where it
-attaches and which way it points, so a leaf joins a branch at its stalk and a
-plant stands on its base. Branch leaves are placed on the curve itself and
-turned to face along it — leaves positioned near a line instead of growing out
-of it is what made the first attempt look like scattered debris.
+attaches and which way it points, so a leaf joins a limb at its stalk and a
+plant stands on its base. Leaves are placed on the curve itself and turned to
+face along it. Stems are filled tapered shapes rather than constant-width
+strokes — a stroke of even weight is what makes a branch read as wire.
+
+The garden is one tree. A trunk that belongs to both of them rises from the bed
+and divides at the crown; above that line the left canopy is drawn in THEN's
+hand and the right in NOW's, and they interleave rather than splitting the tree
+down the middle. Every discovered connection hangs on it as a flower, clustered
+where the two canopies overlap. Earlier passes scattered a plant per flower
+across the full width, which read as busy and unplaced rather than as somewhere
+you are standing.
 
 What stayed programmatic, and why: every branch, trunk and stem is an SVG path
 drawn by `stroke-dashoffset`, so it can grow on screen — the signature bloom
