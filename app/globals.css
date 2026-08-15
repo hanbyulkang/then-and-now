@@ -1,26 +1,214 @@
 @import "tailwindcss";
 
+/* ==========================================================================
+   Then & Now — design tokens
+   Three visual languages: THEN (aged storybook), NOW (clean contemporary),
+   BETWEEN (the shared space where both merge).
+   ========================================================================== */
+
+@theme {
+  /* Base */
+  --color-canvas: #f7f4ec;
+
+  /* THEN — aged storybook, warm, tactile */
+  --color-then-paper: #e8ddc8;
+  --color-then-ink: #40382f;
+  --color-then-faded: #88745f;
+  --color-then-rose: #a77d75;
+  --color-then-sage: #7c876a;
+
+  /* NOW — clean, quiet, contemporary */
+  --color-now-canvas: #faf9f5;
+  --color-now-charcoal: #2d302f;
+  --color-now-slate: #747c79;
+  --color-now-sage: #9aaa94;
+  --color-now-grey: #daddd8;
+
+  /* BETWEEN — shared / bloom */
+  --color-bloom-gold: #c5a768;
+  --color-bloom-rose: #b88379;
+  --color-bloom-green: #788d72;
+
+  /* Typography */
+  --font-serif: var(--font-instrument-serif), "Instrument Serif", Georgia, serif;
+  --font-memory: var(--font-fraunces), "Fraunces", Georgia, serif;
+  --font-sans: var(--font-geist), "Geist", system-ui, sans-serif;
+
+  /* Motion — spec §31 */
+  --ease-organic: cubic-bezier(0.33, 0, 0.15, 1);
+  --ease-settle: cubic-bezier(0.2, 0.8, 0.25, 1);
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: light;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html,
+body {
+  background: var(--color-canvas);
+  color: var(--color-then-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  min-height: 100dvh;
+}
+
+/* Fraunces carries the "memory" voice: soft-edged, slightly wonky serif. */
+.font-memory {
+  font-variation-settings: "SOFT" 0, "WONK" 1;
+}
+
+/* --------------------------------------------------------------------------
+   Paper grain — THEN surfaces only, very low opacity so it never fights
+   readability (spec §32 Contrast).
+   -------------------------------------------------------------------------- */
+.paper-grain {
+  position: relative;
+  isolation: isolate;
+}
+
+.paper-grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.5;
+  background-image: url("/assets/textures/paper-grain.png");
+  background-size: 420px 420px;
+  mix-blend-mode: multiply;
+}
+
+/* Archival photographs sit slightly warm and desaturated. */
+.archival-photo {
+  filter: sepia(0.22) saturate(0.86) contrast(1.02);
+}
+
+/* --------------------------------------------------------------------------
+   Motion primitives
+   -------------------------------------------------------------------------- */
+
+/* Bud: very slow breathing motion (spec §30). */
+@keyframes breathe {
+  0%,
+  100% {
+    transform: scale(1) translateY(0);
+    opacity: 0.92;
+  }
+  50% {
+    transform: scale(1.045) translateY(-2px);
+    opacity: 1;
+  }
+}
+
+.animate-breathe {
+  animation: breathe 5.2s var(--ease-organic) infinite;
+  transform-origin: 50% 100%;
+}
+
+/* Seed: small pulse. */
+@keyframes seed-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.14);
+    opacity: 1;
+  }
+}
+
+.animate-seed-pulse {
+  animation: seed-pulse 3.4s var(--ease-organic) infinite;
+}
+
+/* Leaf unfurl — an individual memory being saved. */
+@keyframes leaf-unfurl {
+  from {
+    transform: scale(0.2) rotate(-18deg);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+.animate-leaf-unfurl {
+  animation: leaf-unfurl 900ms var(--ease-settle) both;
+  transform-origin: 0% 50%;
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-rise-in {
+  animation: rise-in 700ms var(--ease-settle) both;
+}
+
+@keyframes soft-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Recording waveform bars. */
+@keyframes wave-bar {
+  0%,
+  100% {
+    transform: scaleY(0.35);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Reduced motion — spec §31: replace animation with a simple fade.
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .animate-breathe,
+  .animate-seed-pulse {
+    animation: none !important;
+  }
+
+  .animate-leaf-unfurl,
+  .animate-rise-in {
+    animation: soft-fade 200ms ease both !important;
+  }
+}
+
+/* Focus visibility across both visual languages. */
+:where(a, button, [role="button"], input, textarea, [tabindex]):focus-visible {
+  outline: 2px solid var(--color-bloom-gold);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+::selection {
+  background: rgba(197, 167, 104, 0.28);
 }
