@@ -7,6 +7,7 @@ import {
   useEffect,
   useMemo,
   useReducer,
+  useRef,
   type ReactNode,
 } from "react";
 import { freshGarden, grownGarden } from "../demo-data";
@@ -114,7 +115,13 @@ export function GardenProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(reducer, undefined, grownGarden);
 
   /* Persist across reloads so a demo survives a refresh. Audio object URLs are
-     session-scoped and deliberately dropped. */
+     session-scoped and deliberately dropped.
+
+     Writing is gated on having read first: otherwise the save effect fires with
+     the initial demo state before the restore lands, overwrites what was
+     stored, and every reload quietly throws the session away. */
+  const untouched = useRef(state);
+
   useEffect(() => {
     try {
       const raw = window.localStorage.getItem(STORAGE_KEY);
@@ -125,6 +132,7 @@ export function GardenProvider({ children }: { children: ReactNode }) {
   }, []);
 
   useEffect(() => {
+    if (state === untouched.current) return;
     try {
       window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
     } catch {

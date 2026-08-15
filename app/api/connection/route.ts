@@ -42,13 +42,28 @@ ${body.then.name.toUpperCase()} — ${body.then.year}, age ${body.then.age}
 ${body.now.name.toUpperCase()} — ${body.now.year}, age ${body.now.age}
 "${body.now.transcript}"
 
-Read both. Is there something real they share — not the same subject, but the same
-feeling, the same shape of an experience, the same small human habit?
+Read both. Is there something real they share — the same feeling, the same need,
+the same shape of an experience, the same small human habit?
 
-If there is, name it in two or three words, write one line about the distance
-between them and one line about what is the same, and copy the exact phrase from
-each transcript where you saw it. Copy those phrases character for character; do
-not paraphrase or shorten them.
+Two people who answered the same question honestly usually do share something,
+even when the surface details have nothing in common: different food, different
+city, different decade, same feeling underneath. Say so when that is the case.
+
+What counts is a feeling, a need, or a relationship — not an activity and not a
+personality trait. "They were both patient." "They both did slow, careful work."
+"They were both young." Those are true of almost anyone, and a flower built on
+one is a lie the family will see through. Two stories standing side by side with
+nothing between them is a perfectly good outcome here; say so plainly.
+
+If there is: name the feeling in two or three words, write one line about the
+distance between them and one line about what is the same, and copy the exact
+phrase from each transcript where you saw it, character for character.
+
+The two lines are read one after the other, alone on screen, by someone who has
+just finished reading both stories. They already know what was said. So do not
+restate it. "52 years apart. / Same kind of happiness." is right.
+"52 years apart. / Both enjoyed eating with friends after school." is wrong —
+it explains what the reader just read, which makes the moment smaller.
 
 Then write one question for ${body.then.name} that this discovery opens up, about
 something specific they mentioned.`,

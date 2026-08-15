@@ -10,12 +10,12 @@ export const connectionSchema = z.object({
   found: z
     .boolean()
     .describe(
-      "True only if there is a genuine shared thread. If the two stories are simply about the same topic, that is not enough — say false.",
+      "True only when the thread is emotional or relational: how they felt, who they needed, what they were afraid of, what they loved, what they were leaving behind. The activities and details can be completely different — that is usually the point. A shared activity, a shared personality trait, or a shared kind of work is NOT a connection: two people being patient, or busy, or careful, is not a memory they share.",
     ),
   theme: z
     .string()
     .describe(
-      'Two or three words naming the flower, title case. e.g. "Everyday Joy", "Leaving Home".',
+      'Two or three words naming the flower, title case. Name the feeling, not the activity: "Everyday Joy", "Leaving Home", "Starting Over" — never "After-Class Food" or "Phone Calls".',
     ),
   headline: z
     .string()
@@ -25,7 +25,7 @@ export const connectionSchema = z.object({
   statement: z
     .string()
     .describe(
-      'A short line about what is shared, ending in a period. e.g. "Same kind of happiness." Never longer than six words.',
+      'What is the same, named as a feeling and ending in a period. Five words at the very most, and fewer is better: "Same kind of happiness." "Similar uncertainty." "The same phone call." Never describe the activity again — the transcripts already did that.',
     ),
   thenHighlight: z
     .string()

@@ -102,12 +102,8 @@ export default function RevealPage() {
             the branches grow; on mobile it sits between them so the comparison
             still reads top to bottom (spec §33). */}
         <div
-          className="relative order-2 shrink-0 self-stretch border-y border-black/5 transition-[width] duration-[900ms] ease-[var(--ease-settle)] md:order-none md:w-[var(--center-width)] md:border-x md:border-y-0"
-          style={
-            {
-              "--center-width": bloomStarted ? "min(42vw, 480px)" : "1px",
-            } as React.CSSProperties
-          }
+          className="relative order-2 shrink-0 self-stretch border-y border-black/5 transition-[width] duration-[900ms] ease-[var(--ease-settle)] max-md:!w-full md:order-none md:border-x md:border-y-0"
+          style={{ width: bloomStarted ? "min(42vw, 480px)" : "1px" }}
         >
           <div className="relative mx-auto h-[440px] w-full max-w-[440px] py-6 md:absolute md:inset-y-0 md:left-1/2 md:h-full md:w-[min(42vw,480px)] md:max-w-none md:-translate-x-1/2 md:py-0">
             {connection ? (

@@ -49,17 +49,15 @@ export async function findSharedThread({
 
     if (response.ok) {
       const result = await response.json();
-      if (result.found) {
-        return toConnection(result, then, now);
-      }
-      /* The model looked and found nothing. That is a valid answer: some
-         questions simply produce two separate leaves. */
-      return demoFallback(then, now);
+      /* "Nothing here" is a real answer, and it stands. Some questions simply
+         produce two separate leaves, and the garden is honest about that. */
+      return result.found ? toConnection(result, then, now) : undefined;
     }
   } catch {
-    /* Offline or blocked — fall through to the curated story. */
+    /* Offline or blocked — fall through to the curated story below. */
   }
 
+  /* Reached only when no model was available at all. */
   return demoFallback(then, now);
 }
 

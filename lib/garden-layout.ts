@@ -15,12 +15,6 @@ export const CANVAS = { width: 1440, height: 720 } as const;
 export const THEN_ORIGIN = { x: 168, y: 706 } as const;
 export const NOW_ORIGIN = { x: 1276, y: 706 } as const;
 
-/**
- * The lower middle belongs to today's question. Nothing is planted there, so
- * the card never lands on top of a flower.
- */
-export const QUESTION_ZONE = { x0: 470, x1: 970, y0: 390 } as const;
-
 export interface FlowerSlot {
   x: number;
   y: number;
@@ -28,19 +22,19 @@ export interface FlowerSlot {
 }
 
 /**
- * Filled newest-first, so the most recent discovery holds the centre. Later
- * slots drift outward — deeper conversations grow away from the ground they
- * started on, and the arrangement stays asymmetric on purpose.
+ * Filled newest-first, so the most recent discovery holds the crown of the
+ * composition. Nothing is planted in the lower middle: that band belongs to
+ * today's question, and a flower behind the card would simply be lost.
  */
 export const FLOWER_SLOTS: FlowerSlot[] = [
-  { x: 726, y: 222, size: 92 },
-  { x: 466, y: 168, size: 66 },
-  { x: 982, y: 196, size: 64 },
-  { x: 296, y: 330, size: 58 },
-  { x: 1148, y: 316, size: 56 },
-  { x: 636, y: 96, size: 50 },
-  { x: 1246, y: 158, size: 46 },
-  { x: 178, y: 178, size: 44 },
+  { x: 726, y: 116, size: 88 },
+  { x: 438, y: 200, size: 66 },
+  { x: 1008, y: 190, size: 64 },
+  { x: 246, y: 340, size: 58 },
+  { x: 1198, y: 330, size: 56 },
+  { x: 330, y: 128, size: 50 },
+  { x: 1120, y: 108, size: 46 },
+  { x: 1330, y: 220, size: 44 },
 ];
 
 /** Where a lone memory sits: close to whoever told it, never in the middle. */
@@ -60,15 +54,15 @@ export function leafSlot(side: "then" | "now", index: number) {
   };
 }
 
-/**
+/*
  * Each flower keeps the two short branches it grew from, one in each hand.
  *
  * They are approaches, not wires: tracing every flower all the way back to a
  * corner would turn the garden into a dependency diagram, which is exactly the
  * look the design rules out. The long histories live in the root systems at the
- * bottom instead.
+ * bottom instead. The shapes vary per flower so no two pairs read as a repeated
+ * motif.
  */
-/** Per-flower variation, so no two pairs of branches read as a repeated motif. */
 function thenShape(seed: number) {
   return {
     reach: 104 + ((seed * 47) % 74),

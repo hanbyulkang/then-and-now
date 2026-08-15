@@ -64,7 +64,7 @@ export function GardenCanvas({
   return (
     // --fy pulls the flowers up on short screens so the question card never
     // lands on one of their labels. It scales the stems and heads together.
-    <div className="relative w-full flex-1 overflow-hidden [--fy:0.84] md:[--fy:1]">
+    <div className="relative min-h-[520px] w-full flex-1 overflow-hidden [--fy:0.86] md:[--fy:1]">
       <svg
         viewBox={`0 0 ${CANVAS.width} ${CANVAS.height}`}
         preserveAspectRatio="none"

@@ -29,11 +29,11 @@ export function QuestionBud({
   const ready = status === "ready";
 
   return (
-    <div className="flex flex-col items-center gap-6 md:gap-8">
+    <div className="flex flex-col items-center gap-5 md:gap-6">
       {ready ? (
         /* 07 — Both Stories Ready. The moment gets more room than the waiting
            state did: this is an occasion, not a task. */
-        <article className="flex w-[min(420px,calc(100vw-40px))] flex-col items-center gap-5 rounded-[24px] border-[1.5px] border-bloom-gold bg-white p-7 text-center shadow-[0_12px_16px_rgba(64,56,47,0.06)] md:p-9">
+        <article className="flex w-[min(420px,calc(100vw-40px))] flex-col items-center gap-4 rounded-[24px] border-[1.5px] border-bloom-gold bg-white p-6 text-center shadow-[0_12px_16px_rgba(64,56,47,0.06)] md:p-7">
           <span className="rounded-[12px] bg-bloom-rose/[0.12] px-3 py-1 text-[12px] font-semibold uppercase tracking-wide text-bloom-rose">
             Both stories are ready
           </span>
