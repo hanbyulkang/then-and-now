@@ -3,29 +3,32 @@
 import { useState } from "react";
 import {
   CANVAS,
-  FLOWER_SLOTS,
+  type FlowerSlot,
   NOW_ORIGIN,
   THEN_ORIGIN,
   leafSlot,
-  leavesAlong,
-  stemPath,
+  nowApproach,
+  nowNode,
+  thenApproach,
+  thenLeaf,
 } from "@/lib/garden-layout";
 import type { Conversation, Memory, Pair } from "@/lib/types";
+import { NowRoot, ThenRoot } from "./RootSystem";
 import { SharedFlower } from "./SharedFlower";
 import { StoryPreview } from "./StoryPreview";
 
 export interface PlacedFlower {
   conversation: Conversation;
-  slot: (typeof FLOWER_SLOTS)[number];
+  slot: FlowerSlot;
   index: number;
 }
 
 /**
  * The garden itself.
  *
- * Drawn as one continuous botanical composition rather than a node graph:
- * every stem is a cubic Bézier rooted in one person's ground, and the only
- * things sitting in the middle are flowers that belong to both of them.
+ * One continuous botanical composition rather than a node graph. Every stem is
+ * rooted in one person's ground, and the only things standing in the middle are
+ * flowers that belong to both of them. THEN's lines wander; NOW's are drafted.
  */
 export function GardenCanvas({
   pair,
@@ -38,13 +41,22 @@ export function GardenCanvas({
   pair: Pair;
   flowers: PlacedFlower[];
   leaves: Memory[];
-  /** Plays the arrival animation for a flower that has only just appeared. */
+  /** Marks a flower that has only just appeared. */
   justBloomedId?: string;
   onOpenFlower(conversation: Conversation): void;
   /** The question card and bud, positioned by the caller. */
   children?: React.ReactNode;
 }) {
   const [hovered, setHovered] = useState<string | null>(null);
+
+  /* Each root grows in proportion to what its owner has actually told. */
+  const told = flowers.flatMap((f) => Object.values(f.conversation.memories));
+  const thenMemories =
+    told.filter((m) => m.personId === pair.then.id).length +
+    leaves.filter((m) => m.personId === pair.then.id).length;
+  const nowMemories =
+    told.filter((m) => m.personId === pair.now.id).length +
+    leaves.filter((m) => m.personId === pair.now.id).length;
 
   const pct = (value: number, axis: "x" | "y") =>
     `${(value / (axis === "x" ? CANVAS.width : CANVAS.height)) * 100}%`;
@@ -53,95 +65,110 @@ export function GardenCanvas({
     <div className="relative w-full flex-1 overflow-hidden">
       <svg
         viewBox={`0 0 ${CANVAS.width} ${CANVAS.height}`}
-        preserveAspectRatio="xMidYMax meet"
+        preserveAspectRatio="none"
         className="absolute inset-0 size-full"
         aria-hidden
       >
-        {/* The two grounds. Warm and worn on the left, cool and even on the right. */}
-        <ellipse
-          cx={THEN_ORIGIN.x + 24}
-          cy={CANVAS.height + 30}
-          rx={400}
-          ry={112}
-          fill="#e8ddc8"
-          opacity={0.66}
+        <defs>
+          {/* Soft edges so the ground reads as light on soil, not as a shape. */}
+          <filter id="ground-blur" x="-30%" y="-60%" width="160%" height="260%">
+            <feGaussianBlur stdDeviation="26" />
+          </filter>
+        </defs>
+
+        <g filter="url(#ground-blur)">
+          <ellipse
+            cx={THEN_ORIGIN.x + 30}
+            cy={CANVAS.height + 40}
+            rx={480}
+            ry={128}
+            fill="#e8ddc8"
+            opacity={0.85}
+          />
+          <ellipse
+            cx={NOW_ORIGIN.x - 30}
+            cy={CANVAS.height + 40}
+            rx={480}
+            ry={128}
+            fill="#daddd8"
+            opacity={0.6}
+          />
+        </g>
+
+        {/* Everything each person has told so far, rooted in their own ground. */}
+        <ThenRoot
+          x={THEN_ORIGIN.x}
+          y={THEN_ORIGIN.y}
+          memories={thenMemories}
         />
-        <ellipse
-          cx={NOW_ORIGIN.x - 24}
-          cy={CANVAS.height + 30}
-          rx={400}
-          ry={112}
-          fill="#daddd8"
-          opacity={0.42}
-        />
+        <NowRoot x={NOW_ORIGIN.x} y={NOW_ORIGIN.y} memories={nowMemories} />
 
         {flowers.map(({ conversation, slot, index }) => {
-          const fresh = conversation.id === justBloomedId;
           const active = hovered === conversation.id;
+          const fresh = conversation.id === justBloomedId;
+          const leaf = thenLeaf(slot, index);
+          const node = nowNode(slot, index);
           return (
             <g key={conversation.id}>
-              {/* THEN reaches up from the left in an uneven, drawn line. */}
               <path
-                d={stemPath("then", slot, index)}
+                d={thenApproach(slot, index)}
                 stroke="#40382f"
-                strokeWidth={active ? 2 : 1.5}
+                strokeWidth={active ? 2.2 : 1.7}
                 strokeLinecap="round"
                 fill="none"
-                opacity={active ? 0.62 : 0.34}
+                opacity={active ? 0.6 : 0.34}
                 pathLength={1}
                 style={{
                   strokeDasharray: 1,
-                  strokeDashoffset: fresh ? 1 : 0,
                   animation: fresh
-                    ? "none"
+                    ? "draw-stem 1.5s var(--ease-organic) both"
                     : undefined,
-                  transition:
-                    "stroke-dashoffset 2.2s var(--ease-organic), opacity 300ms ease, stroke-width 300ms ease",
+                  transition: "opacity 300ms ease, stroke-width 300ms ease",
                 }}
               />
-              {/* NOW answers from the right with a thinner, steadier line. */}
               <path
-                d={stemPath("now", slot, index)}
+                d={nowApproach(slot, index)}
                 stroke="#2d302f"
                 strokeWidth={active ? 1.4 : 1}
                 strokeLinecap="round"
                 fill="none"
-                opacity={active ? 0.5 : 0.24}
+                opacity={active ? 0.52 : 0.28}
+                pathLength={1}
                 style={{
+                  strokeDasharray: 1,
+                  animation: fresh
+                    ? "draw-stem 1.5s var(--ease-organic) 320ms both"
+                    : undefined,
                   transition: "opacity 300ms ease, stroke-width 300ms ease",
                 }}
               />
 
-              {leavesAlong("then", slot, index).map((leaf, i) => (
-                <ellipse
-                  key={`t${i}`}
-                  cx={leaf.x}
-                  cy={leaf.y}
-                  rx={leaf.size}
-                  ry={leaf.size / 2}
-                  fill="#7c876a"
-                  opacity={0.85}
-                  transform={`rotate(${leaf.rotation} ${leaf.x} ${leaf.y})`}
-                />
-              ))}
-              {leavesAlong("now", slot, index).map((leaf, i) => (
-                <rect
-                  key={`n${i}`}
-                  x={leaf.x - leaf.size / 2}
-                  y={leaf.y - leaf.size / 2}
-                  width={leaf.size}
-                  height={leaf.size}
-                  rx={leaf.size / 2.4}
-                  fill="#9aaa94"
-                  opacity={0.8}
-                  transform={`rotate(${leaf.rotation} ${leaf.x} ${leaf.y})`}
-                />
-              ))}
+              <ellipse
+                cx={leaf.x}
+                cy={leaf.y}
+                rx={leaf.size}
+                ry={leaf.size / 2.2}
+                fill="#7c876a"
+                opacity={active ? 0.95 : 0.75}
+                transform={`rotate(${leaf.rotation} ${leaf.x} ${leaf.y})`}
+                style={{ transition: "opacity 300ms ease" }}
+              />
+              <rect
+                x={node.x - node.size / 2}
+                y={node.y - node.size / 2}
+                width={node.size}
+                height={node.size}
+                rx={node.size / 2.6}
+                fill="#9aaa94"
+                opacity={active ? 0.92 : 0.7}
+                transform={`rotate(${node.rotation} ${node.x} ${node.y})`}
+                style={{ transition: "opacity 300ms ease" }}
+              />
             </g>
           );
         })}
 
-        {/* Memories nobody has met in the middle yet — leaves, not flowers. */}
+        {/* Memories that have not met anything in the middle: leaves, not flowers. */}
         {leaves.map((memory, i) => {
           const side = memory.personId === pair.then.id ? "then" : "now";
           const at = leafSlot(side, i);
@@ -151,10 +178,10 @@ export function GardenCanvas({
               cx={at.x}
               cy={at.y}
               rx={13}
-              ry={6.5}
+              ry={6}
               fill="#7c876a"
-              opacity={0.7}
-              transform={`rotate(${-24 - i * 13} ${at.x} ${at.y})`}
+              opacity={0.6}
+              transform={`rotate(${-26 - i * 15} ${at.x} ${at.y})`}
             />
           ) : (
             <rect
@@ -163,24 +190,26 @@ export function GardenCanvas({
               y={at.y - 7}
               width={14}
               height={14}
-              rx={6}
+              rx={5}
               fill="#9aaa94"
-              opacity={0.7}
+              opacity={0.6}
               transform={`rotate(${18 + i * 11} ${at.x} ${at.y})`}
             />
           );
         })}
       </svg>
 
-      {/* Flower heads and their labels sit above the drawing so they can be
-          hovered, focused and opened. */}
+      {/* Flower heads sit above the drawing so they can be hovered, focused
+          and opened. */}
       {flowers.map(({ conversation, slot, index }) => (
         <div
           key={conversation.id}
           className="absolute -translate-x-1/2 -translate-y-1/2"
           style={{ left: pct(slot.x, "x"), top: pct(slot.y, "y") }}
           onMouseEnter={() => setHovered(conversation.id)}
-          onMouseLeave={() => setHovered((h) => (h === conversation.id ? null : h))}
+          onMouseLeave={() =>
+            setHovered((h) => (h === conversation.id ? null : h))
+          }
         >
           <button
             type="button"
@@ -194,13 +223,12 @@ export function GardenCanvas({
               size={slot.size}
               variant={index}
               glow={conversation.id === justBloomedId}
-              bloom={1}
             />
             <span
               className={`whitespace-nowrap rounded-[12px] border border-bloom-gold px-2.5 py-1 text-[11px] ${
                 index === 0
                   ? "bg-then-paper font-semibold text-then-ink"
-                  : "bg-white font-medium text-then-ink"
+                  : "bg-white/90 font-medium text-then-ink"
               }`}
             >
               {conversation.connection?.theme}

@@ -44,10 +44,14 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${instrumentSerif.variable} ${fraunces.variable} ${geist.variable} antialiased`}
-      >
+    /* The font variables live on <html> so the design tokens on :root that
+       reference them resolve — declared on <body> they would leave every
+       :root token invalid, and the whole page would fall back to Times. */
+    <html
+      lang="en"
+      className={`${instrumentSerif.variable} ${fraunces.variable} ${geist.variable}`}
+    >
+      <body className="antialiased">
         <GardenProvider>{children}</GardenProvider>
       </body>
     </html>

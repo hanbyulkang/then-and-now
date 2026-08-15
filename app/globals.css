@@ -143,6 +143,16 @@ body {
   transform-origin: 0% 50%;
 }
 
+/* A stem drawing itself in, used when a new flower joins the garden. */
+@keyframes draw-stem {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
 @keyframes rise-in {
   from {
     opacity: 0;

@@ -29,86 +29,96 @@ export function QuestionBud({
   const ready = status === "ready";
 
   return (
-    <div className="flex flex-col items-center gap-6">
-      <article
-        className={`w-[min(380px,calc(100vw-40px))] rounded-[16px] border bg-white p-6 shadow-[0_8px_12px_rgba(64,56,47,0.06)] md:p-7 ${
-          ready ? "border-bloom-rose" : "border-bloom-gold"
-        }`}
-      >
-        <header className="flex items-start justify-between gap-3">
-          <p className="text-[12px] font-semibold uppercase tracking-wide text-bloom-gold">
-            {question.origin === "follow-up"
-              ? "A conversation waiting to bloom"
-              : "Today's Question"}
+    <div className="flex flex-col items-center gap-6 md:gap-8">
+      {ready ? (
+        /* 07 — Both Stories Ready. The moment gets more room than the waiting
+           state did: this is an occasion, not a task. */
+        <article className="flex w-[min(420px,calc(100vw-40px))] flex-col items-center gap-5 rounded-[24px] border-[1.5px] border-bloom-gold bg-white p-7 text-center shadow-[0_12px_16px_rgba(64,56,47,0.06)] md:p-9">
+          <span className="rounded-[12px] bg-bloom-rose/[0.12] px-3 py-1 text-[12px] font-semibold uppercase tracking-wide text-bloom-rose">
+            Both stories are ready
+          </span>
+          <h2 className="font-serif text-[26px] leading-tight text-then-ink md:text-[32px]">
+            &ldquo;{question.text}&rdquo;
+          </h2>
+          <p className="text-[14px] leading-[1.5] text-now-slate">
+            Take a quiet moment to reveal each other&apos;s memories together.
           </p>
-          {partnerAnswered ? (
-            <span className="shrink-0 rounded-[12px] bg-then-sage/[0.08] px-2 py-1 text-[11px] text-then-sage">
-              {partner.name} answered
-            </span>
-          ) : null}
-        </header>
-
-        <p className="mt-4 font-memory text-[20px] leading-[1.4] text-then-ink md:text-[22px]">
-          &ldquo;{question.text}&rdquo;
-        </p>
-
-        <footer className="mt-4 flex items-center justify-between gap-4">
-          {ready ? (
-            <>
-              <p className="text-[13px] text-then-faded">
-                Both stories are ready.
-              </p>
-              <button
-                type="button"
-                onClick={onReveal}
-                className="shrink-0 rounded-[20px] bg-bloom-rose px-4 py-2 text-[13px] font-semibold text-white transition-colors duration-200 hover:bg-then-rose"
-              >
-                Reveal together
-              </button>
-            </>
-          ) : viewerAnswered ? (
-            <p className="text-[13px] leading-[1.5] text-now-slate">
-              {partner.name} hasn&apos;t answered yet. We&apos;ll keep your
-              story private until she does.
+          <button
+            type="button"
+            onClick={onReveal}
+            className="rounded-[24px] bg-bloom-green px-6 py-3 text-[14px] font-semibold text-white transition-colors duration-200 hover:bg-then-sage"
+          >
+            Reveal together
+          </button>
+        </article>
+      ) : (
+        <article className="w-[min(380px,calc(100vw-40px))] rounded-[16px] border border-bloom-gold bg-white p-6 shadow-[0_8px_12px_rgba(64,56,47,0.06)] md:p-7">
+          <header className="flex items-start justify-between gap-3">
+            <p className="text-[12px] font-semibold uppercase tracking-wide text-bloom-gold">
+              {question.origin === "follow-up"
+                ? "A conversation waiting to bloom"
+                : "Today's Question"}
             </p>
-          ) : (
-            <>
-              <p className="text-[13px] text-now-slate">
-                Waiting for your answer
-              </p>
-              <button
-                type="button"
-                onClick={onAnswer}
-                className="shrink-0 rounded-[20px] bg-bloom-green px-4 py-2 text-[13px] font-semibold text-white transition-colors duration-200 hover:bg-then-sage"
-              >
-                Answer
-              </button>
-            </>
-          )}
-        </footer>
-      </article>
+            {partnerAnswered ? (
+              <span className="shrink-0 rounded-[12px] bg-then-sage/[0.08] px-2 py-1 text-[11px] text-then-sage">
+                {partner.name} answered
+              </span>
+            ) : null}
+          </header>
 
-      {/* The bud. It breathes while it waits, and brightens once both stories
-          are in — the only thing that changes about it. */}
-      <div className="flex flex-col items-center gap-1">
+          <p className="mt-4 font-memory text-[20px] leading-[1.4] text-then-ink md:text-[22px]">
+            &ldquo;{question.text}&rdquo;
+          </p>
+
+          <footer className="mt-4 flex items-center justify-between gap-4">
+            {viewerAnswered ? (
+              /* Spec §14: the story stays private until both have spoken. */
+              <p className="text-[13px] leading-[1.5] text-now-slate">
+                {partner.name} hasn&apos;t answered yet. We&apos;ll keep your
+                story private until she does.
+              </p>
+            ) : (
+              <>
+                <p className="text-[13px] text-now-slate">
+                  Waiting for your answer
+                </p>
+                <button
+                  type="button"
+                  onClick={onAnswer}
+                  className="shrink-0 rounded-[20px] bg-bloom-green px-4 py-2 text-[13px] font-semibold text-white transition-colors duration-200 hover:bg-then-sage"
+                >
+                  Answer
+                </button>
+              </>
+            )}
+          </footer>
+        </article>
+      )}
+
+      {/* The bud. It breathes while it waits, and warms once both stories are
+          in — the only thing about it that ever changes. */}
+      <div className="flex flex-col items-center gap-2">
         <svg
-          width="40"
-          height="56"
+          width={ready ? 58 : 40}
+          height={ready ? 78 : 56}
           viewBox="0 0 40 56"
           fill="none"
           aria-hidden
-          className="animate-breathe"
+          className="animate-breathe overflow-visible"
         >
+          {ready ? (
+            <ellipse cx="20" cy="28" rx="30" ry="34" fill="#b88379" opacity="0.16" />
+          ) : null}
           <path
             d="M20 0.75C25.2 0.75 30 3.7 33.5 8.6 37 13.6 39.25 20.4 39.25 28c0 7.6-2.2 14.4-5.75 19.4C30 52.3 25.2 55.25 20 55.25S9.99 52.3 6.47 47.4C2.95 42.4.75 35.6.75 28c0-7.6 2.2-14.4 5.72-19.4C9.99 3.7 14.8.75 20 .75Z"
-            fill={ready ? "#c5a768" : "#b88379"}
+            fill={ready ? "#c08b7f" : "#b88379"}
             stroke="#c5a768"
             strokeWidth="1.5"
             style={{ transition: "fill 900ms ease" }}
           />
         </svg>
-        <p className="text-[12px] text-then-faded">
-          {ready ? "Ready to open" : "Bud of Memory"}
+        <p className="text-[12px] text-then-faded md:text-[13px]">
+          {ready ? "Ready to Bloom" : "Bud of Memory"}
         </p>
       </div>
     </div>
