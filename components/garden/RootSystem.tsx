@@ -1,5 +1,7 @@
 "use client";
 
+import { NowLeaf, ThenLeaf } from "./Leaf";
+
 /**
  * A person's accumulated history, growing out of their corner of the ground
  * (spec §11: Root). It thickens as they tell more stories — the garden should
@@ -48,11 +50,12 @@ export function ThenRoot({
         fill="none"
       />
 
-      <ellipse cx={w * 0.42} cy={-h * 0.5} rx={14} ry={6.4} fill="#7c876a" transform={`rotate(-22 ${w * 0.42} ${-h * 0.5})`} />
-      <ellipse cx={w * 0.74} cy={-h * 0.62} rx={11} ry={5.2} fill="#7c876a" transform={`rotate(18 ${w * 0.74} ${-h * 0.62})`} />
-      <ellipse cx={-w * 0.34} cy={-h * 0.79} rx={12} ry={5.6} fill="#7c876a" transform={`rotate(-46 ${-w * 0.34} ${-h * 0.79})`} />
-      <ellipse cx={w * 0.12} cy={-h * 0.88} rx={13} ry={6} fill="#7c876a" transform={`rotate(-8 ${w * 0.12} ${-h * 0.88})`} />
-      <ellipse cx={-w * 0.06} cy={-h * 0.2} rx={10} ry={4.6} fill="#7c876a" transform={`rotate(34 ${-w * 0.06} ${-h * 0.2})`} />
+      {/* Leaves sit at careless angles, the way they do on a real stem. */}
+      <ThenLeaf x={w * 0.42} y={-h * 0.5} width={34} rotation={-22} />
+      <ThenLeaf x={w * 0.74} y={-h * 0.62} width={27} rotation={18} />
+      <ThenLeaf x={-w * 0.34} y={-h * 0.79} width={30} rotation={-46} />
+      <ThenLeaf x={w * 0.12} y={-h * 0.88} width={32} rotation={-8} />
+      <ThenLeaf x={-w * 0.06} y={-h * 0.2} width={25} rotation={34} />
     </g>
   );
 }
@@ -94,10 +97,11 @@ export function NowRoot({
         fill="none"
       />
 
-      <rect x={-6} y={-h * 0.88 - 6} width={12} height={12} rx={6} fill="#9aaa94" />
-      <rect x={-w * 0.6 - 5} y={-h * 0.58 - 5} width={10} height={10} rx={4} fill="#9aaa94" transform={`rotate(45 ${-w * 0.6} ${-h * 0.58})`} />
-      <rect x={w * 0.42 - 5} y={-h * 0.84 - 5} width={10} height={10} rx={4} fill="#9aaa94" transform={`rotate(15 ${w * 0.42} ${-h * 0.84})`} />
-      <rect x={-4} y={-h * 0.26 - 4} width={8} height={8} rx={3} fill="#9aaa94" />
+      {/* The same leaf, ruled flat — NOW keeps its own hand. */}
+      <NowLeaf x={0} y={-h * 0.88} width={14} rotation={0} />
+      <NowLeaf x={-w * 0.6} y={-h * 0.58} width={12} rotation={-52} />
+      <NowLeaf x={w * 0.42} y={-h * 0.84} width={12} rotation={38} />
+      <NowLeaf x={0} y={-h * 0.26} width={10} rotation={12} />
     </g>
   );
 }

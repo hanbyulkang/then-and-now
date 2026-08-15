@@ -69,6 +69,17 @@ lib/
   voice/                   Recording and browser transcription
 ```
 
+### The botanical artwork
+
+One art direction throughout: a pressed botanical specimen, flat fills, a
+hand-inked contour of uneven weight, in the Then & Now palette. The petals,
+leaves and bud are drawn artwork; the arrangement, the variation and the growth
+are code, because branches have to be able to draw themselves on screen.
+
+The shared flower is the clearest case. Its left petals are drawn by hand and
+its right petals are the same petal ruled into flat facets — one bloom in two
+hands, belonging to neither person alone.
+
 ### The garden
 
 Drawn as a single botanical composition, not a node graph. Positions come from

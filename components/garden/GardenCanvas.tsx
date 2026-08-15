@@ -13,6 +13,7 @@ import {
   thenLeaf,
 } from "@/lib/garden-layout";
 import type { Conversation, Memory, Pair } from "@/lib/types";
+import { NowLeaf, ThenLeaf } from "./Leaf";
 import { NowRoot, ThenRoot } from "./RootSystem";
 import { SharedFlower } from "./SharedFlower";
 import { StoryPreview } from "./StoryPreview";
@@ -161,26 +162,19 @@ export function GardenCanvas({
                 }}
               />
 
-              <ellipse
-                cx={leaf.x}
-                cy={leaf.y}
-                rx={leaf.size}
-                ry={leaf.size / 2.2}
-                fill="#7c876a"
-                opacity={active ? 0.95 : 0.75}
-                transform={`rotate(${leaf.rotation} ${leaf.x} ${leaf.y})`}
-                style={{ transition: "opacity 300ms ease" }}
+              <ThenLeaf
+                x={leaf.x}
+                y={leaf.y}
+                width={leaf.size * 2.4}
+                rotation={leaf.rotation}
+                opacity={active ? 1 : 0.82}
               />
-              <rect
-                x={node.x - node.size / 2}
-                y={node.y - node.size / 2}
-                width={node.size}
-                height={node.size}
-                rx={node.size / 2.6}
-                fill="#9aaa94"
-                opacity={active ? 0.92 : 0.7}
-                transform={`rotate(${node.rotation} ${node.x} ${node.y})`}
-                style={{ transition: "opacity 300ms ease" }}
+              <NowLeaf
+                x={node.x}
+                y={node.y}
+                width={node.size * 1.1}
+                rotation={node.rotation}
+                opacity={active ? 1 : 0.78}
               />
             </g>
           );
@@ -192,27 +186,22 @@ export function GardenCanvas({
           const side = memory.personId === pair.then.id ? "then" : "now";
           const at = leafSlot(side, i);
           return side === "then" ? (
-            <ellipse
+            <ThenLeaf
               key={memory.id}
-              cx={at.x}
-              cy={at.y}
-              rx={13}
-              ry={6}
-              fill="#7c876a"
-              opacity={0.6}
-              transform={`rotate(${-26 - i * 15} ${at.x} ${at.y})`}
+              x={at.x}
+              y={at.y}
+              width={30}
+              rotation={-26 - i * 15}
+              opacity={0.7}
             />
           ) : (
-            <rect
+            <NowLeaf
               key={memory.id}
-              x={at.x - 7}
-              y={at.y - 7}
-              width={14}
-              height={14}
-              rx={5}
-              fill="#9aaa94"
-              opacity={0.6}
-              transform={`rotate(${18 + i * 11} ${at.x} ${at.y})`}
+              x={at.x}
+              y={at.y}
+              width={13}
+              rotation={18 + i * 11}
+              opacity={0.7}
             />
           );
         })}

@@ -3,15 +3,23 @@
 /**
  * The shared flower.
  *
- * Its two halves are quotations: the rose petals are drawn in THEN's hand
- * (organic, tilted, soft-edged) and the sage panels in NOW's (geometric,
- * measured). Neither side owns the result — that is the whole idea. A flower is
- * only ever rendered where a real connection was found.
+ * Its two halves are quotations. The left petals are drawn by hand — a soft
+ * rose form with a contour that wanders. The right petals are the same petal
+ * redrawn as flat, ruled geometry in sage. Neither side owns the result, which
+ * is the whole idea, and a flower is only ever rendered where a real connection
+ * was found.
  *
- * At larger sizes it opens into the fuller form, with a second petal and a
- * second panel; small ones in the garden keep the simpler silhouette so a row
- * of them stays legible.
+ * The petals are drawn artwork; the fan, the variation and the bloom belong to
+ * the code, so every flower is the same specimen arranged a little differently.
  */
+
+const THEN_PETAL = "/assets/botanical/then/petal.svg";
+const NOW_PETAL = "/assets/botanical/now/petal.svg";
+
+/** Aspect of each source drawing, so a petal never distorts. */
+const THEN_RATIO = 574 / 972;
+const NOW_RATIO = 443 / 953;
+
 export function SharedFlower({
   size = 64,
   /** Stable per-flower variation so the same memory always looks the same. */
@@ -24,130 +32,89 @@ export function SharedFlower({
   bloom?: number;
   glow?: boolean;
 }) {
-  const full = size >= 120;
-  const c = 32;
-  const id = `fl${variant}${full ? "f" : "s"}`;
+  /* Deterministic tilt — a row of identical flowers would read as a chart. */
+  const lean = -8 + ((variant * 37) % 17);
+  const spread = 38 + ((variant * 13) % 9);
 
-  /* Deterministic tilts — a row of identical flowers would read as a chart. */
-  const petalTilt = -46 + ((variant * 37) % 62);
-  const panelTilt = 10 + ((variant * 23) % 34);
-  const petalRx = 10 + (variant % 3);
-  const petalRy = 16 + (variant % 4);
+  const petalH = size * 0.46;
+  const centre = Math.max(5, size * 0.15);
+
+  const thenAngles = [-spread, -spread * 2.05, -spread * 3.1];
+  const nowAngles = [spread, spread * 2.05, spread * 3.1];
 
   return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 64 64"
-      fill="none"
-      className="overflow-visible"
-      aria-hidden
+    <span
+      className="relative block"
       style={{
-        transform: `scale(${bloom})`,
+        width: size,
+        height: size,
+        transform: `scale(${bloom}) rotate(${lean}deg)`,
         transformOrigin: "center",
         transition: "transform 1200ms var(--ease-settle)",
       }}
+      aria-hidden
     >
-      <defs>
-        <filter
-          id={`${id}-glow`}
-          x="-60%"
-          y="-60%"
-          width="220%"
-          height="220%"
-        >
-          <feGaussianBlur stdDeviation={full ? 4 : 2} />
-        </filter>
-      </defs>
+      {/* The warmth the flower sits in — light on the page, never a disc. */}
+      <span
+        className="absolute rounded-full"
+        style={{
+          inset: `-${size * (glow ? 0.14 : 0.06)}px`,
+          background: "#b88379",
+          opacity: (glow ? 0.13 : 0.07) * bloom,
+          filter: `blur(${size * 0.26}px)`,
+        }}
+      />
 
-      <circle
-        cx={c}
-        cy={c}
-        r={glow ? 26 : 22}
-        fill="#b88379"
-        fillOpacity={glow ? 0.26 * bloom : 0.11}
-        filter={`url(#${id}-glow)`}
-      >
-        {glow ? (
-          <animate
-            attributeName="r"
-            values="24;28;24"
-            dur="6s"
-            repeatCount="indefinite"
+      {[...thenAngles, ...nowAngles].map((angle, i) => {
+        const isThen = i < thenAngles.length;
+        const ratio = isThen ? THEN_RATIO : NOW_RATIO;
+        return (
+          /* eslint-disable-next-line @next/next/no-img-element */
+          <img
+            key={i}
+            src={isThen ? THEN_PETAL : NOW_PETAL}
+            alt=""
+            style={{
+              position: "absolute",
+              left: "50%",
+              bottom: "50%",
+              width: petalH * ratio,
+              height: petalH,
+              transformOrigin: "50% 100%",
+              transform: `translateX(-50%) rotate(${angle}deg)`,
+              opacity: bloom,
+              transition: `opacity 700ms ease ${i * 60}ms`,
+            }}
           />
-        ) : null}
-      </circle>
+        );
+      })}
 
-      {/* THEN — petals that lean. Proportions follow the drawn flower in the
-          design file, where the rose reads as two overlapping strokes rather
-          than one mass. */}
-      {full ? (
-        <ellipse
-          cx={33.9}
-          cy={17.5}
-          rx={10.7}
-          ry={15.5}
-          transform={`rotate(${petalTilt} 33.9 17.5)`}
-          fill="#a77d75"
-          style={{ opacity: bloom, transition: "opacity 700ms ease" }}
-        />
-      ) : null}
-      <ellipse
-        cx={full ? 25.6 : 31.4}
-        cy={full ? 25.6 : 23.6}
-        rx={full ? 9.6 : petalRx}
-        ry={full ? 14.3 : petalRy}
-        transform={`rotate(${full ? petalTilt + 60 : petalTilt} ${full ? 25.6 : 31.4} ${full ? 25.6 : 23.6})`}
-        fill="#a77d75"
+      {/* Where the two hands meet. */}
+      <span
+        className="absolute rounded-full"
         style={{
-          opacity: bloom,
-          transition: "opacity 700ms ease 90ms",
+          left: "50%",
+          top: "50%",
+          width: centre,
+          height: centre,
+          marginLeft: -centre / 2,
+          marginTop: -centre / 2,
+          background: "#c5a768",
+          boxShadow: `0 0 0 ${Math.max(1, size * 0.018)}px #f7f4ec`,
         }}
       />
-
-      {/* NOW — forms with corners, even when they are soft. */}
-      <rect
-        x={full ? 23.9 : 22}
-        y={full ? 27.6 : 22}
-        width={full ? 16.2 : 20}
-        height={full ? 16.2 : 20}
-        rx={full ? 2.6 : 4}
-        transform={`rotate(${full ? panelTilt + 35 : panelTilt} 32 ${full ? 35.7 : 32})`}
-        fill="#9aaa94"
-        stroke={full ? "#c5a768" : undefined}
-        strokeWidth={full ? 0.5 : undefined}
+      <span
+        className="absolute rounded-full"
         style={{
-          opacity: bloom,
-          transition: "opacity 700ms ease 180ms",
+          left: "50%",
+          top: "50%",
+          width: centre * 0.44,
+          height: centre * 0.44,
+          marginLeft: (-centre * 0.44) / 2,
+          marginTop: (-centre * 0.44) / 2,
+          background: "#40382f",
         }}
       />
-      {full ? (
-        <rect
-          x={22.9}
-          y={19.2}
-          width={13.9}
-          height={13.9}
-          rx={1.7}
-          transform={`rotate(${panelTilt} 29.8 26.1)`}
-          fill="#9aaa94"
-          stroke="#c5a768"
-          strokeWidth="0.5"
-          style={{ opacity: bloom, transition: "opacity 700ms ease 260ms" }}
-        />
-      ) : null}
-
-      {/* Where the two meet. */}
-      {full ? (
-        <circle
-          cx={c}
-          cy={c}
-          r={5.4}
-          fill="#c5a768"
-          stroke="#fff"
-          strokeWidth={0.72}
-        />
-      ) : null}
-      <circle cx={c} cy={c} r={full ? 2.4 : 6} fill="#40382f" />
-    </svg>
+    </span>
   );
 }

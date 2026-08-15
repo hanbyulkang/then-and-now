@@ -1,5 +1,6 @@
 "use client";
 
+import { Bud } from "@/components/botanical/Bud";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
@@ -120,24 +121,7 @@ export default function SharedMemoryPage() {
 
       <footer className="flex flex-col items-start gap-4 border-t border-bloom-gold bg-then-paper px-6 py-5 md:flex-row md:items-center md:justify-between md:px-12">
         <div className="flex items-center gap-4">
-          <svg
-            width="24"
-            height="32"
-            viewBox="0 0 24 32"
-            fill="none"
-            aria-hidden
-            className="shrink-0 animate-breathe"
-          >
-            <ellipse
-              cx="12"
-              cy="16"
-              rx="11"
-              ry="15"
-              fill="#e6d6b4"
-              stroke="#c5a768"
-              strokeWidth="1"
-            />
-          </svg>
+          <Bud width={26} className="shrink-0" />
           <div className="flex flex-col gap-0.5">
             <p className="text-[11px] font-semibold uppercase tracking-wide text-bloom-rose">
               Continue this conversation

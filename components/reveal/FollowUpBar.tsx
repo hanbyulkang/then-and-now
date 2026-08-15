@@ -1,5 +1,6 @@
 "use client";
 
+import { Bud } from "@/components/botanical/Bud";
 import type { Connection } from "@/lib/types";
 
 /**
@@ -32,24 +33,7 @@ export function FollowUpBar({
       }}
     >
       <div className="flex items-center gap-4">
-        <svg
-          width="24"
-          height="32"
-          viewBox="0 0 24 32"
-          fill="none"
-          aria-hidden
-          className="shrink-0 animate-breathe"
-        >
-          <ellipse
-            cx="12"
-            cy="16"
-            rx="11"
-            ry="15"
-            fill="#e6d6b4"
-            stroke="#c5a768"
-            strokeWidth="1"
-          />
-        </svg>
+        <Bud width={26} className="shrink-0" />
         <div className="flex flex-col gap-0.5">
           <p className="text-[11px] font-semibold uppercase tracking-wide text-then-faded">
             Next conversation waiting to bloom

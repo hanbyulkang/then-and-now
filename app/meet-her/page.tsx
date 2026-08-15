@@ -1,5 +1,6 @@
 "use client";
 
+import { Bud } from "@/components/botanical/Bud";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Vine } from "@/components/botanical/Vine";
@@ -135,16 +136,7 @@ export default function MeetHerPage() {
 
       <footer className="flex flex-col items-start gap-4 border-t border-bloom-gold bg-then-paper px-6 py-5 md:flex-row md:items-center md:justify-between md:px-12">
         <div className="flex items-center gap-4">
-          <svg
-            width="28"
-            height="40"
-            viewBox="0 0 28 40"
-            fill="none"
-            aria-hidden
-            className="shrink-0 animate-breathe"
-          >
-            <ellipse cx="14" cy="20" rx="13" ry="19" fill="#b88379" />
-          </svg>
+          <Bud width={28} className="shrink-0" />
           <p className="font-serif text-[19px] italic text-then-ink md:text-[22px]">
             What would you ask {pair.then.name} about her youth?
           </p>

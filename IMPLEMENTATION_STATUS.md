@@ -48,7 +48,8 @@ Legend: ✅ done · ◐ partial · ✗ not started
 
 - `nav/Navigation`, `nav/ProfilePair` — one bar, three places; bottom tabs on mobile ✅
 - `garden/GardenCanvas`, `SharedFlower`, `RootSystem`, `QuestionBud`, `StoryPreview` ✅
-- `botanical/Seedling` (organic + geometric), `Seed`, `Vine` ✅
+- `garden/Leaf` (drawn THEN / ruled NOW) ✅
+- `botanical/Seedling` (organic + geometric), `Seed`, `Bud`, `Vine` ✅
 - `answer/AnswerOverlay`, `lib/voice/use-recorder` ✅
 - `audio/AudioPlayer`, `audio/Waveform` ✅
 - `reveal/StoryPanel`, `BloomSequence`, `HighlightedTranscript`, `FollowUpBar`, `phases` ✅
@@ -68,7 +69,9 @@ Legend: ✅ done · ◐ partial · ✗ not started
 | Voice recording | ✅ MediaRecorder + Web Speech API, written fallback |
 | Transcription | ◐ browser speech recognition; demo transcript when unavailable |
 | Connection discovery | ✅ Claude via `/api/connection`; curated fallback without a key |
-| Design assets | ✅ exported from Figma into `public/assets` |
+| Photographs, icons, vine | ✅ exported from Figma into `public/assets` |
+| Botanical artwork | ✅ drawn with Recraft — petals, leaves, bud |
+| Paper grain | ✅ procedural `feTurbulence`, seamless at any size |
 | Typecheck · lint · build | ✅ |
 
 ## Deployment
@@ -79,6 +82,28 @@ Legend: ✅ done · ◐ partial · ✗ not started
 | Repo | https://github.com/hanbyulkang/then-and-now (private) |
 | Production env | `ANTHROPIC_API_KEY`, `AI_MODEL` set on Vercel |
 | Verified in production | garden renders, `/api/connection` returns a real thread |
+
+## Botanical art direction
+
+The shapes exported from the design file were primitives — ellipses, rounded
+rectangles and straight lines — which read as crude at real sizes. They were
+redrawn with Recraft under one art direction (pressed botanical specimen, flat
+fills, hand-inked contour, the Then & Now palette) and split into single
+assets, with the generated colours snapped onto the design tokens.
+
+| Asset | Source | Used by |
+|---|---|---|
+| `then/petal.svg` | Recraft | the THEN half of every shared flower |
+| `now/petal.svg` | Recraft | the NOW half of every shared flower |
+| `then/leaf.svg` | Recraft | branches, roots, Grandma's seedling |
+| `now/leaf.svg` | Recraft | branches, roots, Ann's seedling |
+| `shared/bud.svg` | Recraft | today's question, every follow-up bar |
+| `vine/*.svg` | Figma | the climbing vine on Meet Her at My Age |
+
+What stayed programmatic, and why: every branch and stem is an SVG path drawn
+by `stroke-dashoffset`, so it can grow on screen — the signature bloom depends
+on it. The flower's fan, its per-flower variation and its bloom are code for
+the same reason. Recraft draws the specimen; the garden arranges it.
 
 ## Known limitations
 

@@ -1,5 +1,6 @@
 "use client";
 
+import { Bud } from "@/components/botanical/Bud";
 import type { ConversationStatus, Pair, Question } from "@/lib/types";
 
 /**
@@ -98,25 +99,7 @@ export function QuestionBud({
       {/* The bud. It breathes while it waits, and warms once both stories are
           in — the only thing about it that ever changes. */}
       <div className="flex flex-col items-center gap-2">
-        <svg
-          width={ready ? 58 : 40}
-          height={ready ? 78 : 56}
-          viewBox="0 0 40 56"
-          fill="none"
-          aria-hidden
-          className="animate-breathe overflow-visible"
-        >
-          {ready ? (
-            <ellipse cx="20" cy="28" rx="30" ry="34" fill="#b88379" opacity="0.16" />
-          ) : null}
-          <path
-            d="M20 0.75C25.2 0.75 30 3.7 33.5 8.6 37 13.6 39.25 20.4 39.25 28c0 7.6-2.2 14.4-5.75 19.4C30 52.3 25.2 55.25 20 55.25S9.99 52.3 6.47 47.4C2.95 42.4.75 35.6.75 28c0-7.6 2.2-14.4 5.72-19.4C9.99 3.7 14.8.75 20 .75Z"
-            fill={ready ? "#c08b7f" : "#b88379"}
-            stroke="#c5a768"
-            strokeWidth="1.5"
-            style={{ transition: "fill 900ms ease" }}
-          />
-        </svg>
+        <Bud width={ready ? 62 : 46} ready={ready} />
         <p className="text-[12px] text-then-faded md:text-[13px]">
           {ready ? "Ready to Bloom" : "Bud of Memory"}
         </p>
