@@ -14,7 +14,7 @@ import { type Cubic, type Point } from "./garden-layout";
 
 export const TREE_BASE: Point = { x: 720, y: 712 };
 /** Where the trunk divides. Above this line the tree has two hands. */
-export const CROWN: Point = { x: 720, y: 318 };
+export const CROWN: Point = { x: 720, y: 372 };
 
 /** The trunk leans out and settles back — no tree grows up a plumb line. */
 export const TRUNK: Cubic = {
@@ -54,9 +54,9 @@ export const LIMBS: Limb[] = [
     weight: 20,
     curve: {
       p0: CROWN,
-      p1: { x: 704, y: 244 },
-      p2: { x: 588, y: 226 },
-      p3: { x: 524, y: 82 },
+      p1: { x: 704, y: 300 },
+      p2: { x: 588, y: 284 },
+      p3: { x: 526, y: 168 },
     },
   },
   {
@@ -64,9 +64,9 @@ export const LIMBS: Limb[] = [
     weight: 17,
     curve: {
       p0: CROWN,
-      p1: { x: 742, y: 238 },
-      p2: { x: 858, y: 216 },
-      p3: { x: 926, y: 74 },
+      p1: { x: 742, y: 294 },
+      p2: { x: 858, y: 276 },
+      p3: { x: 924, y: 160 },
     },
   },
   {
@@ -74,9 +74,9 @@ export const LIMBS: Limb[] = [
     weight: 15,
     curve: {
       p0: CROWN,
-      p1: { x: 650, y: 300 },
-      p2: { x: 502, y: 304 },
-      p3: { x: 336, y: 146 },
+      p1: { x: 650, y: 352 },
+      p2: { x: 502, y: 356 },
+      p3: { x: 338, y: 226 },
     },
   },
   {
@@ -84,9 +84,9 @@ export const LIMBS: Limb[] = [
     weight: 14,
     curve: {
       p0: CROWN,
-      p1: { x: 794, y: 294 },
-      p2: { x: 944, y: 296 },
-      p3: { x: 1112, y: 138 },
+      p1: { x: 794, y: 348 },
+      p2: { x: 944, y: 350 },
+      p3: { x: 1110, y: 218 },
     },
   },
 ];
@@ -113,6 +113,34 @@ export const BLOSSOMS: Blossom[] = [
   { limb: 1, t: 0.6, size: 48 },
   { limb: 3, t: 0.58, size: 44 },
   { limb: 2, t: 0.56, size: 44 },
+];
+
+/**
+ * Twigs that run off the top of the frame.
+ *
+ * A canopy that stops politely inside its box reads as an illustration placed
+ * on a page. These carry on past the edge, so the page is a window onto
+ * something larger rather than a container holding all of it.
+ */
+export const OUTRUNNERS: Cubic[] = [
+  {
+    p0: { x: 562, y: 216 },
+    p1: { x: 520, y: 132 },
+    p2: { x: 458, y: 56 },
+    p3: { x: 402, y: -92 },
+  },
+  {
+    p0: { x: 884, y: 208 },
+    p1: { x: 930, y: 124 },
+    p2: { x: 1000, y: 48 },
+    p3: { x: 1060, y: -96 },
+  },
+  {
+    p0: { x: 702, y: 176 },
+    p1: { x: 690, y: 100 },
+    p2: { x: 710, y: 34 },
+    p3: { x: 694, y: -110 },
+  },
 ];
 
 /** Where the unopened question hangs: low and central, under the canopy. */

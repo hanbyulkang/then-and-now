@@ -191,6 +191,19 @@ body {
   }
 }
 
+/* Leaves are never quite still. The amount is deliberately below the level
+   you would notice on purpose — it should read as air moving, not as an
+   animation playing. */
+@keyframes leaf-sway {
+  0%,
+  100% {
+    transform: rotate(-1.7deg);
+  }
+  50% {
+    transform: rotate(1.7deg);
+  }
+}
+
 /* Recording waveform bars. */
 @keyframes wave-bar {
   0%,

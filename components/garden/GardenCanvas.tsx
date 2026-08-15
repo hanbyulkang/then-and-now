@@ -105,14 +105,17 @@ export function GardenCanvas({
           <>
             <Tree />
             <GroundPlanting />
-            {/* The shell it came out of, fallen to one side of the trunk. */}
-            <SeedVessel
-              stage={progress.stage}
-              opened={1}
-              size={54}
-              x={TREE_BASE.x - 142}
-              y={GROUND_Y + 6}
-            />
+            {/* The shell it came out of, fallen to one side and half buried
+                by now. Kept, but not asking to be looked at. */}
+            <g opacity={0.62}>
+              <SeedVessel
+                stage={progress.stage}
+                opened={1}
+                size={32}
+                x={TREE_BASE.x - 182}
+                y={GROUND_Y - 2}
+              />
+            </g>
           </>
         ) : (
           /* Before anything is shared the seed is the entire garden, so it is

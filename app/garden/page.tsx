@@ -57,41 +57,56 @@ function Garden() {
     <div className="flex min-h-dvh flex-col bg-canvas">
       <Navigation />
 
-      <header className="flex shrink-0 flex-col items-start px-5 pt-5 text-left md:items-center md:px-6 md:pt-6 md:text-center">
-        <h1 className="font-serif text-[28px] text-then-ink md:text-[36px]">
-          {pair.then.name} &amp; {pair.now.name}
-        </h1>
-        <p className="text-[13px] text-then-faded md:text-[14px]">
-          {gardenLine(yearsBetween(pair), progress)}
-        </p>
-      </header>
+      {/* The garden owns the whole page rather than a panel of it, so branches
+          pass behind the heading and twigs run off the top edge. */}
+      <div className="relative flex flex-1 flex-col">
+        <GardenCanvas
+          pair={pair}
+          progress={progress}
+          flowers={flowers}
+          leaves={leaves}
+          justBloomedId={justBloomed}
+          onOpenFlower={(conversation) =>
+            router.push(`/memory/${conversation.id}`)
+          }
+        >
+          {progress.stage === "dormant" ? (
+            <p className="absolute inset-x-0 top-[26%] px-8 text-center font-serif text-[19px] italic text-then-faded md:text-[22px]">
+              Every garden begins with a story.
+            </p>
+          ) : null}
 
-      <GardenCanvas
-        pair={pair}
-        progress={progress}
-        flowers={flowers}
-        leaves={leaves}
-        justBloomedId={justBloomed}
-        onOpenFlower={(conversation) => router.push(`/memory/${conversation.id}`)}
-      >
-        {progress.stage === "dormant" ? (
-          <p className="absolute inset-x-0 top-[10%] px-8 text-center font-serif text-[19px] italic text-then-faded md:text-[22px]">
-            Every garden begins with a story.
+          <div className="absolute inset-x-0 bottom-[3%] flex justify-center px-5">
+            <QuestionBud
+              question={active.question}
+              pair={pair}
+              status={status}
+              viewerAnswered={viewerHasAnswered}
+              partnerAnswered={partnerHasAnswered}
+              onAnswer={() => setAnswering(true)}
+              onReveal={() => router.push(`/reveal/${active.id}`)}
+            />
+          </div>
+        </GardenCanvas>
+
+        {/* Their names sit in front of the branches, not above them. */}
+        <header className="pointer-events-none absolute inset-x-0 top-0 z-10 flex flex-col items-start px-5 pt-5 text-left md:items-center md:px-6 md:pt-7 md:text-center">
+          {/* A halo of the page's own colour, so a branch can pass behind a
+              name without ever taking it from you. */}
+          <h1
+            className="font-serif text-[28px] text-then-ink md:text-[36px]"
+            style={{ textShadow: "0 0 18px #f7f4ec, 0 0 34px #f7f4ec" }}
+          >
+            {pair.then.name} &amp; {pair.now.name}
+          </h1>
+          <p
+            className="text-[13px] text-then-faded md:text-[14px]"
+            style={{ textShadow: "0 0 14px #f7f4ec, 0 0 26px #f7f4ec" }}
+          >
+            {gardenLine(yearsBetween(pair), progress)}
           </p>
-        ) : null}
-
-        <div className="absolute inset-x-0 bottom-[3%] flex justify-center px-5">
-          <QuestionBud
-            question={active.question}
-            pair={pair}
-            status={status}
-            viewerAnswered={viewerHasAnswered}
-            partnerAnswered={partnerHasAnswered}
-            onAnswer={() => setAnswering(true)}
-            onReveal={() => router.push(`/reveal/${active.id}`)}
-          />
-        </div>
-      </GardenCanvas>
+        </header>
+      </div>
 
       <MobileNavSpacer />
 

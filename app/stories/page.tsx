@@ -133,6 +133,26 @@ function StoryPage({ entry, index }: { entry: Entry; index: number }) {
               className={`object-cover ${isThen ? "archival-photo" : ""}`}
             />
           </div>
+
+          {/* Pressed against the print, overlapping it the way a real one
+              would if somebody had left it between the pages. */}
+          {grewInto ? (
+            <svg
+              className={`pointer-events-none absolute ${
+                isThen ? "-right-7 -top-6" : "-left-7 -bottom-6"
+              }`}
+              width="72"
+              height="60"
+              viewBox="0 0 72 60"
+              aria-hidden
+            >
+              {isThen ? (
+                <ThenLeaf x={54} y={48} length={54} angle={-138} sway={false} />
+              ) : (
+                <NowLeaf x={18} y={14} length={48} angle={36} sway={false} />
+              )}
+            </svg>
+          ) : null}
         </figure>
       ) : null}
 

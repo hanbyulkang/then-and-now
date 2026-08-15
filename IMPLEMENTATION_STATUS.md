@@ -65,7 +65,9 @@ Legend: ✅ done · ◐ partial · ✗ not started
 | Typography (Instrument Serif · Fraunces · Geist) | ✅ |
 | Garden composition | ✅ `lib/garden-tree.ts` — one tree, fixed limbs and blossom slots |
 | Bloom sequence, 4–6s | ✅ `components/reveal/phases.ts` |
-| `prefers-reduced-motion` | ✅ animations collapse to fades |
+| Leaves keep moving | ✅ each on its own clock, below the level you notice |
+| Garden runs past the page | ✅ branches behind the heading, twigs off the top edge |
+| `prefers-reduced-motion` | ✅ animations collapse to fades, sway stops |
 | Blind answering | ✅ partner's story never rendered before both exist |
 | Flowers require a real connection | ✅ `flowersOf()` filters on `connection` |
 | Voice recording | ✅ MediaRecorder + Web Speech API, written fallback |

@@ -100,7 +100,10 @@ export function QuestionBud({
           in — the only thing about it that ever changes. */}
       <div className="flex flex-col items-center gap-2">
         <Bud width={ready ? 62 : 46} ready={ready} />
-        <p className="text-[12px] text-then-faded md:text-[13px]">
+        <p
+          className="text-[12px] text-then-faded md:text-[13px]"
+          style={{ textShadow: "0 0 12px #f7f4ec, 0 0 22px #f7f4ec" }}
+        >
           {ready ? "Ready to open" : "Still closed"}
         </p>
       </div>

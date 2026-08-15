@@ -1,7 +1,7 @@
 "use client";
 
 import { cubicAngle, cubicPoint, taperedStem } from "@/lib/garden-layout";
-import { CROWN, LIMBS, TRUNK } from "@/lib/garden-tree";
+import { CROWN, LIMBS, OUTRUNNERS, TRUNK } from "@/lib/garden-tree";
 import { NowLeaf, ThenLeaf } from "./Leaf";
 
 /**
@@ -54,6 +54,40 @@ export function Tree({ growth = 1 }: { growth?: number }) {
                   x={at.x}
                   y={at.y}
                   length={44 - j * 4}
+                  angle={angle}
+                  flip={j % 2 === 1}
+                />
+              );
+            })}
+          </g>
+        );
+      })}
+
+      {/* Twigs that carry on past the top of the frame. */}
+      {OUTRUNNERS.map((twig, i) => {
+        const leafy = i !== 1;
+        return (
+          <g key={`out${i}`} opacity={0.85}>
+            <path d={taperedStem(twig, 7 - i, 0.8)} fill={BARK} />
+            {[0.3, 0.6, 0.85].map((t, j) => {
+              const at = cubicPoint(twig, t);
+              const along = cubicAngle(twig, t);
+              const angle = along + (j % 2 ? 56 : -60);
+              return leafy ? (
+                <ThenLeaf
+                  key={t}
+                  x={at.x}
+                  y={at.y}
+                  length={34 - j * 4}
+                  angle={angle}
+                  flip={j % 2 === 0}
+                />
+              ) : (
+                <NowLeaf
+                  key={t}
+                  x={at.x}
+                  y={at.y}
+                  length={30 - j * 4}
                   angle={angle}
                   flip={j % 2 === 1}
                 />

@@ -93,6 +93,8 @@ export interface PlacedProps {
   opacity?: number;
   /** Mirror it, so a row of the same drawing does not repeat. */
   flip?: boolean;
+  /** Let it move in the air. On by default; off for anything pressed flat. */
+  sway?: boolean;
 }
 
 export function Botanical({
@@ -103,27 +105,49 @@ export function Botanical({
   angle = -90,
   opacity = 1,
   flip = false,
+  sway = true,
 }: PlacedProps & { spec: Specimen }) {
   const scale = length / spec.reach;
   const w = spec.w * scale;
   const h = spec.h * scale;
 
+  /* Each leaf keeps its own time, derived from where it is, so a branch full
+     of them never moves in unison — which is what would make it read as an
+     animation rather than as weather. */
+  const seed = Math.abs(Math.round(x * 7 + y * 13));
+  const duration = 6.5 + (seed % 40) / 10;
+  const delay = -((seed % 70) / 10);
+
   return (
     <g
-      transform={`translate(${x} ${y}) rotate(${angle - spec.facing})${
-        flip ? " scale(-1 1)" : ""
-      }`}
+      transform={`translate(${x} ${y})`}
       opacity={opacity}
       style={{ transition: "opacity 300ms ease" }}
     >
-      <image
-        href={spec.src}
-        x={-w * spec.anchor.x}
-        y={-h * spec.anchor.y}
-        width={w}
-        height={h}
-        preserveAspectRatio="xMidYMid meet"
-      />
+      {/* The sway pivots on the stalk, where a leaf is actually held. */}
+      <g
+        style={
+          sway
+            ? {
+                animation: `leaf-sway ${duration}s ease-in-out ${delay}s infinite`,
+                transformOrigin: "0px 0px",
+              }
+            : undefined
+        }
+      >
+        <g
+          transform={`rotate(${angle - spec.facing})${flip ? " scale(-1 1)" : ""}`}
+        >
+          <image
+            href={spec.src}
+            x={-w * spec.anchor.x}
+            y={-h * spec.anchor.y}
+            width={w}
+            height={h}
+            preserveAspectRatio="xMidYMid meet"
+          />
+        </g>
+      </g>
     </g>
   );
 }
