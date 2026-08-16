@@ -19,8 +19,11 @@ const BARK = "#43392f";
 export function Tree({ growth = 1 }: { growth?: number }) {
   return (
     <g>
-      {/* The trunk. Warm ink, because it is the part they share. */}
-      <path d={taperedStem(TRUNK, 46, 17)} fill={BARK} />
+      {/* The trunk. Warm ink, because it is the part they share. It keeps its
+          weight all the way up, so the boughs leave a shoulder rather than
+          being stuck onto the end of a post. */}
+      <path d={taperedStem(TRUNK, 46, 30)} fill={BARK} />
+      <circle cx={CROWN.x} cy={CROWN.y} r={16} fill={BARK} />
 
       {LIMBS.map((limb, i) => {
         const leafy = limb.hand === "then";
@@ -32,10 +35,11 @@ export function Tree({ growth = 1 }: { growth?: number }) {
               transition: `opacity 900ms ease ${i * 90}ms`,
             }}
           >
-            <path d={taperedStem(limb.curve, limb.weight, 1.4)} fill={BARK} />
+            <path d={taperedStem(limb.curve, limb.weight)} fill={BARK} />
 
-            {/* THEN's side carries more leaves; NOW's keeps more air. */}
-            {(leafy ? [0.36, 0.58, 0.8, 0.97] : [0.42, 0.72, 0.96]).map((t, j) => {
+            {/* THEN's side carries more leaves; NOW's keeps more air. The
+                lowest sits near the fork, so the crown is not a bare joint. */}
+            {(leafy ? [0.2, 0.42, 0.63, 0.85] : [0.26, 0.55, 0.84]).map((t, j) => {
               const at = cubicPoint(limb.curve, t);
               const along = cubicAngle(limb.curve, t);
               const angle = along + (j % 2 ? 58 : -62);
@@ -44,7 +48,7 @@ export function Tree({ growth = 1 }: { growth?: number }) {
                   key={t}
                   x={at.x}
                   y={at.y}
-                  length={48 - j * 4}
+                  length={40 - j * 3}
                   angle={angle}
                   flip={j % 2 === 0}
                 />
@@ -53,7 +57,7 @@ export function Tree({ growth = 1 }: { growth?: number }) {
                   key={t}
                   x={at.x}
                   y={at.y}
-                  length={44 - j * 4}
+                  length={37 - j * 3}
                   angle={angle}
                   flip={j % 2 === 1}
                 />
@@ -64,12 +68,12 @@ export function Tree({ growth = 1 }: { growth?: number }) {
       })}
 
       {/* Twigs that carry on past the top of the frame. */}
-      {OUTRUNNERS.map((twig, i) => {
-        const leafy = i !== 1;
+      {OUTRUNNERS.map(({ curve: twig, weight }, i) => {
+        const leafy = i === 0;
         return (
-          <g key={`out${i}`} opacity={0.85}>
-            <path d={taperedStem(twig, 7 - i, 0.8)} fill={BARK} />
-            {[0.3, 0.6, 0.85].map((t, j) => {
+          <g key={`out${i}`}>
+            <path d={taperedStem(twig, weight)} fill={BARK} />
+            {[0.24, 0.52].map((t, j) => {
               const at = cubicPoint(twig, t);
               const along = cubicAngle(twig, t);
               const angle = along + (j % 2 ? 56 : -60);
@@ -78,7 +82,7 @@ export function Tree({ growth = 1 }: { growth?: number }) {
                   key={t}
                   x={at.x}
                   y={at.y}
-                  length={34 - j * 4}
+                  length={30 - j * 4}
                   angle={angle}
                   flip={j % 2 === 0}
                 />
@@ -87,7 +91,7 @@ export function Tree({ growth = 1 }: { growth?: number }) {
                   key={t}
                   x={at.x}
                   y={at.y}
-                  length={30 - j * 4}
+                  length={27 - j * 4}
                   angle={angle}
                   flip={j % 2 === 1}
                 />
@@ -96,10 +100,6 @@ export function Tree({ growth = 1 }: { growth?: number }) {
           </g>
         );
       })}
-
-      {/* A little foliage at the crown, so the fork is not a bare joint. */}
-      <ThenLeaf x={CROWN.x - 28} y={CROWN.y + 10} length={42} angle={-158} />
-      <NowLeaf x={CROWN.x + 30} y={CROWN.y + 14} length={38} angle={-22} />
     </g>
   );
 }

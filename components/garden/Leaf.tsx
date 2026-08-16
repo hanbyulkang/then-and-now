@@ -111,6 +111,10 @@ export function Botanical({
   const w = spec.w * scale;
   const h = spec.h * scale;
 
+  /* Rounded before it reaches the DOM. Server and browser can disagree on the
+     last bit of an atan2, and React counts that as a hydration mismatch. */
+  const r = (n: number) => n.toFixed(3);
+
   /* Each leaf keeps its own time, derived from where it is, so a branch full
      of them never moves in unison — which is what would make it read as an
      animation rather than as weather. */
@@ -120,7 +124,7 @@ export function Botanical({
 
   return (
     <g
-      transform={`translate(${x} ${y})`}
+      transform={`translate(${r(x)} ${r(y)})`}
       opacity={opacity}
       style={{ transition: "opacity 300ms ease" }}
     >
@@ -135,15 +139,23 @@ export function Botanical({
             : undefined
         }
       >
+        {/* Mirroring has to happen about the specimen's own axis. Flipping it
+            in the placed frame instead turns the drawing round to face the
+            other way, which is how leaves ended up lying back across the wood
+            they grow out of. */}
         <g
-          transform={`rotate(${angle - spec.facing})${flip ? " scale(-1 1)" : ""}`}
+          transform={
+            flip
+              ? `rotate(${r(angle)}) scale(1 -1) rotate(${r(-spec.facing)})`
+              : `rotate(${r(angle - spec.facing)})`
+          }
         >
           <image
             href={spec.src}
-            x={-w * spec.anchor.x}
-            y={-h * spec.anchor.y}
-            width={w}
-            height={h}
+            x={r(-w * spec.anchor.x)}
+            y={r(-h * spec.anchor.y)}
+            width={r(w)}
+            height={r(h)}
             preserveAspectRatio="xMidYMid meet"
           />
         </g>

@@ -105,14 +105,14 @@ export interface Blossom {
  * Several to a bough, which is what a tree in blossom actually looks like.
  */
 export const BLOSSOMS: Blossom[] = [
-  { limb: 0, t: 0.96, size: 84 },
-  { limb: 1, t: 0.96, size: 72 },
-  { limb: 0, t: 0.62, size: 58 },
-  { limb: 3, t: 0.95, size: 56 },
-  { limb: 2, t: 0.95, size: 54 },
-  { limb: 1, t: 0.6, size: 48 },
-  { limb: 3, t: 0.58, size: 44 },
-  { limb: 2, t: 0.56, size: 44 },
+  { limb: 0, t: 0.88, size: 84 },
+  { limb: 1, t: 0.88, size: 72 },
+  { limb: 0, t: 0.6, size: 58 },
+  { limb: 3, t: 0.87, size: 56 },
+  { limb: 2, t: 0.87, size: 54 },
+  { limb: 1, t: 0.58, size: 48 },
+  { limb: 3, t: 0.56, size: 44 },
+  { limb: 2, t: 0.54, size: 44 },
 ];
 
 /**
@@ -121,25 +121,31 @@ export const BLOSSOMS: Blossom[] = [
  * A canopy that stops politely inside its box reads as an illustration placed
  * on a page. These carry on past the edge, so the page is a window onto
  * something larger rather than a container holding all of it.
+ *
+ * Each one leaves a bough at a point where that bough still has some weight in
+ * it, and is no thicker than the bough is there. A twig that begins in mid-air
+ * begins with a cut across it, which is what a branch never does.
  */
-export const OUTRUNNERS: Cubic[] = [
+export const OUTRUNNERS: { curve: Cubic; weight: number }[] = [
   {
-    p0: { x: 562, y: 216 },
-    p1: { x: 520, y: 132 },
-    p2: { x: 458, y: 56 },
-    p3: { x: 402, y: -92 },
+    /* Off the near bough of THEN's canopy, at t ≈ 0.72. */
+    weight: 7,
+    curve: {
+      p0: { x: 588, y: 245 },
+      p1: { x: 540, y: 150 },
+      p2: { x: 470, y: 60 },
+      p3: { x: 398, y: -96 },
+    },
   },
   {
-    p0: { x: 884, y: 208 },
-    p1: { x: 930, y: 124 },
-    p2: { x: 1000, y: 48 },
-    p3: { x: 1060, y: -96 },
-  },
-  {
-    p0: { x: 702, y: 176 },
-    p1: { x: 690, y: 100 },
-    p2: { x: 710, y: 34 },
-    p3: { x: 694, y: -110 },
+    /* And the matching one on NOW's. */
+    weight: 6,
+    curve: {
+      p0: { x: 860, y: 238 },
+      p1: { x: 908, y: 146 },
+      p2: { x: 978, y: 58 },
+      p3: { x: 1052, y: -100 },
+    },
   },
 ];
 

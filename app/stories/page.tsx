@@ -6,6 +6,7 @@ import { useMemo, useState } from "react";
 import { AudioPlayer } from "@/components/audio/AudioPlayer";
 import { BookGround, PageYear } from "@/components/book/BookSpread";
 import { NowLeaf, ThenLeaf } from "@/components/garden/Leaf";
+import { SharedFlower } from "@/components/garden/SharedFlower";
 import { MobileNavSpacer, Navigation } from "@/components/nav/Navigation";
 import { useGarden } from "@/lib/state/garden-provider";
 import type { Conversation, Memory, Person } from "@/lib/types";
@@ -15,6 +16,8 @@ type Filter = "all" | "then" | "now";
 
 interface Spread {
   id: string;
+  /** Which of the drawn flowers this one opened as. */
+  index: number;
   /** The earlier of the two years — what puts this spread in order. */
   year: number;
   then?: { memory: Memory; person: Person };
@@ -38,7 +41,7 @@ export default function StoriesPage() {
   const pair = state.pair;
 
   const spreads = useMemo<Spread[]>(() => {
-    const rows = state.conversations.map((c) => {
+    const rows = state.conversations.map((c, index) => {
       const sides = Object.values(c.memories).map((memory) => ({
         memory,
         person: personById(pair, memory.personId),
@@ -47,6 +50,7 @@ export default function StoriesPage() {
       const now = sides.find((s) => s.person.side === "now");
       return {
         id: c.id,
+        index,
         year: Math.min(...sides.map((s) => s.memory.year)),
         then: filter === "now" ? undefined : then,
         now: filter === "then" ? undefined : now,
@@ -115,10 +119,12 @@ export default function StoriesPage() {
               </div>
 
               {/* The two of them turned out to be the same story. */}
-              {spread.grewInto?.connection && spread.then && spread.now ? (
+              {spread.grewInto?.connection ? (
                 <CrossingStem
                   href={`/memory/${spread.grewInto.id}`}
                   theme={spread.grewInto.connection.theme}
+                  variant={spread.index}
+                  paired={Boolean(spread.then && spread.now)}
                 />
               ) : null}
             </li>
@@ -206,27 +212,50 @@ function Entry({
   );
 }
 
-/** A thin stem drawn across the fold, joining the two halves of one story. */
-function CrossingStem({ href, theme }: { href: string; theme: string }) {
+/**
+ * What the two halves grew into, drawn in the gutter between them: a stem
+ * crossing the fold with the flower it opened standing on it.
+ */
+function CrossingStem({
+  href,
+  theme,
+  variant,
+  paired,
+}: {
+  href: string;
+  theme: string;
+  variant: number;
+  /** Only one of them told this one, so there is nothing to cross. */
+  paired: boolean;
+}) {
   return (
     <Link
       href={href}
-      className="group absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-1.5 md:flex"
+      className={`group left-1/2 top-1/2 flex flex-col items-center gap-1.5 ${
+        paired
+          ? "max-md:hidden md:absolute md:-translate-x-1/2 md:-translate-y-1/2"
+          : "col-span-full justify-self-center pt-4"
+      }`}
     >
-      <svg width="184" height="54" viewBox="0 0 184 54" aria-hidden>
-        <path
-          d="M 6 12 C 46 30, 60 44, 92 30 S 138 12, 178 34"
-          stroke="#43392f"
-          strokeWidth="1.6"
-          strokeLinecap="round"
-          fill="none"
-          opacity={0.6}
-        />
-        <ThenLeaf x={58} y={31} length={26} angle={-142} />
-        <NowLeaf x={126} y={20} length={24} angle={38} />
-      </svg>
+      {paired ? (
+        <svg width="196" height="60" viewBox="0 0 196 60" aria-hidden>
+          <path
+            d="M 6 16 C 44 34, 62 50, 98 36 S 150 16, 190 38"
+            stroke="#43392f"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+            fill="none"
+            opacity={0.55}
+          />
+          <ThenLeaf x={52} y={34} length={26} angle={-146} />
+          <NowLeaf x={146} y={22} length={24} angle={34} />
+        </svg>
+      ) : null}
+
+      <SharedFlower size={paired ? 62 : 54} variant={variant} />
+
       <span
-        className="text-[12px] italic text-then-faded transition-colors group-hover:text-then-ink"
+        className="pt-1 text-[12px] italic text-then-faded transition-colors group-hover:text-then-ink"
         style={{ textShadow: "0 0 14px #f2ece0, 0 0 24px #f2ece0" }}
       >
         This one grew into{" "}

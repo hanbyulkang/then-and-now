@@ -46,12 +46,16 @@ export function cubicPoint({ p0, p1, p2, p3 }: Cubic, t: number): Point {
  * A constant-width stroke is what makes a branch read as wire. A real stem is
  * thick where it leaves the ground and fine at its tip, so this walks the curve,
  * offsets each side by a width that tapers along it, and closes the outline.
+ *
+ * The taper holds its weight for most of the run and gives it up near the end,
+ * which is how a branch actually goes. Taking it away evenly — or, worse, early
+ * — leaves a thin wire with a blunt cut across the end of it.
  */
 export function taperedStem(
   curve: Cubic,
   baseWidth: number,
-  tipWidth = 0.5,
-  steps = 26,
+  tipWidth = 0,
+  steps = 44,
 ): string {
   const left: Point[] = [];
   const right: Point[] = [];
@@ -60,16 +64,16 @@ export function taperedStem(
     const t = i / steps;
     const at = cubicPoint(curve, t);
     const heading = (cubicAngle(curve, t) * Math.PI) / 180;
-    /* Taper on a curve rather than a straight line: stems thin out fast near
-       the tip and hold their weight low down. */
-    const half = (baseWidth + (tipWidth - baseWidth) * Math.pow(t, 0.7)) / 2;
+    const half = (baseWidth + (tipWidth - baseWidth) * Math.pow(t, 1.5)) / 2;
     const nx = -Math.sin(heading) * half;
     const ny = Math.cos(heading) * half;
     left.push({ x: at.x + nx, y: at.y + ny });
     right.push({ x: at.x - nx, y: at.y - ny });
   }
 
-  const forward = left.map((p, i) => `${i ? "L" : "M"} ${p.x.toFixed(2)} ${p.y.toFixed(2)}`);
+  const forward = left.map(
+    (p, i) => `${i ? "L" : "M"} ${p.x.toFixed(2)} ${p.y.toFixed(2)}`,
+  );
   const back = right.reverse().map((p) => `L ${p.x.toFixed(2)} ${p.y.toFixed(2)}`);
   return `${forward.join(" ")} ${back.join(" ")} Z`;
 }
