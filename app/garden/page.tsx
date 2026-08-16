@@ -2,19 +2,21 @@
 
 import { useRouter } from "next/navigation";
 import { Suspense, useState } from "react";
-import { BookSpread, PageHead } from "@/components/book/BookSpread";
+import { Field } from "@/components/garden/Field";
 import { Garden as GardenPlot } from "@/components/garden/Garden";
 import { MobileNavSpacer, Navigation } from "@/components/nav/Navigation";
+import { LeafButton, Panel, PanelLabel } from "@/components/ui/Panel";
 import { useGarden } from "@/lib/state/garden-provider";
 import { yearsBetween } from "@/lib/types";
 
 /**
  * The garden.
  *
- * One spread — her page, your page, and the thing the two of you are growing
- * coming up through the fold between them. Nothing about today's question is a
- * panel over the top of it: the question is a bud standing in the garden, and
- * you open it by going to it.
+ * One painted field running the whole width — warm where her life is, cooling
+ * into sage where yours is, and no line drawn between them anywhere.
+ * Everything growing out of it is something the two of you have said. Today's
+ * question stands in it as a small note laid on the grass, kept low enough that
+ * the garden still reads behind it.
  */
 export default function GardenPage() {
   return (
@@ -31,124 +33,91 @@ function Garden() {
 
   const pair = state.pair;
   const [asking, setAsking] = useState(false);
-  const storyCount = state.conversations.reduce(
-    (n, c) => n + Object.keys(c.memories).length,
-    0,
-  );
   const years = yearsBetween(pair);
 
   return (
     <div className="flex min-h-dvh flex-col bg-canvas">
       <Navigation />
 
-      <p className="flex items-baseline justify-center gap-3 bg-canvas pb-4 pt-6 text-center">
-        <span className="font-serif text-[18px] text-then-ink md:text-[20px]">
-          {pair.now.name} &amp; {pair.then.name}
+      <p className="flex items-baseline justify-center gap-3 bg-canvas pb-5 pt-6 text-center">
+        <span className="font-serif text-[19px] text-then-ink md:text-[21px]">
+          {pair.then.name} &amp; {pair.now.name}
         </span>
-        <span className="text-[11px] uppercase tracking-[0.2em] text-then-faded">
+        <span className="text-[11px] uppercase tracking-[0.18em] text-then-faded">
           · {years} years between you
         </span>
       </p>
 
-      <BookSpread
-        className="min-h-[560px]"
-        across={
+      <Field className="min-h-[520px]">
+        <div className="absolute inset-0">
           <GardenPlot
             state={state}
             questionAnswered={viewerHasAnswered}
             onOpenBloom={(id) => router.push(`/memory/${id}`)}
-            onOpenQuestion={() => setAsking((v) => !v)}
+            onOpenQuestion={
+              status !== "revealed" ? () => setAsking((v) => !v) : undefined
+            }
           />
-        }
-        left={
-          <div className="pointer-events-none relative z-20 flex flex-1 flex-col p-8 md:p-12">
-            <PageHead side="then" eyebrow="Then" name={pair.then.name} />
-          </div>
-        }
-        right={
-          <div className="pointer-events-none relative z-20 flex flex-1 flex-col items-end p-8 text-right md:p-12">
-            <PageHead
-              side="now"
-              eyebrow="Now"
-              name={pair.now.name}
-              className="items-end"
-            />
-          </div>
-        }
-        atTheFold={
-          /* What the bud is holding, opened where it stands. */
-          asking ? (
-            <div className="max-w-[46ch] px-6 pb-8 text-center md:pb-12">
-              <p
-                className="text-[11px] uppercase tracking-[0.28em] text-then-faded"
-                style={{ textShadow: "0 0 14px #f2ece0" }}
-              >
-                Today&apos;s question
-              </p>
-              <p
-                className="mt-3 font-serif text-[21px] italic leading-snug text-then-ink md:text-[26px]"
-                style={{ textShadow: "0 0 18px #f2ece0, 0 0 34px #f2ece0" }}
-              >
-                &ldquo;{active.question.text}&rdquo;
+        </div>
+
+        {/* Today's question, standing in the garden it belongs to. */}
+        {status !== "revealed" ? (
+          <div className="relative z-20 flex flex-1 items-center px-6 md:px-[8%]">
+            <Panel className="w-full max-w-[300px]">
+              <PanelLabel>Today&apos;s question</PanelLabel>
+              <p className="mt-3 font-serif text-[19px] leading-snug text-then-ink md:text-[21px]">
+                {active.question.text}
               </p>
 
               {status === "ready" ? (
                 <>
-                  <p
-                    className="mt-4 text-[14px] text-then-faded"
-                    style={{ textShadow: "0 0 14px #f2ece0" }}
-                  >
-                    Two stories are ready.
+                  <p className="mt-4 text-[12px] leading-relaxed text-then-faded">
+                    Both stories are ready.
                   </p>
-                  <button
-                    type="button"
+                  <LeafButton
+                    className="mt-4"
                     onClick={() => router.push(`/reveal/${active.id}`)}
-                    className="mt-1 text-[15px] font-semibold text-bloom-rose underline-offset-8 hover:underline"
                   >
-                    Open them together →
-                  </button>
+                    Reveal together →
+                  </LeafButton>
                 </>
               ) : viewerHasAnswered ? (
-                <p
-                  className="mt-4 text-[14px] text-then-faded"
-                  style={{ textShadow: "0 0 14px #f2ece0" }}
-                >
-                  Your story is here. {pair.then.name}&apos;s is still coming.
+                <p className="mt-4 text-[12px] leading-relaxed text-then-faded">
+                  You answered
+                  <br />· Waiting for {pair.then.name}
                 </p>
               ) : (
                 <>
-                  {partnerHasAnswered ? (
-                    <p
-                      className="mt-4 text-[14px] leading-relaxed text-then-faded"
-                      style={{ textShadow: "0 0 14px #f2ece0" }}
-                    >
-                      {pair.then.name} has left a story here.
-                      <br />
-                      Yours is still waiting.
-                    </p>
-                  ) : null}
-                  <button
-                    type="button"
+                  <p className="mt-4 text-[12px] leading-relaxed text-then-faded">
+                    {partnerHasAnswered
+                      ? `${pair.then.name} answered`
+                      : "Nobody has answered yet"}
+                    <br />· Waiting for you
+                  </p>
+                  <LeafButton
+                    className="mt-4"
                     onClick={() => router.push("/today")}
-                    className="mt-2 text-[15px] font-semibold text-bloom-green underline-offset-8 transition-colors hover:text-then-ink hover:underline"
                   >
-                    Tell your story →
-                  </button>
+                    Answer
+                  </LeafButton>
                 </>
               )}
-            </div>
-          ) : storyCount === 0 ? (
-            <div className="px-6 pb-8 text-center md:pb-12">
-              <p
-                className="font-serif text-[19px] italic text-then-faded md:text-[22px]"
-                style={{ textShadow: "0 0 18px #f2ece0" }}
-              >
-                Every garden begins with a story.
-              </p>
-            </div>
-          ) : null
-        }
-      />
+            </Panel>
+          </div>
+        ) : null}
+
+        {/* What the bud holds, when you go to the bud rather than to the note. */}
+        {asking ? (
+          <div className="pointer-events-none absolute inset-x-0 bottom-8 z-20 flex justify-center px-6">
+            <p
+              className="max-w-[42ch] text-center font-serif text-[19px] italic leading-snug text-then-ink md:text-[22px]"
+              style={{ textShadow: "0 0 18px #faf7f0, 0 0 34px #faf7f0" }}
+            >
+              &ldquo;{active.question.text}&rdquo;
+            </p>
+          </div>
+        ) : null}
+      </Field>
 
       <MobileNavSpacer />
     </div>

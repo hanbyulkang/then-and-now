@@ -3,7 +3,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { BudMark, Leaf, Seedling } from "./Botanical";
 import { HybridFlower, SideFlower } from "./Flower";
-import { cubicAngle, cubicPoint, taperedStem } from "@/lib/garden-layout";
+import { PaintDefs, Stem } from "./Paint";
+import { cubicAngle, cubicPoint } from "@/lib/garden-layout";
 import {
   FOLD,
   SCENE_WIDTH,
@@ -25,8 +26,6 @@ import type { GardenState, Side } from "@/lib/types";
  * It is painted 1440 units wide and however tall the book is, so it is never
  * stretched to fit — a stretched flower is an oval, and nobody painted an oval.
  */
-
-const STEM: Record<Side, string> = { then: "#a3936f", now: "#9aab96" };
 
 function Mound({ x, y, w }: { x: number; y: number; w: number }) {
   return (
@@ -69,11 +68,13 @@ function PlantBody({
           transition: "transform 2400ms var(--ease-organic), opacity 900ms ease",
         }}
       >
-        <path d={taperedStem(plant.stem, weight)} fill={STEM[plant.side]} />
+        <Stem curve={plant.stem} side={plant.side} width={weight} fine />
         {plant.branch ? (
-          <path
-            d={taperedStem(plant.branch, weight * 0.6)}
-            fill={STEM[plant.side]}
+          <Stem
+            curve={plant.branch}
+            side={plant.side}
+            width={weight * 0.6}
+            fine
           />
         ) : null}
 
@@ -147,10 +148,11 @@ function BloomBody({
         [bloom.nowStem, "now"],
       ] as const).map(([curve, side]) => (
         <g key={side}>
-          <path
-            d={taperedStem(curve, side === "then" ? 6.5 : 5)}
-            fill={STEM[side]}
-            opacity={grown ? 0.95 : 0}
+          <Stem
+            curve={curve}
+            side={side}
+            width={side === "then" ? 9 : 7.5}
+            opacity={grown ? 1 : 0}
             style={{ transition: `opacity 1300ms ease ${delay}ms` }}
           />
           {[0.42, 0.72].map((t, i) => {
@@ -247,6 +249,8 @@ export function Garden({
         className="absolute inset-0 size-full"
         aria-hidden
       >
+        <PaintDefs />
+
         {/* Before anyone has said anything, two seedlings and bare earth. */}
         {scene.storyCount === 0 ? (
           <>
@@ -273,7 +277,7 @@ export function Garden({
             }}
           >
             <Mound x={FOLD} y={ground + 2} w={34} />
-            <path d={taperedStem(scene.waiting.stem, 5)} fill="#a3936f" />
+            <Stem curve={scene.waiting.stem} side="then" width={6} fine />
           </g>
         ) : null}
 
