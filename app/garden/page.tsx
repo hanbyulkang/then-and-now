@@ -79,8 +79,9 @@ function Garden() {
             </Panel>
           </div>
         ) : status !== "revealed" ? (
-          <div className="pointer-events-none relative z-20 flex flex-1 items-start px-5 pt-5 md:items-center md:px-[8%] md:pt-0">
-            <Panel className="pointer-events-auto w-full max-w-[300px]">
+          <div className="pointer-events-none absolute inset-0 z-20 flex items-start justify-center px-5 pt-5 md:px-6 md:pt-0">
+            {/* Standing under the flower this question will one day become. */}
+            <Panel className="pointer-events-auto w-full max-w-[300px] md:absolute md:left-1/2 md:top-[54%] md:-translate-x-1/2">
               <div className="flex items-start justify-between gap-4">
                 <PanelLabel>Today&apos;s question</PanelLabel>
                 <button
