@@ -1,0 +1,417 @@
+# Then & Now — 데모 영상 촬영 대본
+
+**러닝타임 3:38 · 24컷 · 3테이크 · 1440 × 900 · 60fps**
+제출 규정 1–5분 안에 들어갑니다. 뒤에 **60초 컷**도 함께 실었습니다.
+
+내레이션(VO)과 화면 문구는 영어 그대로, 연출 지시는 한국어로 적었습니다.
+녹화 중 옆에 띄워두고 한 줄 앞서 읽으면서 찍으면 됩니다.
+
+---
+
+## 길이와 모바일에 대해
+
+**길이** — 1–5분이면 2분대는 오히려 손해입니다. 심사자가 "이게 뭘 하는 건지"를 넘어 "이걸 실제로 쓰면 어떤 기분인지"까지 가려면 Reveal에 시간을 줘야 하고, 그 앞뒤에 숨 쉴 자리가 필요합니다. 3:38로 잡되 **길이를 늘린 만큼을 전부 정적에 씁니다** — 새 화면을 욱여넣는 데 쓰지 않습니다.
+
+**모바일** — 데스크톱 우선으로 만든 웹앱이고, 이 제품의 승부처(Reveal의 정적, 반반인 꽃)는 넓은 화면에서 가장 잘 읽힙니다. 그래서 **모바일 병행 워크스루는 하지 마세요.** 대신 끝에 **15초 코다**(23번 컷)로 같은 정원과 같은 Reveal이 폰에서 접히는 걸 보여줍니다. "반응형입니다"를 말이 아니라 화면으로 한 번에 처리하는 방법이고, 흐름을 끊지 않습니다.
+
+---
+
+## 촬영 전 준비
+
+준비 10분이 재촬영 1시간을 아낍니다. 마지막 두 항목은 사람들이 꼭 건너뛰고 후회하는 것입니다.
+
+| | |
+|---|---|
+| **빌드** | `localhost`가 아니라 배포본을 찍으세요. dev 빌드는 구석에 배지를 그립니다. → `then-and-now-olive.vercel.app` |
+| **창** | 1440 × 900, 브라우저 확대 100%, 북마크바 숨김. 탭만 녹화하거나 `⌘⇧F`로 툴바를 숨기세요. |
+| **모션** | 시스템 설정 → 손쉬운 사용 → 디스플레이 → **동작 줄이기 끄기**. 켜져 있으면 모든 성장 애니메이션이 페이드로 뭉개져서 Reveal에 보여줄 게 없습니다. |
+| **상태** | 콘솔에서 `localStorage.clear()` 실행 후 새로고침. **테이크마다** 하세요. |
+| **마이크** | 버리는 녹음을 한 번 먼저 해서 Chrome 권한 팝업을 미리 없애세요. 화면에 절대 나오면 안 됩니다. |
+| **커서** | 커서 하이라이트 켜기, 클릭 물결 끄기. 천천히 움직이세요 — 앱의 속도가 요점이고, 커서가 튀면 그걸 망칩니다. |
+| **리허설** | **17번 컷을 촬영 전에 한 번 끝까지** 돌려보세요. 두 이야기의 연결은 모델이 실시간으로 찾습니다. 꽃이 안 피면 스토리지 지우고 다시 하세요. |
+
+---
+
+## 러닝 오더
+
+연속 촬영 셋을 붙입니다. A는 현관, B는 본편, C는 폰.
+
+| 시작 | 길이 | 테이크 | 컷 | 내용 |
+|---|---|---|---|---|
+| 0:00 | 0:30 | A | 1–6 | 현관: 책, 그리고 정원 시작하기 |
+| 0:30 | 0:30 | B | 7–10 | 몇 주 지난 정원, 꽃 하나를 열어보기 |
+| 1:00 | 0:31 | B | 11–14 | 오늘의 질문, 목소리로 답하기 |
+| 1:31 | 0:34 | B | 15–17 | 둘 다 준비됨 → **Reveal (한 컷, 컷 없음)** |
+| 2:05 | 0:16 | B | 18–19 | 좋아요가 아닌 단 하나의 질문, 그리고 다음 질문 |
+| 2:21 | 0:52 | B | 20–22 | 쌓인 것들 — Between Us, 아카이브, Meet Her |
+| 3:13 | 0:15 | C | 23 | 폰 코다 |
+| 3:28 | 0:10 | — | 24 | 엔드카드 |
+
+---
+
+# 테이크 A — 현관
+
+여기서는 아무것도 빨리 누르지 않습니다. 이 앱이 대체하려는 것보다 **느리다는 것**이 피치 전체이기 때문입니다.
+
+### 01 · 0:00 · 5초 · `/`
+
+**책 위에서 시작**
+
+- 페이지는 이미 로드된 상태. **마우스를 움직이지 마세요.**
+- 펼침면 전체를 붙잡습니다 — 왼쪽은 뜯어내 붙인 그녀의 프린트(뒤에 누군가의 손글씨가 비칩니다), 오른쪽은 화면 속 당신.
+
+> **VO** — My grandmother and I are fifty-two years apart. I know almost nothing about who she was at my age.
+
+---
+
+### 02 · 0:05 · 4초 · `/`
+
+**타이틀을 가로질러 천천히**
+
+- 커서를 왼쪽 프린트에서 *"A shared memory garden for two generations"* 위를 지나 씨앗 아래에 놓습니다.
+- 아직 클릭하지 않습니다.
+
+> **VO** — Then & Now asks us the same question — one at a time. And it does not show me hers until I have answered.
+
+---
+
+### 03 · 0:09 · 3초 · `/` → `/onboarding/who`
+
+**Start your garden**
+
+- 초록 버튼 **Start your garden** 클릭.
+- 다음 페이지가 자리 잡을 때까지 한 박자 두고 움직이세요.
+
+---
+
+### 04 · 0:12 · 6초 · `/onboarding/who`
+
+**누구와 함께 키울지**
+
+- *Grandma → Grandpa → Mom → Dad* 위를 천천히 지나갑니다. 이름마다 **다른 꽃**이 켜집니다.
+- **Grandma**로 돌아와 클릭.
+
+> **VO** — Setup is one person and two names. Nothing else is asked.
+
+> **왜 중요한가** — 꽃이 전부 다릅니다. 이 제품 전체의 약속입니다. 어디에도 같은 에셋을 반복하지 않습니다.
+
+---
+
+### 05 · 0:18 · 6초 · `/onboarding/names`
+
+**이름 두 개**
+
+- `Ann`을 사람 속도로 타이핑. 멈춤.
+- `Tab`, `Grandma` 타이핑.
+- **Plant your garden** 클릭.
+
+---
+
+### 06 · 0:24 · 6초 · `/onboarding/ready`
+
+**맨흙 위의 떡잎 둘**
+
+- 붙잡습니다. **Invite Grandma는 누르지 마세요** — 완전히 새 빈 정원이 시작돼서 영상 나머지가 통째로 날아갑니다.
+- 시선이 씨앗 둘에 닿게 두고 컷.
+
+> **VO** — This is what it looks like before anybody has said a word.
+
+> ⛔ **여기서 컷.** 녹화 정지 → `localStorage.clear()` → 새로고침 → 테이크 B 준비.
+
+---
+
+# 테이크 B — 몇 주 지난 뒤
+
+여기서 22번 컷까지 **한 번에** 찍습니다. 대사를 틀려도 계속 돌리고, 내레이션은 따로 다시 녹음하세요.
+
+### 07 · 0:30 · 4초 · `/` → `/garden`
+
+**누군가 이미 키운 정원으로**
+
+- `/`에서 시작. 버튼 아래 작은 이탤릭 줄 *"or look around a garden two people already grew →"* 로 이동.
+- 클릭.
+
+> **VO** — This is the same garden a few weeks in.
+
+---
+
+### 08 · 0:34 · 8초 · `/garden`
+
+**자라나게 두기**
+
+- **처음 3초는 마우스에서 손 떼기.** 모든 줄기가 도착과 함께 땅에서 올라옵니다 — 2.4초짜리 애니메이션이고, 이 아이디어 전체가 이 동작 하나에 들어 있습니다.
+- 그다음 들판을 왼쪽에서 오른쪽으로 아주 천천히 훑습니다.
+
+> **VO** — Her stories come up on the warm side. Mine come up on the cool side. Nothing is in here unless one of us actually said it.
+
+> **식물이 안 보이면** 마우스를 한 번 툭 움직이세요. 일부 녹화 도구가 SVG 레이어를 한 프레임 늦게 그립니다. 앱이 아니라 녹화 도구 문제입니다.
+
+---
+
+### 09 · 0:42 · 10초 · `/garden`
+
+**꽃 쪽으로 몸을 기울이기**
+
+- 가운데 꽃 **Leaving Home** 위에 호버. 아래에 노트가 열리고 나머지 도판이 조용해집니다.
+- 4초 붙잡기 — *"Different cities. Similar uncertainty."* 를 읽을 시간.
+- 왼쪽 **The One You Call** 로 이동. 노트가 바뀌고 흐려짐도 따라옵니다. 3초.
+
+> **VO** — Each flower in the middle is something we turned out to share. Half of it is painted in her hand, half in mine — no two of them are the same flower.
+
+---
+
+### 10 · 0:52 · 8초 · `/garden` → `/memory/c_the_call`
+
+**꽃 하나를 열어보기**
+
+- 지금 호버 중인 **The One You Call** 을 클릭.
+- 그 꽃이 자란 두 이야기가 좌우로 열리고, 꽃은 가운데에 크게 섭니다.
+- 시선이 흐르게 두기: 1976 · Chicago, 복도 공중전화 / 2026 · Seattle, 늦은 밤 전화. 아래엔 아직 안 핀 봉오리.
+
+> **VO** — Open one and you get the two stories it grew out of, and the question it opened.
+
+---
+
+### 11 · 1:00 · 6초 · `/garden`
+
+**오늘의 질문**
+
+- 상단 **Garden** 클릭해 돌아옵니다.
+- 왼쪽 노트로 이동. *"Grandma answered · Waiting for you"* 줄 위에서 한 박자 쉽니다.
+- **Answer** 클릭.
+
+> **VO** — Today: what made you happy when you were twenty. She has already answered. I can't see it yet.
+
+---
+
+### 12 · 1:06 · 5초 · `/today`
+
+**정원이 초점에서 물러남**
+
+- 붙잡습니다. 시트 뒤로 들판이 흐릿하게 남아 있습니다 — 정원을 떠난 게 아니라 그 안의 한 가지 앞에 멈춰 선 것입니다.
+- 파형이 가만히 있는 동안 아무것도 건드리지 마세요.
+
+---
+
+### 13 · 1:11 · 15초 · `/today`
+
+**소리 내어 답하기**
+
+- 둥근 초록 버튼을 한 번 클릭. 파형이 움직이고 시계가 갑니다.
+- 아래 대사를 보통 속도로 — 약 9초.
+- 버튼을 다시 눌러 정지.
+
+> **카메라 앞에서 말할 것** — Honestly, getting food with my friends after class is probably my favourite thing. There's this tiny taco place near campus and we just sit there way too long.
+
+> **VO(녹음 시작 직전에 얹기)** — I answer in my own voice. The recording is the memory; the text is a convenience.
+
+> **한 호흡에 말하세요.** 브라우저가 잘못 알아들어도 앱은 녹음을 보관하고 위 문장으로 대체하니 테이크는 안전합니다. 다만 나중에 재생되는 건 실제로 말한 목소리입니다.
+
+---
+
+### 14 · 1:26 · 5초 · `/today` → `/garden`
+
+**심겼다**
+
+- 손 떼기. *"Planting your story…"* 가 1초쯤 머물고, 봉오리가 열리며 *"Your story is in the garden."*
+- 2초 뒤 앱이 알아서 정원으로 돌아갑니다. **클릭하지 마세요.**
+
+---
+
+### 15 · 1:31 · 7초 · `/garden`
+
+**Both stories are ready**
+
+- 정원이 멈추고 닫힌 봉오리가 그려진 카드 한 장이 가운데 섭니다.
+- **4초 붙잡기.** 여기서 서두르지 마세요 — 다음 컷의 정적이 이 카드에서 시작됩니다.
+
+> **VO** — Neither of us sees the other's answer until both are in.
+
+---
+
+### 16 · 1:38 · 2초 · `/garden` → `/reveal/c_everyday_joy`
+
+**Reveal together**
+
+- **Reveal together →** 클릭.
+- 클릭 직후 손을 마우스에서 완전히 떼세요.
+
+---
+
+### 17 · 1:40 · 25초 · `/reveal/c_everyday_joy`
+
+**Reveal**
+
+> ⛔ **25초간 컷 금지, 마우스 이동 금지, 스크롤 금지.** 이게 영상입니다.
+
+- 두 이야기가 먼저 오고, 사이에는 닫힌 봉오리 하나뿐입니다. 그 침묵이 2–6초 이어지는 동안 연결이 찾아집니다 — **로딩이 아니라 설계**입니다.
+- 두 이야기가 뜬 순간부터 시퀀스는 이 시계대로 갑니다:
+
+| 시점 | 일어나는 일 |
+|---|---|
+| +0.0초 | 두 이야기, 봉오리, 침묵 |
+| +2.8초 | 그녀 이야기의 한 구절이 걸림 — 부드러운 노란 띠가 그어짐 |
+| +3.6초 | 당신 쪽의 대응 구절이 걸림 |
+| +4.4초 | 두 페이지에서 줄기 둘이 올라오기 시작 |
+| +6.2초 | 가운데서 만남 |
+| +6.8초 | 봉오리가 사라지고 꽃이 핌 — 반은 그녀, 반은 당신 |
+| +7.6초 | 이름: *Everyday Joy* |
+| +8.4초 | "52 years apart." / "Same kind of happiness." |
+| +9.6초 | 아래 카드 도착 |
+
+> **VO — +6.8초까지는 침묵을 지킬 것** — Fifty-two years apart. A drugstore counter in Georgia, and a taco place near campus. Neither of us knew the other had said it.
+
+> **편집 노트** — 잘라야 한다면 이 컷 **앞이나 뒤**를 자르세요. 시퀀스 안을 자르면 이 제품이 통째로 기대고 있는 그 정적이 사라집니다.
+
+---
+
+### 18 · 2:05 · 9초 · `/reveal/c_everyday_joy`
+
+**이 제품의 유일한 리액션**
+
+- 아래 카드로 이동: *"Had you heard this story before?"*
+- 두 선택지를 읽을 수 있게 3초 붙잡고 **I never knew this** 클릭.
+- 봉오리가 나타나고 문장이 자리 잡습니다: *"You met a part of Grandma you hadn't known before."*
+
+> **VO** — No hearts, no likes. One question — had you heard this before. It doesn't rate the story; it records where it already stood between us.
+
+---
+
+### 19 · 2:14 · 7초 · → `/garden`
+
+**A conversation waiting to bloom**
+
+- 카드의 후속 질문을 읽습니다: *"What did friendship mean to you at twenty?"*
+- **Ask Grandma →** 클릭. 정원으로 돌아오면 가지에 **새 봉오리**가 달려 있습니다.
+- 새 봉오리 위에서 3초.
+
+> **VO** — A discovery is only worth something if it opens the next question. So it does.
+
+---
+
+### 20 · 2:21 · 16초 · `/between-us`
+
+**Between Us**
+
+- 상단 내비게이션에서 **Between Us** 클릭.
+- 숫자 위에서 3초: *52 years. 8 stories. 3 things we found in each other.*
+- 천천히 아래로 스크롤 — 휠 두 번, 사이에 멈춤.
+- 꽃 하나에 호버. 도판의 나머지가 흐려지고, 그 꽃을 먹인 두 기억만 양옆에 남습니다. 4초.
+- 마지막 줄까지 스크롤: *"Maybe we weren't so far apart after all."* 3초 붙잡기.
+
+> **VO** — Everything we found, laid out like a field journal — her half on one side, mine on the other, and a line running into the flower it fed.
+
+---
+
+### 21 · 2:37 · 14초 · `/stories` → `/stories/discovered`
+
+**서로에게 한 모든 이야기**
+
+- **Stories** 클릭. 목록 위에서 붙잡기 — 1966부터 2026까지, 그녀의 손과 당신의 손이 같은 열에. 4초.
+- 아래로 한 번 스크롤했다가 다시 위로.
+- **Stories I discovered →** 클릭.
+- *"Stories I never knew."* — *"The pieces of Grandma's life I met for the first time."* 위에서 3초.
+- **I remember** 탭 클릭. 제목이 *"Stories I remember."* — *"The memories that were already part of us."* 로 바뀝니다. 3초.
+
+> **VO** — Everything either of us has said, in the order it happened. And the ones I had never heard get their own shelf — beside the ones I grew up hearing.
+
+---
+
+### 22 · 2:51 · 22초 · `/meet-her`
+
+**Meet her at my age**
+
+- **우상단 두 사람의 초상화**를 클릭 — 이 페이지의 입구입니다.
+- 책장이 넘어가며 펼침면이 도착. **2초 손 떼기.**
+- 시선이 흐르게 두기: *Grandma at 22 · Chicago · First job · Living away from family · Unsure about the future* — 그리고 당신 쪽의 같은 네 줄. 6초.
+- 가운데의 꽃 세 송이 — 둘이 이미 찾아낸 것들 — 위를 지나갑니다. 3초.
+- *"Different worlds. Same age."* 위에서 4초.
+- 아래 노트 *"Ask her something you wish someone would ask you."* 에서 3초.
+
+> **VO** — And once in a while you stop meeting your grandmother as your grandmother, and meet the person she was at the age you are now. Same city size, same first job, same not knowing what comes next.
+
+> ⛔ **여기서 컷.** 테이크 B 끝.
+
+---
+
+# 테이크 C — 폰 코다
+
+### 23 · 3:13 · 15초 · 모바일
+
+**같은 정원, 한 손 안에서**
+
+- 브라우저 창을 **420 × 900** 으로 줄이거나 실제 폰에서 녹화. `localStorage.clear()` 후 랜딩의 데모 링크로 다시 들어갑니다.
+- `/garden` — 정원이 가운데로 당겨져 꽃이 제 크기로 섭니다. 하단 탭 내비. 3초.
+- 카드의 **Answer** 를 눌러 `/today` 오버레이가 화면에 꽉 차는 것. 3초.
+- 뒤로 나와 이미 열어둔 `/reveal/c_the_call` 로 이동 — 두 페이지가 **세로로 쌓이고**, 만남이 그 사이에서 일어납니다. 위아래로 한 번 천천히 스크롤. 6초.
+- 마지막 3초는 꽃과 *"Two generations apart. / The same phone call."* 에 머무릅니다.
+
+> **VO** — It folds down to one page on a phone. The same garden, the same meeting — just closer to.
+
+> **편집 노트** — 이 컷만 화면 비율이 다릅니다. 좌우를 흐린 배경으로 채우지 말고 **폰 프레임 목업 안에 넣거나**, 화면 중앙에 세로 영상 그대로 두고 양옆은 단색(`#f1f0ec`)으로 두세요.
+
+---
+
+### 24 · 3:28 · 10초 · 엔드카드
+
+- `/` 랜딩 스프레드 스틸, 또는 자란 정원을 붙잡은 프레임으로 컷.
+- 그 위에 URL을 작게, 좌하단에. 4초 유지 후 페이드.
+
+> **VO** — Then & Now. A shared memory garden for two generations. One question at a time, discover the stories you never knew to ask.
+
+---
+
+## 잘못될 수 있는 것
+
+당일 물릴 수 있는 건 네 가지고, 넷 다 테이크를 살리는 길이 있습니다.
+
+**Reveal에서 꽃이 안 핀다**
+연결은 실시간으로 찾고, 모델은 **아무것도 못 찾을 권리**가 있습니다. 일부러 그렇게 만들었습니다 — 그래야 꽃이 피었을 때 그게 진짜라는 뜻이 됩니다. 카메라 앞에서 그러면 *"Two stories, kept side by side"* 가 대신 뜹니다. `localStorage` 지우고 새로고침해서 11–17번 컷을 다시 찍으세요. **촬영 전 리허설 필수.**
+
+**마이크가 거부된다**
+시트가 *"We couldn't hear you"* 와 **Write it instead** 버튼으로 바뀝니다. 그 자체로 괜찮은 컷이긴 합니다 — 글자가 상자가 아니라 줄 위에 놓입니다 — 다만 목소리를 잃습니다. 버리는 테이크에서 권한을 먼저 허용해두세요.
+
+**정원이 비어 보인다**
+거의 항상 캡처 아티팩트입니다. 일부 녹화 도구가 SVG 레이어를 한 프레임 늦게 그립니다. 페이지 이동 후 마우스를 한 번 움직이세요. 계속되면 60fps 대신 30fps로 찍으세요.
+
+**노트북 화면으로 찍고 있다**
+폭 820px 아래에서는 정원이 가까이 당겨지며 식물을 덜 보여주고, 560px 아래에서는 페이지가 세로로 쌓입니다. 둘 다 정상 동작이고 23번 컷에서 일부러 보여주는 것이지만, 본편에는 넓은 구도가 필요합니다. 첫 테이크 전에 창이 정말 1440인지 확인하세요.
+
+---
+
+## 60초 컷
+
+제출 규정이 더 짧을 때, 혹은 소셜용 짧은 버전이 필요할 때.
+
+| 시작 | 길이 | 컷 | 남기는 것 |
+|---|---|---|---|
+| 0:00 | 0:06 | 1 | 책, 그리고 한 줄짜리 전제 |
+| 0:06 | 0:08 | 8–9 | 정원, 그리고 꽃 하나의 노트 |
+| 0:14 | 0:10 | 11, 13 | 오늘의 질문과 목소리로 답하기 |
+| 0:24 | 0:22 | 17 | **Reveal, 무편집.** 앞의 정적만 다듬기 |
+| 0:46 | 0:06 | 18 | "I never knew this" |
+| 0:52 | 0:08 | 24 | 엔드카드 |
+
+---
+
+## 참고 — 화면에 실제로 뜨는 문구
+
+내레이션과 겹치지 않게 쓰거나, 자막을 넣을 때 대조용으로.
+
+| 화면 | 문구 |
+|---|---|
+| 랜딩 | Then & Now / A shared memory garden for two generations. / One question at a time, discover the stories you never knew to ask. |
+| 온보딩 1 | Who are you growing this with? / You can invite them to your garden. |
+| 온보딩 2 | Tell us your names. / This will be the beginning of your garden. |
+| 온보딩 3 | Your garden is ready. / Ann & Grandma's Garden |
+| 정원 | Grandma & Ann · 52 years between you / TODAY'S QUESTION / Grandma answered · Waiting for you |
+| 꽃 노트 | Leaving Home / Grandma · Savannah → Atlanta · 1966 / Ann · Seattle, WA · 2024 / Different cities. Similar uncertainty. / Hear this story → |
+| 답하기 | Hold to record your story / Write instead · Add a photo |
+| 심은 뒤 | Planting your story… → Your story is in the garden. |
+| 준비됨 | Both stories are ready. / Reveal together → |
+| Reveal | Everyday Joy / 52 years apart. / Same kind of happiness. |
+| 리액션 | Had you heard this story before? / I never knew this · I remember this |
+| 후속 | A conversation waiting to bloom / What did friendship mean to you at twenty? / Ask Grandma → |
+| Between Us | Things we never knew we shared. / 52 years. 8 stories. 3 things we found in each other. / Maybe we weren't so far apart after all. |
+| 발견한 것들 | Stories I never knew. / The pieces of Grandma's life I met for the first time. — Stories I remember. / The memories that were already part of us. |
+| Meet Her | Grandma at 22 / Ann at 22 / Different worlds. Same age. / Ask her something you wish someone would ask you. |
