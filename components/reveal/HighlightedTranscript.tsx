@@ -12,7 +12,7 @@ export function HighlightedTranscript({
   highlight,
   active,
   className = "",
-  markColor = "#b88379",
+  markColor = "#e7d49a",
 }: {
   text: string;
   highlight?: string;
@@ -30,17 +30,20 @@ export function HighlightedTranscript({
   return (
     <p className={className}>
       &ldquo;{before}
+      {/* The phrase is marked the way somebody marks a book: a soft stripe of
+          colour laid over the words, drawn on from the left. */}
       <mark
-        className="bg-transparent font-semibold"
+        className="bg-transparent"
         style={{
-          color: active ? markColor : "inherit",
-          fontWeight: active ? 700 : "inherit",
+          color: "inherit",
           backgroundImage: `linear-gradient(${markColor}, ${markColor})`,
           backgroundRepeat: "no-repeat",
-          backgroundPosition: "0 92%",
-          backgroundSize: active ? "100% 1.5px" : "0% 1.5px",
-          transition:
-            "background-size 900ms var(--ease-organic), color 700ms ease, font-weight 400ms ease",
+          backgroundPosition: "0 55%",
+          backgroundSize: active ? "100% 78%" : "0% 78%",
+          boxDecorationBreak: "clone",
+          WebkitBoxDecorationBreak: "clone",
+          padding: "0.06em 0.1em",
+          transition: "background-size 1100ms var(--ease-organic)",
         }}
       >
         {highlight}

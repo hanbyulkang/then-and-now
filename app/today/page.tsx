@@ -2,11 +2,10 @@
 
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
-import { BookSpread, PageHead } from "@/components/book/BookSpread";
-import { BudMark } from "@/components/garden/Botanical";
 import { Waveform } from "@/components/audio/Waveform";
-import { Icon } from "@/components/ui/Icon";
-import { Navigation } from "@/components/nav/Navigation";
+import { BudMark } from "@/components/garden/Botanical";
+import { Field } from "@/components/garden/Field";
+import { LeafButton, Panel, PanelLabel } from "@/components/ui/Panel";
 import { ANN_FALLBACK_ANSWER } from "@/lib/demo-data";
 import { useGarden } from "@/lib/state/garden-provider";
 import { useRecorder } from "@/lib/voice/use-recorder";
@@ -19,14 +18,11 @@ function clock(seconds: number) {
 }
 
 /**
- * Today's page.
+ * Answering today's question.
  *
- * The question is printed on the old page and your side of the book is blank,
- * the way a book you are keeping together would be. Speaking is the way you
- * answer it; writing is there for when you cannot.
- *
- * Nothing here is a form. There is no box to fill in — you are leaving
- * something on a page.
+ * The garden stays behind it, out of focus, because you have not left it — you
+ * have stopped in front of one thing in it. Speaking is how you answer; writing
+ * is there for when you cannot. Nothing on this screen is a form.
  */
 export default function TodayPage() {
   const router = useRouter();
@@ -69,8 +65,8 @@ export default function TodayPage() {
     window.setTimeout(() => {
       setSaved("done");
       addMemory(active.id, memory);
-      window.setTimeout(() => router.push("/garden"), 2200);
-    }, 1200);
+      window.setTimeout(() => router.push("/garden"), 2000);
+    }, 1100);
   }
 
   async function finish() {
@@ -93,68 +89,46 @@ export default function TodayPage() {
 
   return (
     <div className="flex min-h-dvh flex-col bg-canvas">
-      <Navigation />
+      <Field className="min-h-dvh justify-center">
+        {/* The garden is still there; you have only stopped in front of it. */}
+        <div className="absolute inset-0 bg-[#3d372c]/45 backdrop-blur-[3px]" aria-hidden />
 
-      <BookSpread
-        left={
-          <div className="flex flex-1 flex-col justify-between gap-12 p-8 md:p-16">
-            <PageHead side="then" eyebrow="Today's question" name="" />
-
-            <blockquote className="max-w-[22ch] font-serif text-[34px] leading-[1.25] text-then-ink md:text-[46px]">
-              &ldquo;{active.question.text}&rdquo;
-            </blockquote>
-
-            <div className="flex items-end gap-5">
-              <svg width="40" height="48" viewBox="-20 -46 40 48" aria-hidden>
-                <BudMark x={0} y={0} length={42} />
-              </svg>
-              <p className="max-w-[30ch] text-[13px] leading-relaxed text-then-faded">
-                {pair.then.name} will see this question too. Neither of you sees
-                the other&apos;s page until both are written.
-              </p>
-            </div>
-          </div>
-        }
-        right={
-          <div className="flex flex-1 flex-col justify-between gap-12 p-8 md:p-16">
-            <PageHead side="now" eyebrow="Your story" name="" />
-
+        <div className="relative z-10 flex flex-1 items-center justify-center px-6 py-14">
+          <Panel className="w-full max-w-[440px] px-8 py-10 text-center">
             {saved !== "idle" ? (
               <Planted state={saved} />
             ) : viewerHasAnswered ? (
-              <div className="flex flex-col gap-6">
-                <p className="text-[19px] leading-relaxed text-now-charcoal">
-                  You have already left a story on this page.
+              <div className="flex flex-col items-center gap-5">
+                <p className="font-serif text-[19px] leading-snug text-then-ink">
+                  You have already left a story here.
                 </p>
-                <button
-                  type="button"
-                  onClick={() => router.push("/garden")}
-                  className="w-fit text-[15px] font-medium text-bloom-green underline-offset-8 hover:underline"
-                >
-                  Back to the garden →
-                </button>
+                <LeafButton onClick={() => router.push("/garden")}>
+                  Back to the garden
+                </LeafButton>
               </div>
             ) : writing ? (
-              /* Writing on the page, not typing into a box. */
-              <div className="flex flex-1 flex-col justify-center gap-8">
+              <div className="flex flex-col items-center gap-6">
+                <PanelLabel>Today&apos;s question</PanelLabel>
+                <p className="font-serif text-[21px] leading-snug text-then-ink md:text-[24px]">
+                  {active.question.text}
+                </p>
                 <textarea
                   autoFocus
                   value={written}
                   onChange={(e) => setWritten(e.target.value)}
-                  rows={6}
+                  rows={5}
                   placeholder="I remember…"
-                  className="w-full resize-none border-0 bg-transparent p-0 font-memory text-[22px] leading-[2.1] text-now-charcoal outline-none placeholder:text-now-slate/40 md:text-[24px]"
+                  className="w-full resize-none border-0 bg-transparent p-0 text-left font-memory text-[17px] leading-[2.1] text-then-ink outline-none placeholder:text-then-faded/50"
                   style={{
                     backgroundImage:
-                      "repeating-linear-gradient(transparent, transparent calc(2.1em - 1px), rgba(116,124,121,0.18) calc(2.1em - 1px), rgba(116,124,121,0.18) 2.1em)",
+                      "repeating-linear-gradient(transparent, transparent calc(2.1em - 1px), rgba(138,115,85,0.22) calc(2.1em - 1px), rgba(138,115,85,0.22) 2.1em)",
                     lineHeight: "2.1em",
                   }}
                 />
-                <div className="flex items-center gap-8">
-                  <button
-                    type="button"
+                <div className="flex items-center gap-6">
+                  <LeafButton
+                    disabled={written.trim().length < 4}
                     onClick={() =>
-                      written.trim().length >= 4 &&
                       plant(
                         build({
                           transcript: written.trim(),
@@ -165,87 +139,87 @@ export default function TodayPage() {
                         }),
                       )
                     }
-                    disabled={written.trim().length < 4}
-                    className="text-[15px] font-semibold text-bloom-green underline-offset-8 transition-opacity hover:underline disabled:opacity-35"
                   >
-                    Plant this story →
-                  </button>
+                    Plant this story
+                  </LeafButton>
                   <button
                     type="button"
                     onClick={() => setWriting(false)}
-                    className="text-[14px] text-now-slate underline-offset-4 hover:underline"
+                    className="text-[13px] text-then-faded underline-offset-4 hover:underline"
                   >
                     I&apos;d rather say it
                   </button>
                 </div>
               </div>
             ) : (
-              /* The page stays empty until she speaks into it. */
-              <div className="flex flex-1 flex-col items-start justify-center gap-9">
+              <div className="flex flex-col items-center gap-7">
+                <PanelLabel>Today&apos;s question</PanelLabel>
+                <p className="max-w-[24ch] font-serif text-[22px] leading-snug text-then-ink md:text-[26px]">
+                  {active.question.text}
+                </p>
+
                 <Waveform
                   seed={active.question.id}
-                  bars={22}
-                  color="#9aaa94"
+                  bars={34}
+                  color="#9aab96"
                   live={recording}
-                  height={54}
+                  height={44}
                 />
 
-                <div className="flex flex-col gap-2">
-                  <p className="text-[13px] uppercase tracking-[0.22em] text-now-slate">
-                    {phase === "denied"
-                      ? "We couldn't hear you"
-                      : recording
-                        ? "Listening"
-                        : "Take your time"}
+                <p className="text-[15px] tabular-nums text-then-faded">
+                  {recording ? clock(elapsed) : "00:00"}
+                </p>
+
+                <p className="text-[12px] text-then-faded">
+                  {phase === "denied"
+                    ? "We couldn't hear you"
+                    : recording
+                      ? "Listening — press again when you're done"
+                      : "Hold to record your story"}
+                </p>
+
+                {heard ? (
+                  <p className="max-w-[34ch] font-memory text-[14px] italic leading-relaxed text-then-faded">
+                    {heard}
                   </p>
-                  {recording ? (
-                    <p className="text-[38px] font-light tabular-nums leading-none text-now-charcoal">
-                      {clock(elapsed)}
-                    </p>
-                  ) : null}
-                  {heard ? (
-                    <p className="mt-2 max-w-[46ch] font-memory text-[17px] italic leading-relaxed text-now-slate">
-                      {heard}
-                    </p>
-                  ) : null}
-                </div>
+                ) : null}
 
                 {phase === "denied" ? (
-                  <button
-                    type="button"
+                  <LeafButton
                     onClick={() => {
                       setWriting(true);
                       setPhase("idle");
                     }}
-                    className="text-[17px] font-medium text-bloom-green underline-offset-8 hover:underline"
                   >
-                    Write it instead →
-                  </button>
+                    Write it instead
+                  </LeafButton>
                 ) : (
                   <button
                     type="button"
                     onClick={recording ? finish : start}
-                    className="flex items-center gap-4 text-[19px] font-medium text-now-charcoal transition-opacity hover:opacity-70 md:text-[21px]"
+                    aria-label={recording ? "Stop recording" : "Start recording"}
+                    className="flex size-[62px] items-center justify-center rounded-full bg-[#6d8060] shadow-[0_8px_20px_rgba(64,56,47,0.18)] transition-transform duration-300 hover:scale-105"
                   >
-                    <span className="flex size-[52px] items-center justify-center rounded-full border border-now-slate/40">
-                      <Icon name="mic" size={20} />
-                    </span>
-                    {recording ? "That's the story →" : "Tell your story →"}
+                    {recording ? (
+                      <span className="block size-[18px] rounded-[3px] bg-[#f7f4ec]" />
+                    ) : (
+                      <span className="block size-[18px] rounded-full bg-[#f7f4ec]" />
+                    )}
                   </button>
                 )}
 
-                <div className="flex items-center gap-8 pt-2">
+                <div className="flex items-center gap-8 pt-1">
                   <button
                     type="button"
                     onClick={() => setWriting(true)}
-                    className="text-[14px] text-now-slate underline-offset-4 hover:underline"
+                    className="text-[13px] text-then-faded underline-offset-4 hover:text-then-ink hover:underline"
                   >
                     Write instead
                   </button>
                   <button
                     type="button"
                     onClick={() => fileRef.current?.click()}
-                    className="text-[14px] text-now-slate underline-offset-4 hover:underline"
+                    className="text-[13px] text-then-faded underline-offset-4 hover:text-then-ink hover:underline"
                   >
                     {photo ? "Photo added" : "Add a photo"}
                   </button>
@@ -262,11 +236,17 @@ export default function TodayPage() {
                 </div>
               </div>
             )}
+          </Panel>
+        </div>
 
-            <span aria-hidden />
-          </div>
-        }
-      />
+        <button
+          type="button"
+          onClick={() => router.push("/garden")}
+          className="absolute right-6 top-6 z-10 text-[13px] text-[#f7f4ec]/80 transition-colors hover:text-[#f7f4ec]"
+        >
+          Close
+        </button>
+      </Field>
     </div>
   );
 }
@@ -274,25 +254,29 @@ export default function TodayPage() {
 /** What happens after. No processing language: a story went into the garden. */
 function Planted({ state }: { state: "saving" | "done" }) {
   return (
-    <div className="flex flex-1 flex-col items-start justify-center gap-5">
+    <div className="flex flex-col items-center gap-5 py-6">
       {state === "saving" ? (
         <>
           <span
-            className="block size-2.5 rounded-full bg-bloom-rose animate-seed-pulse"
+            className="block size-2.5 animate-seed-pulse rounded-full bg-bloom-rose"
             aria-hidden
           />
-          <p className="font-memory text-[24px] italic text-now-charcoal">
+          <p className="font-serif text-[20px] italic text-then-ink">
             Planting your story…
           </p>
         </>
       ) : (
         <>
-          <div className="animate-leaf-unfurl" aria-hidden>
-            <svg width="52" height="26" viewBox="0 0 52 26" fill="none">
-              <ellipse cx="26" cy="13" rx="26" ry="13" fill="#9aaa94" />
-            </svg>
-          </div>
-          <p className="animate-rise-in font-memory text-[26px] italic text-now-charcoal">
+          <svg
+            width="48"
+            height="56"
+            viewBox="-24 -52 48 56"
+            className="animate-leaf-unfurl"
+            aria-hidden
+          >
+            <BudMark x={0} y={0} length={50} />
+          </svg>
+          <p className="animate-rise-in font-serif text-[21px] italic text-then-ink">
             Your story is in the garden.
           </p>
         </>

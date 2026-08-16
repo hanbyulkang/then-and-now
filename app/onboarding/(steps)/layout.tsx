@@ -1,8 +1,9 @@
 /**
- * The pages before the garden.
+ * The three pages before the garden.
  *
- * A book's front matter, not a signup flow: the title at the head of the page,
- * the question set on the page itself, and nothing framed in a box.
+ * The name at the head, one thing asked at a time on a small sheet, and a line
+ * along the bottom that fills as you go — enough to know where you are without
+ * being counted at.
  */
 export default function OnboardingLayout({
   children,
@@ -10,9 +11,9 @@ export default function OnboardingLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="paper-grain flex min-h-dvh flex-col items-center bg-then-paper px-6 pb-16">
-      <header className="flex w-full shrink-0 justify-center pt-12">
-        <p className="font-serif text-[22px] text-then-ink md:text-[26px]">
+    <div className="flex min-h-dvh flex-col items-center bg-canvas px-6 pb-14">
+      <header className="flex w-full shrink-0 justify-center pt-10">
+        <p className="font-serif text-[21px] text-then-ink md:text-[24px]">
           Then &amp; Now
         </p>
       </header>

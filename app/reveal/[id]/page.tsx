@@ -2,22 +2,24 @@
 
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { BookSpread } from "@/components/book/BookSpread";
+import { Field } from "@/components/garden/Field";
 import { HeardBefore } from "@/components/reveal/HeardBefore";
 import { Meeting } from "@/components/reveal/Meeting";
 import { reached, useReveal } from "@/components/reveal/sequence";
-import { MemoryPage } from "@/components/story/MemoryPage";
+import { StorySide } from "@/components/story/StorySide";
 import { Navigation } from "@/components/nav/Navigation";
+import { LeafButton, Panel, PanelLabel } from "@/components/ui/Panel";
+import { seedOf } from "@/lib/botany";
 import { useGarden } from "@/lib/state/garden-provider";
 import type { Connection } from "@/lib/types";
 
 /**
  * Two stories, opened together.
  *
- * Her page, your page, and for the first few seconds nothing at all in between
- * — the words have to land before anything comments on them. Then two stems
- * come up out of the pages and meet on the binding, and a flower opens that is
- * half of each of them.
+ * Her page and yours, and between them — for the first few seconds — one closed
+ * bud and nothing else, because the words have to land before anything comments
+ * on them. Then two stems come up out of the pages and meet, and the flower
+ * that opens is half of each of them.
  *
  * Afterwards there is one question, and it is not whether you liked it.
  */
@@ -68,7 +70,7 @@ export default function RevealPage() {
 
   const thenMemory = conversation.memories[pair.then.id];
   const nowMemory = conversation.memories[pair.now.id];
-  const seed = id.split("").reduce((h, c) => (h * 31 + c.charCodeAt(0)) | 0, 0);
+  const done = reached(beat, "asked") || (looked && !connection);
 
   return (
     <div className="flex min-h-dvh flex-col bg-canvas">
@@ -80,55 +82,49 @@ export default function RevealPage() {
           : "Both stories are open."}
       </p>
 
-      <BookSpread
-        className="min-h-[620px]"
-        left={
-          thenMemory ? (
-            <div className="relative z-20 flex flex-1 flex-col justify-center p-7 md:py-14 md:pl-16 md:pr-[clamp(90px,13vw,200px)]">
-              <MemoryPage
-                person={pair.then}
-                memory={thenMemory}
-                highlight={connection?.thenHighlight}
-                highlightActive={reached(beat, "catchThen")}
-                gloss={
-                  reached(beat, "catchThen") ? connection?.thenGloss : undefined
-                }
-              />
-            </div>
-          ) : (
-            <span aria-hidden />
-          )
-        }
-        right={
-          nowMemory ? (
-            <div className="relative z-20 flex flex-1 flex-col justify-center p-7 md:py-14 md:pl-[clamp(90px,13vw,200px)] md:pr-16">
-              <MemoryPage
-                person={pair.now}
-                memory={nowMemory}
-                align="right"
-                highlight={connection?.nowHighlight}
-                highlightActive={reached(beat, "catchNow")}
-              />
-            </div>
-          ) : (
-            <span aria-hidden />
-          )
-        }
-        across={
-          connection ? (
-            <Meeting
-              beat={beat}
-              seed={seed}
-              theme={connection.theme}
-              headline={connection.headline}
-              statement={connection.statement}
+      <Field className="min-h-[560px]">
+        {connection ? (
+          <Meeting
+            beat={beat}
+            seed={seedOf(id)}
+            theme={connection.theme}
+            headline={connection.headline}
+            statement={connection.statement}
+          />
+        ) : null}
+
+        <div className="relative z-20 grid flex-1 grid-cols-1 items-center gap-10 px-6 pb-4 pt-10 md:grid-cols-[1fr_minmax(280px,32%)_1fr] md:gap-4 md:px-[4%]">
+          {thenMemory ? (
+            <StorySide
+              person={pair.then}
+              memory={thenMemory}
+              highlight={connection?.thenHighlight}
+              highlightActive={reached(beat, "catchThen")}
+              gloss={reached(beat, "catchThen") ? connection?.thenGloss : undefined}
             />
-          ) : null
-        }
-        atTheFold={
-          reached(beat, "asked") || (looked && !connection) ? (
-            <div className="flex max-w-[46ch] flex-col items-center gap-6 px-6 pb-8 md:pb-11">
-              {/* Whether or not anything was found, you just heard her. */}
+          ) : (
+            <span aria-hidden />
+          )}
+
+          <span aria-hidden />
+
+          {nowMemory ? (
+            <StorySide
+              person={pair.now}
+              memory={nowMemory}
+              align="right"
+              highlight={connection?.nowHighlight}
+              highlightActive={reached(beat, "catchNow")}
+            />
+          ) : (
+            <span aria-hidden />
+          )}
+        </div>
+
+        {/* What this opened, and the one question worth asking after it. */}
+        {done ? (
+          <div className="relative z-20 flex justify-center px-6 pb-8">
+            <Panel className="animate-rise-in flex w-full max-w-[360px] flex-col items-center gap-3 text-center">
               {thenMemory ? (
                 <HeardBefore
                   name={pair.then.name}
@@ -138,34 +134,34 @@ export default function RevealPage() {
               ) : null}
 
               {connection ? (
-                <button
-                  type="button"
-                  onClick={() => {
-                    askFollowUp(id);
-                    router.push("/garden");
-                  }}
-                  className="text-[15px] font-semibold text-bloom-green underline-offset-8 transition-colors hover:text-then-ink hover:underline"
-                  style={{ textShadow: "0 0 16px #f2ece0" }}
-                >
-                  A conversation is waiting to bloom →
-                </button>
+                <>
+                  <PanelLabel>A conversation waiting to bloom</PanelLabel>
+                  <p className="font-serif text-[17px] italic leading-snug text-then-ink md:text-[19px]">
+                    {connection.followUp}
+                  </p>
+                  <LeafButton
+                    onClick={() => {
+                      askFollowUp(id);
+                      router.push("/garden");
+                    }}
+                  >
+                    Ask {pair.then.name} →
+                  </LeafButton>
+                </>
               ) : (
-                <button
-                  type="button"
+                <LeafButton
                   onClick={() => {
                     markSeen(id);
                     router.push("/garden");
                   }}
-                  className="text-[15px] font-semibold text-bloom-green underline-offset-8 hover:underline"
-                  style={{ textShadow: "0 0 16px #f2ece0" }}
                 >
-                  Back to the garden →
-                </button>
+                  Back to the garden
+                </LeafButton>
               )}
-            </div>
-          ) : null
-        }
-      />
+            </Panel>
+          </div>
+        ) : null}
+      </Field>
     </div>
   );
 }
