@@ -110,13 +110,13 @@ function Row({ entry }: { entry: Entry }) {
   return (
     <li className="flex items-center gap-5 border-b border-then-faded/15 py-5 last:border-b-0 md:gap-7">
       <span
-        className={`w-[68px] shrink-0 text-right ${
+        className={`w-[86px] shrink-0 text-right ${
           isThen
             ? "font-serif text-[19px] text-then-ink"
             : "text-[18px] font-light text-bloom-green"
         }`}
       >
-        {memory.year}
+        {memory.year} <span className="text-then-faded/50">→</span>
       </span>
 
       {memory.photoUrl ? (

@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { Suspense, useState } from "react";
+import { BudMark } from "@/components/garden/Botanical";
 import { Field } from "@/components/garden/Field";
 import { Garden as GardenPlot } from "@/components/garden/Garden";
 import { MobileNavSpacer, Navigation } from "@/components/nav/Navigation";
@@ -60,8 +61,22 @@ function Garden() {
           />
         </div>
 
-        {/* Today's question, standing in the garden it belongs to. */}
-        {status !== "revealed" ? (
+        {/* When both are in, the garden stops and says so in the middle of it. */}
+        {status === "ready" ? (
+          <div className="relative z-20 flex flex-1 items-center justify-center px-6">
+            <Panel className="flex w-full max-w-[280px] flex-col items-center gap-4 py-8 text-center">
+              <svg width="56" height="66" viewBox="-28 -62 56 66" aria-hidden>
+                <BudMark x={0} y={0} length={58} />
+              </svg>
+              <p className="font-serif text-[19px] text-then-ink md:text-[21px]">
+                Both stories are ready.
+              </p>
+              <LeafButton onClick={() => router.push(`/reveal/${active.id}`)}>
+                Reveal together →
+              </LeafButton>
+            </Panel>
+          </div>
+        ) : status !== "revealed" ? (
           <div className="relative z-20 flex flex-1 items-center px-6 md:px-[8%]">
             <Panel className="w-full max-w-[300px]">
               <PanelLabel>Today&apos;s question</PanelLabel>
@@ -69,19 +84,7 @@ function Garden() {
                 {active.question.text}
               </p>
 
-              {status === "ready" ? (
-                <>
-                  <p className="mt-4 text-[12px] leading-relaxed text-then-faded">
-                    Both stories are ready.
-                  </p>
-                  <LeafButton
-                    className="mt-4"
-                    onClick={() => router.push(`/reveal/${active.id}`)}
-                  >
-                    Reveal together →
-                  </LeafButton>
-                </>
-              ) : viewerHasAnswered ? (
+              {viewerHasAnswered ? (
                 <p className="mt-4 text-[12px] leading-relaxed text-then-faded">
                   You answered
                   <br />· Waiting for {pair.then.name}

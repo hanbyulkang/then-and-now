@@ -94,7 +94,16 @@ export default function TodayPage() {
         <div className="absolute inset-0 bg-[#3d372c]/45 backdrop-blur-[3px]" aria-hidden />
 
         <div className="relative z-10 flex flex-1 items-center justify-center px-6 py-14">
-          <Panel className="w-full max-w-[440px] px-8 py-10 text-center">
+          <Panel className="relative w-full max-w-[440px] px-8 py-10 text-center">
+            <button
+              type="button"
+              onClick={() => router.push("/garden")}
+              aria-label="Close"
+              className="absolute right-4 top-4 text-[17px] leading-none text-then-faded transition-colors hover:text-then-ink"
+            >
+              ×
+            </button>
+
             {saved !== "idle" ? (
               <Planted state={saved} />
             ) : viewerHasAnswered ? (
@@ -160,10 +169,10 @@ export default function TodayPage() {
 
                 <Waveform
                   seed={active.question.id}
-                  bars={34}
+                  bars={52}
                   color="#9aab96"
                   live={recording}
-                  height={44}
+                  height={40}
                 />
 
                 <p className="text-[15px] tabular-nums text-then-faded">
@@ -239,13 +248,6 @@ export default function TodayPage() {
           </Panel>
         </div>
 
-        <button
-          type="button"
-          onClick={() => router.push("/garden")}
-          className="absolute right-6 top-6 z-10 text-[13px] text-[#f7f4ec]/80 transition-colors hover:text-[#f7f4ec]"
-        >
-          Close
-        </button>
       </Field>
     </div>
   );

@@ -91,7 +91,7 @@ export default function MeetHerPage() {
 
           {/* And you, at the same age. */}
           <div className="flex flex-col items-center gap-5 md:items-end">
-            <h2 className="text-[24px] font-medium text-now-charcoal md:text-[30px]">
+            <h2 className="font-serif text-[26px] text-then-ink md:text-[32px]">
               {pair.now.name} at {AGE}
             </h2>
             <div className="flex items-start gap-5">

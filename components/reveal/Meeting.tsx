@@ -58,7 +58,7 @@ export function Meeting({
     opacity: reached(beat, at) ? 1 : 0,
     transform: reached(beat, at) ? "translateY(0)" : "translateY(10px)",
     transition: `opacity 1000ms ease ${delay}ms, transform 1000ms var(--ease-settle) ${delay}ms`,
-    textShadow: "0 0 22px #faf7f0, 0 0 40px #faf7f0",
+    textShadow: "0 0 22px #f6f1e6, 0 0 40px #f6f1e6",
   });
 
   return (

@@ -2,7 +2,7 @@
 
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Field } from "@/components/garden/Field";
+import { PaperSpread } from "@/components/garden/Field";
 import { HeardBefore } from "@/components/reveal/HeardBefore";
 import { Meeting } from "@/components/reveal/Meeting";
 import { reached, useReveal } from "@/components/reveal/sequence";
@@ -84,7 +84,7 @@ export default function RevealPage() {
           : "Both stories are open."}
       </p>
 
-      <Field className="min-h-[560px]">
+      <PaperSpread className="min-h-[560px]">
         {connection ? (
           <Meeting
             beat={beat}
@@ -163,7 +163,7 @@ export default function RevealPage() {
             </Panel>
           </div>
         ) : null}
-      </Field>
+      </PaperSpread>
     </div>
   );
 }

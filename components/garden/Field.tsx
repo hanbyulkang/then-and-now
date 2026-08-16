@@ -11,6 +11,35 @@ import type { ReactNode } from "react";
  * edge anywhere — which is the whole idea, and is why there is no fold drawn
  * here at all.
  */
+/**
+ * The reveal stands on two pages rather than one field: her side is paper that
+ * has been in a drawer for fifty years, yours is this year's white. They meet
+ * without a rule drawn between them, but they are visibly two things, because
+ * on this screen the whole point is that there are two of you.
+ */
+export function PaperSpread({
+  children,
+  className = "",
+}: {
+  children: ReactNode;
+  className?: string;
+}) {
+  return (
+    <section className={`relative flex flex-1 flex-col ${className}`}>
+      <div
+        className="paper-grain absolute inset-y-0 left-0 right-1/2 bg-[#e9e0cd]"
+        aria-hidden
+      />
+      <div className="absolute inset-y-0 left-1/2 right-0 bg-[#fcfbf8]" aria-hidden />
+      <div
+        className="absolute inset-y-0 left-1/2 w-[120px] -translate-x-1/2 bg-[linear-gradient(90deg,rgba(233,224,205,0)_0%,rgba(233,224,205,0.9)_36%,rgba(252,251,248,0.9)_64%,rgba(252,251,248,0)_100%)]"
+        aria-hidden
+      />
+      <div className="relative flex flex-1 flex-col">{children}</div>
+    </section>
+  );
+}
+
 export function Field({
   children,
   className = "",

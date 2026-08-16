@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Seedling } from "@/components/garden/Botanical";
+import { Leaf, Seedling } from "@/components/garden/Botanical";
 import { Field } from "@/components/garden/Field";
 import { FlowerMark } from "@/components/garden/Flower";
 import { TornDefs, TornPrint } from "@/components/story/TornPrint";
@@ -38,10 +38,16 @@ export default function LandingPage() {
               caption="Athens, GA · 1974"
               tilt={-2.2}
             >
-              <span className="pointer-events-none absolute -right-10 -top-11">
+              <span
+                className="pointer-events-none absolute -right-10 -top-11"
+                style={{ filter: "hue-rotate(-22deg) saturate(1.5)" }}
+              >
                 <FlowerMark size={86} seed={3} side="then" />
               </span>
-              <span className="pointer-events-none absolute -bottom-6 -left-10">
+              <span
+                className="pointer-events-none absolute -bottom-6 -left-10"
+                style={{ filter: "hue-rotate(-26deg) saturate(1.55)" }}
+              >
                 <FlowerMark size={58} seed={12} side="then" />
               </span>
             </TornPrint>
@@ -116,6 +122,17 @@ export default function LandingPage() {
               <span className="pointer-events-none absolute -left-10 -top-9">
                 <FlowerMark size={64} seed={7} side="now" />
               </span>
+              {/* A sprig laid over the corner of the screen, the way the
+                  design lays one there. */}
+              <svg
+                className="pointer-events-none absolute -right-6 -top-10 w-[118px] opacity-80"
+                viewBox="0 0 130 160"
+                aria-hidden
+              >
+                <Leaf side="now" x={72} y={156} length={72} angle={-98} />
+                <Leaf side="now" x={72} y={116} length={54} angle={-42} />
+                <Leaf side="now" x={72} y={86} length={50} angle={-140} flip />
+              </svg>
             </figure>
           </div>
         </div>

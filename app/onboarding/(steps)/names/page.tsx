@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { LeafButton, Panel } from "@/components/ui/Panel";
+import { Leaf } from "@/components/garden/Botanical";
 import { Steps } from "@/components/ui/Steps";
 import { useOnboardingDraft } from "@/lib/state/onboarding";
 
@@ -15,7 +16,18 @@ export default function OnboardingNamesPage() {
 
   return (
     <main className="flex w-full max-w-[660px] flex-1 flex-col justify-center py-14">
-      <Panel className="px-8 py-12 md:px-14">
+      <Panel className="relative overflow-visible px-8 py-12 md:px-14">
+      {/* A sprig laid in the corner of the sheet. */}
+      <svg
+        className="pointer-events-none absolute -right-2 -top-4 w-[86px] opacity-70 md:-right-4 md:-top-6 md:w-[110px]"
+        viewBox="0 0 120 150"
+        aria-hidden
+      >
+        <Leaf side="then" x={62} y={146} length={64} angle={-96} />
+        <Leaf side="then" x={62} y={112} length={48} angle={-40} />
+        <Leaf side="then" x={62} y={86} length={44} angle={-142} flip />
+      </svg>
+
         <form
           onSubmit={(event) => {
             event.preventDefault();
