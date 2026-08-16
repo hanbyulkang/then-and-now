@@ -68,7 +68,7 @@ export function GardenCanvas({
     `${(value / (axis === "x" ? CANVAS.width : CANVAS.height)) * 100}%`;
 
   return (
-    <div className="relative min-h-[560px] w-full flex-1 overflow-hidden">
+    <div className="relative size-full overflow-hidden">
       <svg
         viewBox={`0 0 ${CANVAS.width} ${CANVAS.height}`}
         preserveAspectRatio="none"
@@ -81,23 +81,16 @@ export function GardenCanvas({
           </filter>
         </defs>
 
-        {/* The ground it rests in — warm under THEN, cooler out toward NOW. */}
+        {/* The pages carry their own colour now, so the ground is only the
+            shadow the planting casts along the foot of the spread. */}
         <g filter="url(#ground-blur)">
           <ellipse
-            cx={TREE_BASE.x - 120}
-            cy={GROUND_Y + 44}
-            rx={760}
-            ry={120}
-            fill="#e8ddc8"
-            opacity={grown ? 0.9 : 0.66}
-          />
-          <ellipse
-            cx={TREE_BASE.x + 460}
-            cy={GROUND_Y + 50}
-            rx={520}
+            cx={TREE_BASE.x}
+            cy={GROUND_Y + 52}
+            rx={880}
             ry={104}
-            fill="#daddd8"
-            opacity={grown ? 0.5 : 0.34}
+            fill="#8a7355"
+            opacity={grown ? 0.16 : 0.11}
           />
         </g>
 

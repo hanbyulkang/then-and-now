@@ -20,7 +20,7 @@ export function Tree({ growth = 1 }: { growth?: number }) {
   return (
     <g>
       {/* The trunk. Warm ink, because it is the part they share. */}
-      <path d={taperedStem(TRUNK, 58, 22)} fill={BARK} />
+      <path d={taperedStem(TRUNK, 46, 17)} fill={BARK} />
 
       {LIMBS.map((limb, i) => {
         const leafy = limb.hand === "then";
