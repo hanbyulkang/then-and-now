@@ -34,9 +34,10 @@ Legend: ✅ done · ◐ partial · ✗ not started
 
 | Route | Screen |
 |---|---|
-| `/` | Landing |
+| `/` | Title spread |
 | `/onboarding/who` · `/names` · `/ready` | Pairing |
 | `/garden` | Garden — home of the product, both the empty and grown states |
+| `/today` | Today's question, and where a story is left |
 | `/reveal/[id]` | Reveal + signature bloom |
 | `/memory/[id]` | Shared memory detail |
 | `/stories` | Editorial archive |
@@ -52,9 +53,10 @@ Legend: ✅ done · ◐ partial · ✗ not started
 - `garden/Leaf` — the specimen table and its attachment maths ✅
 - `garden/GroundPlanting` — the bed both people stand in ✅
 - `botanical/Seedling` (organic + geometric), `Seed`, `Bud`, `Vine` ✅
-- `answer/AnswerOverlay`, `lib/voice/use-recorder` ✅
+- `book/BookSpread`, `BookGround`, `PageHead`, `PageYear` — the open book every screen is laid out on ✅
+- `lib/voice/use-recorder` ✅
 - `audio/AudioPlayer`, `audio/Waveform` ✅
-- `reveal/StoryPanel`, `BloomSequence`, `HighlightedTranscript`, `FollowUpBar`, `phases` ✅
+- `reveal/StoryPage`, `FoldBloom`, `HighlightedTranscript`, `FollowUpBar`, `phases` ✅
 - `ui/Icon`, `ui/MaskIcon` ✅
 
 ## Systems
@@ -86,6 +88,21 @@ Legend: ✅ done · ◐ partial · ✗ not started
 | Repo | https://github.com/hanbyulkang/then-and-now (private) |
 | Production env | `ANTHROPIC_API_KEY`, `AI_MODEL` set on Vercel |
 | Verified in production | garden renders, `/api/connection` returns a real thread |
+
+## The book
+
+Every screen is one open spread: an old book on the left, a modern one on the
+right, and a fold down the middle where the two meet. The fold is the shadow
+paper makes when it is bent, not a rule drawn between two columns — that is what
+tells you these are two pages of one thing rather than two panels.
+
+`BookSpread` is the layout primitive. `left` and `right` are the two pages;
+`across` is the layer the garden and the botanical drawings live in, spanning
+both pages above the paper and below the writing, so a stem can cross the fold
+and pass behind a line of text; `atTheFold` and `atTheCentre` sit in the gutter.
+On a phone there is only one page, so the pages stack and anything that belonged
+in the gutter follows them instead. `BookGround` is the same two pages where the
+content sets the height — the archive, and Meet Her at My Age.
 
 ## Botanical art direction
 

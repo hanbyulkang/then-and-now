@@ -17,16 +17,19 @@ export function BookSpread({
   right,
   across,
   /**
-   * Sits over everything, centred on the fold. On one page there is no gutter
-   * to sit in, so it follows the pages instead.
+   * Sits over everything at the foot of the fold. On one page there is no
+   * gutter to sit in, so it follows the pages instead.
    */
   atTheFold,
+  /** The same, halfway up the fold — where a book prints its own name. */
+  atTheCentre,
   className = "",
 }: {
   left: ReactNode;
   right: ReactNode;
   across?: ReactNode;
   atTheFold?: ReactNode;
+  atTheCentre?: ReactNode;
   className?: string;
 }) {
   return (
@@ -52,6 +55,12 @@ export function BookSpread({
       {across ? (
         <div className="pointer-events-none absolute inset-0 z-10">
           <div className="pointer-events-auto contents">{across}</div>
+        </div>
+      ) : null}
+
+      {atTheCentre ? (
+        <div className="pointer-events-none z-20 flex items-center justify-center px-6 py-14 md:absolute md:inset-0 md:py-0">
+          <div className="pointer-events-auto">{atTheCentre}</div>
         </div>
       ) : null}
 
