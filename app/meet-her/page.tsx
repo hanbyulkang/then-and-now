@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useMemo } from "react";
+import { BookGround } from "@/components/book/BookSpread";
 import { Bud } from "@/components/botanical/Bud";
 import { SharedFlower } from "@/components/garden/SharedFlower";
 import { MobileNavSpacer, Navigation } from "@/components/nav/Navigation";
@@ -12,12 +13,13 @@ import { flowersOf } from "@/lib/types";
 /**
  * Meet Her at My Age.
  *
- * A page turned deeper into the book, where you stop meeting your grandmother
- * as your grandmother and meet the person she was at the age you are now.
+ * A page turned deeper into the book — the spread arrives on a turn — where you
+ * stop meeting your grandmother as your grandmother and meet the person she was
+ * at the age you are now.
  *
- * The two columns are held to the same rhythm on purpose: the same four facts
- * in the same order, so the resemblance arrives on its own without anything
- * having to point at it.
+ * The two pages are held to the same rhythm on purpose: the same four facts in
+ * the same order, one on each side of the fold, so the resemblance arrives on
+ * its own without anything having to point at it.
  */
 
 const AGE = 22;
@@ -36,30 +38,24 @@ export default function MeetHerPage() {
   const shared = useMemo(() => flowersOf(state).slice(0, 4), [state]);
 
   return (
-    <div className="flex min-h-dvh flex-col bg-canvas">
+    <div className="flex min-h-dvh flex-col overflow-x-hidden bg-canvas">
       <Navigation />
 
-      <main className="flex flex-1 flex-col items-center px-6 pb-24 pt-14 md:px-12">
-        <p
-          className="text-[12px] uppercase tracking-[0.22em] text-then-faded"
-          style={{ animation: "rise-in 1200ms var(--ease-settle) 100ms both" }}
-        >
+      <BookGround className="animate-page-turn">
+        <p className="pt-12 text-center text-[12px] uppercase tracking-[0.24em] text-then-faded">
           A page further in
         </p>
 
-        {/* Both of them at the same age, held to the same rhythm. */}
-        <div
-          className="mt-12 grid w-full max-w-[1120px] grid-cols-1 gap-14 md:grid-cols-[1fr_auto_1fr] md:gap-10"
-          style={{ animation: "rise-in 1400ms var(--ease-settle) 500ms both" }}
-        >
-          <section className="flex flex-col items-center gap-6 text-center md:items-end md:text-right">
-            <figure className="rounded-[3px] border border-bloom-gold/70 bg-canvas p-3 shadow-[0_18px_30px_rgba(64,56,47,0.1)]">
-              <div className="relative h-[280px] w-[220px] overflow-hidden md:h-[320px] md:w-[254px]">
+        {/* Both of them at the same age, one on each page. */}
+        <div className="mt-12 grid grid-cols-1 gap-14 md:grid-cols-2 md:gap-0">
+          <section className="flex flex-col items-center gap-6 px-7 text-center">
+            <figure className="border border-bloom-gold/60 bg-canvas p-3 shadow-[0_18px_30px_rgba(64,56,47,0.1)]">
+              <div className="relative h-[280px] w-[220px] overflow-hidden md:h-[330px] md:w-[262px]">
                 <Image
                   src="/assets/photos/grandma-at-22.jpg"
                   alt={`${pair.then.name} at ${AGE}`}
                   fill
-                  sizes="254px"
+                  sizes="262px"
                   className="archival-photo object-cover"
                   priority
                 />
@@ -70,16 +66,14 @@ export default function MeetHerPage() {
             </h1>
           </section>
 
-          <div className="hidden w-px bg-bloom-gold/30 md:block" aria-hidden />
-
-          <section className="flex flex-col items-center gap-6 text-center md:items-start md:text-left">
-            <figure className="rounded-[10px] border border-black/[0.04] p-2.5 shadow-[0_14px_36px_rgba(0,0,0,0.04)]">
-              <div className="relative h-[280px] w-[220px] overflow-hidden rounded-[6px] md:h-[320px] md:w-[254px]">
+          <section className="flex flex-col items-center gap-6 px-7 text-center">
+            <figure className="rounded-[10px] p-2.5 shadow-[0_14px_36px_rgba(0,0,0,0.05)]">
+              <div className="relative h-[280px] w-[220px] overflow-hidden rounded-[6px] md:h-[330px] md:w-[262px]">
                 <Image
                   src="/assets/photos/ann-at-22.jpg"
                   alt={`${pair.now.name} at ${AGE}`}
                   fill
-                  sizes="254px"
+                  sizes="262px"
                   className="object-cover"
                   priority
                 />
@@ -91,50 +85,33 @@ export default function MeetHerPage() {
           </section>
         </div>
 
-        {/* The same four facts, side by side, nothing pointing at anything. */}
-        <dl
-          className="mt-16 grid w-full max-w-[1120px] grid-cols-1 gap-y-5 md:grid-cols-[1fr_auto_1fr] md:gap-x-10"
-          style={{ animation: "rise-in 1400ms var(--ease-settle) 900ms both" }}
-        >
-          {PAIRED.map((row, i) => (
-            <div key={i} className="contents">
-              <dt className="font-serif text-[19px] italic text-then-ink md:text-right md:text-[21px]">
+        {/* The same four facts, facing each other across the fold. */}
+        <dl className="mx-auto mt-16 grid w-full max-w-[1180px] grid-cols-2 gap-y-5">
+          {PAIRED.map((row) => (
+            <div key={row.then + row.now} className="contents">
+              <dt className="px-7 text-right font-serif text-[18px] italic text-then-ink md:pr-12 md:text-[21px]">
                 {row.then}
               </dt>
-              <span
-                className="hidden self-center text-[13px] text-bloom-gold md:block"
-                aria-hidden
-              >
-                ↔
-              </span>
-              <dd className="border-b border-black/5 pb-5 text-[17px] text-now-charcoal md:border-none md:pb-0 md:text-[19px]">
+              <dd className="px-7 text-[16px] text-now-charcoal md:pl-12 md:text-[19px]">
                 {row.now}
               </dd>
             </div>
           ))}
         </dl>
 
-        <div
-          className="mt-20 flex flex-col items-center gap-3 text-center"
-          style={{ animation: "rise-in 1600ms var(--ease-settle) 1400ms both" }}
-        >
+        <div className="mt-20 flex flex-col items-center gap-3 px-6 text-center">
           <p className="font-serif text-[26px] italic text-then-faded md:text-[30px]">
             Different worlds.
           </p>
-          <p className="font-serif text-[38px] leading-none text-then-ink md:text-[52px]">
+          <p className="font-serif text-[38px] leading-none text-then-ink md:text-[54px]">
             Same age.
           </p>
         </div>
 
-        {/* And the things they already found out they share. */}
+        {/* And the things they already found out they share, on the fold. */}
         {shared.length > 0 ? (
-          <div
-            className="mt-20 flex flex-col items-center gap-7"
-            style={{
-              animation: "rise-in 1600ms var(--ease-settle) 1900ms both",
-            }}
-          >
-            <p className="text-[12px] uppercase tracking-[0.18em] text-then-faded">
+          <div className="mt-20 flex flex-col items-center gap-7 px-6">
+            <p className="text-[11px] uppercase tracking-[0.24em] text-then-faded">
               What you already found
             </p>
             <ul className="flex flex-wrap items-end justify-center gap-x-12 gap-y-8">
@@ -144,7 +121,7 @@ export default function MeetHerPage() {
                     href={`/memory/${id}`}
                     className="group flex flex-col items-center gap-2"
                   >
-                    <SharedFlower size={62 - i * 3} variant={i} />
+                    <SharedFlower size={64 - i * 3} variant={i} />
                     <span className="font-serif text-[16px] italic text-then-ink underline decoration-transparent underline-offset-4 transition-colors group-hover:decoration-bloom-gold">
                       {connection?.theme}
                     </span>
@@ -156,16 +133,15 @@ export default function MeetHerPage() {
         ) : null}
 
         <Link
-          href="/garden"
-          className="mt-24 flex items-center gap-4 text-center"
-          style={{ animation: "rise-in 1600ms var(--ease-settle) 2300ms both" }}
+          href="/today"
+          className="mb-24 mt-24 flex items-center justify-center gap-4 px-6 text-center"
         >
           <Bud width={26} className="shrink-0" />
           <span className="font-serif text-[20px] italic text-then-ink underline decoration-bloom-gold/50 underline-offset-8 transition-colors hover:decoration-bloom-gold md:text-[24px]">
             Ask her something you wish someone would ask you →
           </span>
         </Link>
-      </main>
+      </BookGround>
 
       <MobileNavSpacer />
     </div>

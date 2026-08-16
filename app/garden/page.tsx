@@ -68,7 +68,7 @@ function Garden() {
           />
         }
         left={
-          <div className="relative z-20 flex flex-1 flex-col gap-10 p-8 md:p-14">
+          <div className="pointer-events-none relative z-20 flex flex-1 flex-col gap-10 p-8 md:p-14">
             <PageHead side="then" eyebrow="Then" name={pair.then.name} />
 
             {/* Her page. What is on it is never shown before yours is. */}
@@ -95,7 +95,7 @@ function Garden() {
           </div>
         }
         right={
-          <div className="relative z-20 flex flex-1 flex-col items-end gap-10 p-8 text-right md:p-14">
+          <div className="pointer-events-none relative z-20 flex flex-1 flex-col items-end gap-10 p-8 text-right md:p-14">
             <PageHead
               side="now"
               eyebrow="Now"
@@ -115,7 +115,7 @@ function Garden() {
                 <button
                   type="button"
                   onClick={() => router.push("/today")}
-                  className="text-[15px] font-medium text-bloom-green underline-offset-8 transition-colors hover:text-then-sage hover:underline"
+                  className="pointer-events-auto text-[15px] font-medium text-bloom-green underline-offset-8 transition-colors hover:text-then-sage hover:underline"
                 >
                   Tell your story →
                 </button>

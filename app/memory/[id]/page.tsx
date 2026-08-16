@@ -1,20 +1,22 @@
 "use client";
 
-import { Bud } from "@/components/botanical/Bud";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
-import { SharedFlower } from "@/components/garden/SharedFlower";
+import { BookSpread } from "@/components/book/BookSpread";
 import { MobileNavSpacer, Navigation } from "@/components/nav/Navigation";
-import { StoryPanel } from "@/components/reveal/StoryPanel";
+import { FoldBloom } from "@/components/reveal/FoldBloom";
+import { FollowUpBar } from "@/components/reveal/FollowUpBar";
+import { StoryPage } from "@/components/reveal/StoryPage";
 import { useGarden } from "@/lib/state/garden-provider";
+import { yearsBetween } from "@/lib/types";
 
 /**
- * 13 — Shared Memory Detail.
+ * A shared memory, kept.
  *
- * The same composition as the reveal, at rest. Both people keep their own
- * column and their own words; the flower between them is the only thing
- * neither of them said alone.
+ * The same spread as the reveal, at rest: the stems already crossed, the flower
+ * already open. You can come back to this page any time and it is exactly where
+ * you left it.
  */
 export default function SharedMemoryPage() {
   const router = useRouter();
@@ -36,9 +38,9 @@ export default function SharedMemoryPage() {
           </p>
           <Link
             href="/garden"
-            className="rounded-[20px] bg-bloom-green px-5 py-2.5 text-[13px] font-semibold text-white"
+            className="text-[15px] font-semibold text-bloom-green underline-offset-8 hover:underline"
           >
-            Back to the garden
+            Back to the garden →
           </Link>
         </main>
       </div>
@@ -53,95 +55,74 @@ export default function SharedMemoryPage() {
     <div className="flex min-h-dvh flex-col bg-canvas">
       <Navigation />
 
-      <main className="flex flex-1 flex-col md:flex-row md:items-stretch">
-        {thenMemory ? (
-          <StoryPanel
-            person={pair.then}
-            memory={thenMemory}
-            compact={false}
-            highlight={connection.thenHighlight}
-            gloss={connection.thenGloss}
-            highlightActive
-            showTranslation={Boolean(translated[thenMemory.id])}
-            onToggleTranslation={() =>
-              setTranslated((t) => ({
-                ...t,
-                [thenMemory.id]: !t[thenMemory.id],
-              }))
-            }
-          />
-        ) : null}
-
-        <div className="relative order-2 flex shrink-0 items-start justify-center border-y border-black/5 py-12 md:order-none md:w-[320px] md:border-x md:border-y-0 md:py-0">
-          {/* The seam the flower grew on. */}
-          <span
-            className="absolute inset-y-0 left-1/2 hidden w-px bg-bloom-gold/60 md:block"
-            aria-hidden
-          />
-          <div className="relative flex w-[280px] flex-col items-center gap-5 md:mt-[120px]">
-            <SharedFlower size={180} variant={index} glow />
-            <div className="flex flex-col items-center gap-2 text-center">
-              <p className="text-[14px] font-semibold uppercase tracking-wide text-bloom-gold">
-                Theme
+      <BookSpread
+        left={
+          thenMemory ? (
+            <StoryPage
+              person={pair.then}
+              memory={thenMemory}
+              highlight={connection.thenHighlight}
+              gloss={connection.thenGloss}
+              highlightActive
+              showTranslation={Boolean(translated[thenMemory.id])}
+              onToggleTranslation={() =>
+                setTranslated((t) => ({
+                  ...t,
+                  [thenMemory.id]: !t[thenMemory.id],
+                }))
+              }
+            />
+          ) : (
+            <span aria-hidden />
+          )
+        }
+        right={
+          nowMemory ? (
+            <StoryPage
+              person={pair.now}
+              memory={nowMemory}
+              highlight={connection.nowHighlight}
+              highlightActive
+              showTranslation={Boolean(translated[nowMemory.id])}
+              onToggleTranslation={() =>
+                setTranslated((t) => ({
+                  ...t,
+                  [nowMemory.id]: !t[nowMemory.id],
+                }))
+              }
+            />
+          ) : (
+            <div className="relative z-20 flex flex-1 flex-col items-end justify-center gap-4 p-8 text-right md:p-16">
+              <p className="text-[11px] uppercase tracking-[0.32em] text-now-slate">
+                Now
               </p>
-              <h1 className="font-serif text-[30px] leading-[1.1] text-then-ink md:text-[32px]">
-                {connection.theme}
-              </h1>
-              <p className="font-memory text-[17px] italic leading-snug text-bloom-rose md:text-[18px]">
-                &ldquo;{connection.headline} {connection.statement}&rdquo;
+              <p className="max-w-[28ch] text-[19px] leading-relaxed text-now-charcoal">
+                {pair.now.name} hasn&apos;t told this one yet.
               </p>
             </div>
-          </div>
-        </div>
-
-        {nowMemory ? (
-          <StoryPanel
-            person={pair.now}
-            memory={nowMemory}
-            compact={false}
-            highlight={connection.nowHighlight}
-            highlightActive
-            showTranslation={Boolean(translated[nowMemory.id])}
-            onToggleTranslation={() =>
-              setTranslated((t) => ({
-                ...t,
-                [nowMemory.id]: !t[nowMemory.id],
-              }))
-            }
+          )
+        }
+        across={
+          <FoldBloom
+            phase="followUp"
+            connection={connection}
+            yearsApart={yearsBetween(pair)}
+            variant={index}
           />
-        ) : (
-          <section className="flex flex-1 flex-col justify-center gap-4 bg-now-canvas p-8 md:p-16">
-            <p className="text-[14px] font-semibold text-now-slate">NOW</p>
-            <p className="font-memory text-[19px] italic leading-relaxed text-now-charcoal">
-              {pair.now.name} hasn&apos;t told this one yet.
-            </p>
-          </section>
-        )}
-      </main>
-
-      <footer className="flex flex-col items-start gap-4 border-t border-bloom-gold bg-then-paper px-6 py-5 md:flex-row md:items-center md:justify-between md:px-12">
-        <div className="flex items-center gap-4">
-          <Bud width={26} className="shrink-0" />
-          <div className="flex flex-col gap-0.5">
-            <p className="text-[11px] font-semibold uppercase tracking-wide text-bloom-rose">
-              A conversation is waiting to bloom
-            </p>
-            <p className="font-memory text-[16px] text-then-ink">
-              &ldquo;{connection.followUp}&rdquo;
-            </p>
-          </div>
-        </div>
-        <button
-          type="button"
-          onClick={() => {
-            askFollowUp(conversation.id);
-            router.push("/garden");
-          }}
-          className="shrink-0 rounded-[20px] bg-then-ink px-5 py-2.5 text-[13px] font-semibold text-white transition-colors hover:bg-then-faded"
-        >
-          Ask her this →
-        </button>
-      </footer>
+        }
+        atTheFold={
+          <FollowUpBar
+            connection={connection}
+            partnerName={pair.then.name}
+            visible
+            questionVisible
+            onAsk={() => {
+              askFollowUp(conversation.id);
+              router.push("/garden");
+            }}
+          />
+        }
+      />
 
       <MobileNavSpacer />
     </div>

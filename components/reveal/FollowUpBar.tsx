@@ -4,10 +4,11 @@ import { Bud } from "@/components/botanical/Bud";
 import type { Connection } from "@/lib/types";
 
 /**
- * 20 — Follow-Up Bud.
+ * The last beat of the bloom, written in the gutter.
  *
- * The last beat of the bloom. A discovery is only worth anything here if it
- * opens the next question, so the flower is immediately followed by a bud.
+ * A discovery is only worth anything here if it opens the next question, so the
+ * flower is immediately followed by a bud — one that has not opened yet, with
+ * the question it is holding written beside it.
  */
 export function FollowUpBar({
   connection,
@@ -23,40 +24,39 @@ export function FollowUpBar({
   onAsk(): void;
 }) {
   return (
-    <footer
-      className="flex flex-col items-start gap-4 border-t border-bloom-gold/20 bg-then-paper px-6 py-4 md:flex-row md:items-center md:justify-between md:px-12"
+    <div
+      className="flex flex-col items-center gap-3 px-6 pb-8 text-center md:pb-10"
       style={{
         opacity: visible ? 1 : 0,
         transform: visible ? "translateY(0)" : "translateY(12px)",
-        transition: "opacity 800ms ease, transform 800ms var(--ease-settle)",
+        transition: "opacity 900ms ease, transform 900ms var(--ease-settle)",
         pointerEvents: visible ? "auto" : "none",
       }}
     >
-      <div className="flex items-center gap-4">
-        <Bud width={26} className="shrink-0" />
-        <div className="flex flex-col gap-0.5">
-          <p className="text-[11px] font-semibold uppercase tracking-wide text-then-faded">
-            A conversation is waiting to bloom
-          </p>
-          <p
-            className="font-memory text-[15px] text-then-ink md:text-[16px]"
-            style={{
-              opacity: questionVisible ? 1 : 0,
-              transition: "opacity 700ms ease",
-            }}
-          >
-            &ldquo;{connection.followUp}&rdquo;
-          </p>
-        </div>
-      </div>
+      <Bud width={28} />
+
+      <p
+        className="max-w-[42ch] font-serif text-[19px] italic leading-snug text-then-ink md:text-[22px]"
+        style={{
+          opacity: questionVisible ? 1 : 0,
+          transition: "opacity 900ms ease",
+          textShadow: "0 0 18px #f2ece0, 0 0 32px #f2ece0",
+        }}
+      >
+        &ldquo;{connection.followUp}&rdquo;
+      </p>
 
       <button
         type="button"
         onClick={onAsk}
-        className="shrink-0 rounded-[20px] bg-then-ink px-5 py-2.5 text-[13px] font-semibold text-white transition-colors duration-200 hover:bg-then-faded"
+        className="text-[15px] font-semibold text-bloom-green underline-offset-8 transition-colors hover:text-then-ink hover:underline"
+        style={{
+          opacity: questionVisible ? 1 : 0,
+          transition: "opacity 900ms ease 200ms",
+        }}
       >
         Ask {partnerName} →
       </button>
-    </footer>
+    </div>
   );
 }

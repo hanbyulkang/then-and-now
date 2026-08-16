@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { AudioPlayer } from "@/components/audio/AudioPlayer";
+import { BookGround, PageYear } from "@/components/book/BookSpread";
 import { NowLeaf, ThenLeaf } from "@/components/garden/Leaf";
 import { MobileNavSpacer, Navigation } from "@/components/nav/Navigation";
 import { useGarden } from "@/lib/state/garden-provider";
@@ -12,40 +13,49 @@ import { personById } from "@/lib/types";
 
 type Filter = "all" | "then" | "now";
 
-interface Entry {
-  memory: Memory;
-  person: Person;
-  /** Set when this memory grew into something the two of them share. */
+interface Spread {
+  id: string;
+  /** The earlier of the two years — what puts this spread in order. */
+  year: number;
+  then?: { memory: Memory; person: Person };
+  now?: { memory: Memory; person: Person };
   grewInto?: Conversation;
 }
 
 /**
- * Stories.
+ * Everything you have told each other.
  *
- * Not a feed — a book of things kept. A photograph, a year written large, a
- * voice, and the words as they were said. Grandma's pages are set in the older
- * hand and Ann's in the newer one, and the book turns from one side to the
- * other as you go down it.
+ * The book kept open and read straight through. Her stories run down the left
+ * page and yours down the right, and the years advance as you go — set at the
+ * head of each entry the way an old book marks them, not plotted on an axis.
  *
- * Where a memory grew into something they share, a sprig comes off the edge of
- * the page and says so.
+ * Where two of them turned out to be the same story, a stem crosses the fold
+ * between them.
  */
 export default function StoriesPage() {
   const { state } = useGarden();
   const [filter, setFilter] = useState<Filter>("all");
   const pair = state.pair;
 
-  const entries = useMemo<Entry[]>(() => {
-    const all = state.conversations.flatMap((c) =>
-      Object.values(c.memories).map((memory) => ({
+  const spreads = useMemo<Spread[]>(() => {
+    const rows = state.conversations.map((c) => {
+      const sides = Object.values(c.memories).map((memory) => ({
         memory,
         person: personById(pair, memory.personId),
+      }));
+      const then = sides.find((s) => s.person.side === "then");
+      const now = sides.find((s) => s.person.side === "now");
+      return {
+        id: c.id,
+        year: Math.min(...sides.map((s) => s.memory.year)),
+        then: filter === "now" ? undefined : then,
+        now: filter === "then" ? undefined : now,
         grewInto: c.connection ? c : undefined,
-      })),
-    );
-    return all
-      .filter((e) => filter === "all" || e.person.side === filter)
-      .sort((a, b) => a.memory.year - b.memory.year);
+      };
+    });
+    return rows
+      .filter((r) => r.then || r.now)
+      .sort((a, b) => a.year - b.year);
   }, [state.conversations, filter, pair]);
 
   const filters: { id: Filter; label: string }[] = [
@@ -58,157 +68,172 @@ export default function StoriesPage() {
     <div className="flex min-h-dvh flex-col bg-canvas">
       <Navigation />
 
-      <header className="flex flex-col items-start gap-5 px-6 pb-2 pt-10 md:px-16 lg:px-24">
-        <h1 className="font-serif text-[32px] leading-tight text-then-ink md:text-[44px]">
-          Everything you&apos;ve told each other
-        </h1>
-        <div className="flex flex-wrap gap-6">
-          {filters.map((f) => (
-            <button
-              key={f.id}
-              type="button"
-              onClick={() => setFilter(f.id)}
-              aria-pressed={filter === f.id}
-              className={`text-[14px] underline-offset-8 transition-colors duration-200 ${
-                filter === f.id
-                  ? "font-semibold text-then-ink underline decoration-bloom-gold decoration-2"
-                  : "text-now-slate hover:text-then-faded"
-              }`}
+      <BookGround>
+        <header className="flex flex-col items-start gap-5 px-7 pb-4 pt-12 md:px-14">
+          <h1 className="max-w-[20ch] font-serif text-[32px] leading-tight text-then-ink md:text-[44px]">
+            Everything you&apos;ve told each other
+          </h1>
+          <div className="flex flex-wrap gap-6">
+            {filters.map((f) => (
+              <button
+                key={f.id}
+                type="button"
+                onClick={() => setFilter(f.id)}
+                aria-pressed={filter === f.id}
+                className={`text-[14px] underline-offset-8 transition-colors duration-200 ${
+                  filter === f.id
+                    ? "font-semibold text-then-ink underline decoration-bloom-gold decoration-2"
+                    : "text-now-slate hover:text-then-faded"
+                }`}
+              >
+                {f.label}
+              </button>
+            ))}
+          </div>
+        </header>
+
+        <ol className="flex flex-col">
+          {spreads.map((spread) => (
+            <li
+              key={spread.id}
+              className="relative grid grid-cols-1 gap-y-14 py-14 md:grid-cols-2 md:py-20"
             >
-              {f.label}
-            </button>
+              <div className="px-7 md:pl-14 md:pr-[clamp(70px,9vw,130px)]">
+                {spread.then ? (
+                  <Entry {...spread.then} />
+                ) : (
+                  <span aria-hidden />
+                )}
+              </div>
+
+              <div className="px-7 md:pl-[clamp(70px,9vw,130px)] md:pr-14">
+                {spread.now ? (
+                  <Entry {...spread.now} align="right" />
+                ) : (
+                  <span aria-hidden />
+                )}
+              </div>
+
+              {/* The two of them turned out to be the same story. */}
+              {spread.grewInto?.connection && spread.then && spread.now ? (
+                <CrossingStem
+                  href={`/memory/${spread.grewInto.id}`}
+                  theme={spread.grewInto.connection.theme}
+                />
+              ) : null}
+            </li>
           ))}
-        </div>
-      </header>
+        </ol>
 
-      <main className="flex flex-col gap-24 px-6 pb-28 pt-12 md:gap-36 md:px-16 lg:px-24">
-        {entries.map((entry, i) => (
-          <StoryPage key={entry.memory.id} entry={entry} index={i} />
-        ))}
-
-        {entries.length === 0 ? (
-          <p className="py-24 text-center font-serif text-[22px] italic text-then-faded">
+        {spreads.length === 0 ? (
+          <p className="py-28 text-center font-serif text-[22px] italic text-then-faded">
             This page is still waiting for its first story.
           </p>
-        ) : null}
-      </main>
+        ) : (
+          <p className="px-7 py-16 text-center font-serif text-[17px] italic text-then-faded md:text-[19px]">
+            More of it every time one of you answers.
+          </p>
+        )}
+      </BookGround>
 
       <MobileNavSpacer />
     </div>
   );
 }
 
-function StoryPage({ entry, index }: { entry: Entry; index: number }) {
-  const { memory, person, grewInto } = entry;
+function Entry({
+  memory,
+  person,
+  align = "left",
+}: {
+  memory: Memory;
+  person: Person;
+  align?: "left" | "right";
+}) {
   const isThen = person.side === "then";
 
   return (
     <article
-      className={`relative flex flex-col gap-6 md:flex-row md:items-end md:gap-14 ${
-        /* The book turns from one side to the other as you go down it. */
-        isThen ? "" : "md:flex-row-reverse"
-      }`}
+      className={`flex flex-col gap-6 ${align === "right" ? "items-end text-right" : ""}`}
     >
+      <PageYear
+        side={person.side}
+        year={memory.year}
+        place={`${memory.place} · ${person.name} · Age ${memory.age}`}
+      />
+
       {memory.photoUrl ? (
         <figure
-          className={`relative shrink-0 ${
+          className={`relative w-fit ${
             isThen
-              ? "rounded-[3px] border border-bloom-gold/70 bg-canvas p-3 shadow-[0_18px_30px_rgba(64,56,47,0.09)]"
-              : "rounded-[10px] border border-black/[0.04] p-2.5 shadow-[0_14px_36px_rgba(0,0,0,0.04)]"
+              ? "border border-bloom-gold/60 bg-canvas p-2.5 shadow-[0_16px_28px_rgba(64,56,47,0.09)]"
+              : "rounded-[10px] p-2 shadow-[0_14px_34px_rgba(0,0,0,0.04)]"
           }`}
-          style={{ transform: `rotate(${isThen ? -1.4 : 0.8}deg)` }}
+          style={{ transform: `rotate(${isThen ? -1.3 : 0.8}deg)` }}
         >
           <div
-            className="relative w-[min(100%,380px)] overflow-hidden md:w-[380px]"
-            style={{
-              aspectRatio: index % 3 === 1 ? "4 / 3" : "4 / 5",
-              borderRadius: isThen ? 2 : 6,
-            }}
+            className="relative w-[min(64vw,300px)] overflow-hidden"
+            style={{ aspectRatio: "4 / 5", borderRadius: isThen ? 2 : 6 }}
           >
             <Image
               src={memory.photoUrl}
               alt={`${person.name} in ${memory.place}, ${memory.year}`}
               fill
-              sizes="380px"
+              sizes="300px"
               className={`object-cover ${isThen ? "archival-photo" : ""}`}
             />
           </div>
-
-          {/* Pressed against the print, overlapping it the way a real one
-              would if somebody had left it between the pages. */}
-          {grewInto ? (
-            <svg
-              className={`pointer-events-none absolute ${
-                isThen ? "-right-7 -top-6" : "-left-7 -bottom-6"
-              }`}
-              width="72"
-              height="60"
-              viewBox="0 0 72 60"
-              aria-hidden
-            >
-              {isThen ? (
-                <ThenLeaf x={54} y={48} length={54} angle={-138} sway={false} />
-              ) : (
-                <NowLeaf x={18} y={14} length={48} angle={36} sway={false} />
-              )}
-            </svg>
-          ) : null}
         </figure>
       ) : null}
 
-      <div className="flex min-w-0 flex-1 flex-col gap-5">
-        <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
-          <span
-            className={`font-serif leading-none ${
-              isThen
-                ? "text-[60px] text-bloom-rose md:text-[88px]"
-                : "text-[54px] text-bloom-green md:text-[78px]"
-            }`}
-          >
-            {memory.year}
-          </span>
-          <span className="text-[13px] uppercase tracking-[0.14em] text-now-slate">
-            {person.name} · {memory.place}
-          </span>
-        </div>
+      <blockquote
+        className={
+          isThen
+            ? "max-w-[40ch] font-memory text-[19px] italic leading-[1.7] text-then-ink md:text-[21px]"
+            : "max-w-[40ch] text-[18px] leading-[1.75] text-now-charcoal md:text-[20px]"
+        }
+      >
+        &ldquo;{memory.transcript}&rdquo;
+      </blockquote>
 
-        <blockquote
-          className={
-            isThen
-              ? "max-w-[46ch] font-memory text-[20px] italic leading-[1.65] text-then-ink md:text-[23px]"
-              : "max-w-[46ch] text-[19px] leading-[1.7] text-now-charcoal md:text-[21px]"
-          }
-        >
-          &ldquo;{memory.transcript}&rdquo;
-        </blockquote>
-
-        <AudioPlayer
-          memory={memory}
-          side={person.side}
-          compact
-          label={`Hear ${person.name} tell it`}
-        />
-
-        {/* Pressed beside the page: this one grew into something shared. */}
-        {grewInto?.connection ? (
-          <Link
-            href={`/memory/${grewInto.id}`}
-            className="group mt-1 flex items-center gap-2.5 text-[13px] italic text-then-faded transition-colors hover:text-then-ink"
-          >
-            <svg width="34" height="22" viewBox="0 0 34 22" aria-hidden>
-              {isThen ? (
-                <ThenLeaf x={25} y={18} length={22} angle={-146} />
-              ) : (
-                <NowLeaf x={9} y={18} length={20} angle={-44} />
-              )}
-            </svg>
-            This one grew into{" "}
-            <span className="font-serif not-italic text-then-ink underline decoration-bloom-gold/60 underline-offset-4 group-hover:decoration-bloom-gold">
-              {grewInto.connection.theme}
-            </span>
-          </Link>
-        ) : null}
-      </div>
+      <AudioPlayer
+        memory={memory}
+        side={person.side}
+        compact
+        label={`Hear ${person.name} tell it`}
+      />
     </article>
+  );
+}
+
+/** A thin stem drawn across the fold, joining the two halves of one story. */
+function CrossingStem({ href, theme }: { href: string; theme: string }) {
+  return (
+    <Link
+      href={href}
+      className="group absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-1.5 md:flex"
+    >
+      <svg width="184" height="54" viewBox="0 0 184 54" aria-hidden>
+        <path
+          d="M 6 12 C 46 30, 60 44, 92 30 S 138 12, 178 34"
+          stroke="#43392f"
+          strokeWidth="1.6"
+          strokeLinecap="round"
+          fill="none"
+          opacity={0.6}
+        />
+        <ThenLeaf x={58} y={31} length={26} angle={-142} />
+        <NowLeaf x={126} y={20} length={24} angle={38} />
+      </svg>
+      <span
+        className="text-[12px] italic text-then-faded transition-colors group-hover:text-then-ink"
+        style={{ textShadow: "0 0 14px #f2ece0, 0 0 24px #f2ece0" }}
+      >
+        This one grew into{" "}
+        <span className="font-serif not-italic text-then-ink underline decoration-bloom-gold/60 underline-offset-4 group-hover:decoration-bloom-gold">
+          {theme}
+        </span>
+      </span>
+    </Link>
   );
 }

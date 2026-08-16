@@ -62,6 +62,36 @@ export function BookSpread({
 }
 
 /**
+ * The same two pages, when the content is what sets the height.
+ *
+ * Used where the book runs on past the bottom of the screen — the archive — so
+ * the paper, the fold and the shadow carry all the way down whatever is put on
+ * them. On a narrow screen there is only one page, so the split goes away.
+ */
+export function BookGround({
+  children,
+  className = "",
+}: {
+  children: ReactNode;
+  className?: string;
+}) {
+  return (
+    <div className={`relative flex flex-1 flex-col bg-canvas ${className}`}>
+      <div
+        className="paper-grain absolute inset-y-0 left-0 right-1/2 hidden bg-then-paper md:block"
+        aria-hidden
+      />
+      <div
+        className="absolute inset-y-0 left-1/2 right-0 hidden bg-now-canvas md:block"
+        aria-hidden
+      />
+      <Fold />
+      <div className="relative z-10 flex flex-1 flex-col">{children}</div>
+    </div>
+  );
+}
+
+/**
  * The fold. Not a rule down the middle — the shadow paper makes when it is
  * bent, which is what tells you these are two pages of one thing.
  */

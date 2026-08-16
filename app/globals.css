@@ -65,9 +65,13 @@ body {
    Paper grain — THEN surfaces only, very low opacity so it never fights
    readability (spec §32 Contrast).
    -------------------------------------------------------------------------- */
-.paper-grain {
-  position: relative;
-  isolation: isolate;
+/* In the base layer, so a positioning utility on the same element still wins —
+   the grain only needs *some* containing block, not this one in particular. */
+@layer base {
+  .paper-grain {
+    position: relative;
+    isolation: isolate;
+  }
 }
 
 /* The grain is generated rather than photographed: fractal noise tiles without
@@ -182,6 +186,23 @@ body {
   animation: rise-in 700ms var(--ease-settle) both;
 }
 
+@keyframes page-turn {
+  from {
+    opacity: 0;
+    transform: perspective(2000px) rotateY(-10deg) translateX(-2%);
+  }
+  to {
+    opacity: 1;
+    transform: perspective(2000px) rotateY(0deg) translateX(0);
+  }
+}
+
+/* Turning to a page deeper in the book. */
+.animate-page-turn {
+  transform-origin: left center;
+  animation: page-turn 1200ms var(--ease-settle) both;
+}
+
 @keyframes soft-fade {
   from {
     opacity: 0;
@@ -234,8 +255,10 @@ body {
   }
 
   .animate-leaf-unfurl,
-  .animate-rise-in {
+  .animate-rise-in,
+  .animate-page-turn {
     animation: soft-fade 200ms ease both !important;
+    transform: none !important;
   }
 }
 

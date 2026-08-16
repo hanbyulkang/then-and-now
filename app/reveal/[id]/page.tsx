@@ -2,9 +2,10 @@
 
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { BloomSequence } from "@/components/reveal/BloomSequence";
+import { BookSpread } from "@/components/book/BookSpread";
+import { FoldBloom } from "@/components/reveal/FoldBloom";
 import { FollowUpBar } from "@/components/reveal/FollowUpBar";
-import { StoryPanel } from "@/components/reveal/StoryPanel";
+import { StoryPage } from "@/components/reveal/StoryPage";
 import { atLeast, useRevealSequence } from "@/components/reveal/phases";
 import { Navigation } from "@/components/nav/Navigation";
 import { useGarden } from "@/lib/state/garden-provider";
@@ -12,10 +13,13 @@ import type { Connection } from "@/lib/types";
 import { yearsBetween } from "@/lib/types";
 
 /**
- * 08 / 09 — Reveal.
+ * Reveal.
  *
- * Both stories first, on their own, in their own visual worlds. Only once
- * they have been read does anything grow between them.
+ * The book is open at the page where the two of them wrote about the same day.
+ * Hers on the left, hers on the right, and for the first few seconds nothing in
+ * between — the human words have to land before anything comments on them.
+ * Then two stems come up out of the pages, cross over the fold, and a flower
+ * opens where they meet.
  */
 export default function RevealPage() {
   const router = useRouter();
@@ -32,7 +36,7 @@ export default function RevealPage() {
   const [translated, setTranslated] = useState<Record<string, boolean>>({});
 
   /* Ask whether these two stories share anything before the sequence starts,
-     so the branches never grow toward an empty middle. */
+     so the stems never grow toward an empty middle. */
   useEffect(() => {
     let cancelled = false;
     findConnection(id).then((found) => {
@@ -67,7 +71,6 @@ export default function RevealPage() {
 
   const thenMemory = conversation.memories[pair.then.id];
   const nowMemory = conversation.memories[pair.now.id];
-  const bloomStarted = Boolean(connection) && atLeast(phase, "branches");
 
   return (
     <div className="flex min-h-dvh flex-col bg-canvas">
@@ -79,113 +82,93 @@ export default function RevealPage() {
           : "Both stories are open."}
       </p>
 
-      <main className="flex flex-1 flex-col md:flex-row md:items-stretch">
-        {thenMemory ? (
-          <StoryPanel
-            person={pair.then}
-            memory={thenMemory}
-            compact={bloomStarted}
-            highlight={connection?.thenHighlight}
-            gloss={connection?.thenGloss}
-            highlightActive={atLeast(phase, "highlightThen")}
-            showTranslation={Boolean(translated[thenMemory.id])}
-            onToggleTranslation={() =>
-              setTranslated((t) => ({
-                ...t,
-                [thenMemory.id]: !t[thenMemory.id],
-              }))
-            }
-          />
-        ) : null}
-
-        {/* The shared space. On desktop it opens out between the two columns as
-            the branches grow; on mobile it sits between them so the comparison
-            still reads top to bottom (spec §33). */}
-        <div
-          className="relative order-2 shrink-0 self-stretch border-y border-black/5 transition-[width] duration-[900ms] ease-[var(--ease-settle)] max-md:!w-full md:order-none md:border-x md:border-y-0"
-          style={{ width: bloomStarted ? "min(42vw, 480px)" : "1px" }}
-        >
-          <div className="relative mx-auto h-[440px] w-full max-w-[440px] py-6 md:absolute md:inset-y-0 md:left-1/2 md:h-full md:w-[min(42vw,480px)] md:max-w-none md:-translate-x-1/2 md:py-0">
-            {connection ? (
-              <div
-                className="h-full w-full"
-                style={{
-                  opacity: bloomStarted ? 1 : 0,
-                  transition: "opacity 700ms ease",
-                }}
+      <BookSpread
+        left={
+          thenMemory ? (
+            <StoryPage
+              person={pair.then}
+              memory={thenMemory}
+              highlight={connection?.thenHighlight}
+              gloss={
+                atLeast(phase, "highlightThen") ? connection?.thenGloss : undefined
+              }
+              highlightActive={atLeast(phase, "highlightThen")}
+              showTranslation={Boolean(translated[thenMemory.id])}
+              onToggleTranslation={() =>
+                setTranslated((t) => ({
+                  ...t,
+                  [thenMemory.id]: !t[thenMemory.id],
+                }))
+              }
+            />
+          ) : (
+            <span aria-hidden />
+          )
+        }
+        right={
+          nowMemory ? (
+            <StoryPage
+              person={pair.now}
+              memory={nowMemory}
+              highlight={connection?.nowHighlight}
+              highlightActive={atLeast(phase, "highlightNow")}
+              showTranslation={Boolean(translated[nowMemory.id])}
+              onToggleTranslation={() =>
+                setTranslated((t) => ({
+                  ...t,
+                  [nowMemory.id]: !t[nowMemory.id],
+                }))
+              }
+            />
+          ) : (
+            <span aria-hidden />
+          )
+        }
+        across={
+          connection ? (
+            <FoldBloom
+              phase={phase}
+              connection={connection}
+              yearsApart={yearsBetween(pair)}
+            />
+          ) : null
+        }
+        atTheFold={
+          connection ? (
+            <FollowUpBar
+              connection={connection}
+              partnerName={pair.then.name}
+              visible={atLeast(phase, "followUpBud")}
+              questionVisible={atLeast(phase, "followUp")}
+              onAsk={() => {
+                askFollowUp(id);
+                router.push(`/garden?bloomed=${id}`);
+              }}
+            />
+          ) : looked ? (
+            /* Nothing shared was found: two stories, kept side by side, and no
+               invented flower between them. */
+            <div className="flex flex-col items-center gap-3 px-6 pb-8 text-center md:pb-10">
+              <p
+                className="font-serif text-[19px] italic text-then-ink md:text-[22px]"
+                style={{ textShadow: "0 0 18px #f2ece0" }}
               >
-                <BloomSequence
-                  phase={phase}
-                  connection={connection}
-                  yearsApart={yearsBetween(pair)}
-                />
-              </div>
-            ) : null}
-          </div>
-
-          {/* Until something is found, the divider is only a divider —
-              a small pressed mark on the seam (node 08). */}
-          <span
-            className="absolute left-1/2 top-1/2 z-10 flex size-12 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-bloom-gold bg-canvas"
-            aria-hidden
-            style={{
-              opacity: bloomStarted ? 0 : 1,
-              transition: "opacity 500ms ease",
-            }}
-          >
-            <span className="block size-4 rounded-full bg-bloom-rose" />
-          </span>
-        </div>
-
-        {nowMemory ? (
-          <StoryPanel
-            person={pair.now}
-            memory={nowMemory}
-            compact={bloomStarted}
-            highlight={connection?.nowHighlight}
-            highlightActive={atLeast(phase, "highlightNow")}
-            showTranslation={Boolean(translated[nowMemory.id])}
-            onToggleTranslation={() =>
-              setTranslated((t) => ({
-                ...t,
-                [nowMemory.id]: !t[nowMemory.id],
-              }))
-            }
-          />
-        ) : null}
-      </main>
-
-      {/* Nothing shared was found: two stories, two leaves, no invented flower. */}
-      {looked && !connection ? (
-        <footer className="border-t border-black/5 bg-then-paper px-6 py-5 text-center md:px-12">
-          <p className="font-memory text-[17px] italic text-then-ink">
-            Two stories, kept side by side.
-          </p>
-          <button
-            type="button"
-            onClick={() => {
-              markSeen(id);
-              router.push("/garden");
-            }}
-            className="mt-3 rounded-[20px] bg-then-ink px-5 py-2.5 text-[13px] font-semibold text-white"
-          >
-            Back to the garden →
-          </button>
-        </footer>
-      ) : null}
-
-      {connection ? (
-        <FollowUpBar
-          connection={connection}
-          partnerName={pair.then.name}
-          visible={atLeast(phase, "followUpBud")}
-          questionVisible={atLeast(phase, "followUp")}
-          onAsk={() => {
-            askFollowUp(id);
-            router.push(`/garden?bloomed=${id}`);
-          }}
-        />
-      ) : null}
+                Two stories, kept side by side.
+              </p>
+              <button
+                type="button"
+                onClick={() => {
+                  markSeen(id);
+                  router.push("/garden");
+                }}
+                className="text-[15px] font-semibold text-bloom-green underline-offset-8 hover:underline"
+              >
+                Back to the garden →
+              </button>
+            </div>
+          ) : null
+        }
+      />
     </div>
   );
 }

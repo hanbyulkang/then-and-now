@@ -1,18 +1,20 @@
 import type { Cubic, Point } from "./garden-layout";
 
 /**
- * The map under the garden.
+ * The plate.
  *
- * Between Us is the same relationship seen from below: every theme they share
- * hanging off a root that runs back to one place. The vines wander on their way
- * out, because a root system does — a straight line between two nodes would
- * turn this into a graph, which is the one thing it must never look like.
+ * Between Us is one botanical drawing across the whole open book: everything
+ * the two of them turned out to share, growing on vines that all run back into
+ * the binding. The vines wander on their way out, because a real one does — a
+ * straight line between two nodes would turn this into a graph, which is the
+ * one thing it must never look like.
  */
 
-export const MAP = { width: 1440, height: 560 } as const;
+/** Spread coordinates. Everything here is drawn across both pages. */
+export const MAP = { width: 1440, height: 900 } as const;
 
-/** Where every vine comes back to. */
-export const TAPROOT: Point = { x: 720, y: 548 };
+/** Where every vine comes back to: the foot of the binding. */
+export const TAPROOT: Point = { x: 720, y: 884 };
 
 export interface ThemeSlot {
   at: Point;
@@ -21,15 +23,20 @@ export interface ThemeSlot {
   sway: number;
 }
 
+/* The first thing they found stands highest and nearest the fold; the rest
+   spread out over both pages, leaving the outer corners clear for the words. */
 export const THEME_SLOTS: ThemeSlot[] = [
-  { at: { x: 720, y: 128 }, size: 112, sway: 44 },
-  { at: { x: 430, y: 196 }, size: 98, sway: -70 },
-  { at: { x: 1006, y: 188 }, size: 96, sway: 66 },
-  { at: { x: 232, y: 320 }, size: 84, sway: -92 },
-  { at: { x: 1206, y: 308 }, size: 82, sway: 88 },
-  { at: { x: 566, y: 336 }, size: 80, sway: -48 },
-  { at: { x: 880, y: 344 }, size: 78, sway: 52 },
+  { at: { x: 720, y: 268 }, size: 120, sway: 42 },
+  { at: { x: 452, y: 348 }, size: 102, sway: -78 },
+  { at: { x: 996, y: 336 }, size: 100, sway: 74 },
+  { at: { x: 302, y: 512 }, size: 88, sway: -104 },
+  { at: { x: 1152, y: 494 }, size: 88, sway: 100 },
+  { at: { x: 566, y: 556 }, size: 84, sway: -50 },
+  { at: { x: 884, y: 570 }, size: 82, sway: 54 },
 ];
+
+/** Where the one that hasn't opened yet sits — low, right on the fold. */
+export const BUD_SLOT: Point = { x: 720, y: 706 };
 
 /** The vine out to one theme, wandering as it goes. */
 export function vine(slot: ThemeSlot): Cubic {
