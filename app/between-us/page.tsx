@@ -69,7 +69,7 @@ export default function BetweenUsPage() {
       <Navigation />
 
       <BookSpread
-        className="min-h-[720px]"
+        className="md:min-h-[720px]"
         across={
           <div className="absolute inset-0">
             <svg

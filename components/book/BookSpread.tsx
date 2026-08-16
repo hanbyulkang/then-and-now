@@ -16,7 +16,10 @@ export function BookSpread({
   left,
   right,
   across,
-  /** Sits over everything, centred on the fold. */
+  /**
+   * Sits over everything, centred on the fold. On one page there is no gutter
+   * to sit in, so it follows the pages instead.
+   */
   atTheFold,
   className = "",
 }: {
@@ -53,7 +56,7 @@ export function BookSpread({
       ) : null}
 
       {atTheFold ? (
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 flex justify-center">
+        <div className="pointer-events-none z-20 flex justify-center md:absolute md:inset-x-0 md:bottom-0">
           <div className="pointer-events-auto">{atTheFold}</div>
         </div>
       ) : null}

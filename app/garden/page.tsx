@@ -74,13 +74,16 @@ function Garden() {
             {/* Her page. What is on it is never shown before yours is. */}
             {partnerHasAnswered ? (
               <div className="flex max-w-[30ch] flex-col gap-4">
-                <p className="font-serif text-[19px] italic leading-relaxed text-then-ink md:text-[22px]">
+                <p
+                  className="font-serif text-[19px] italic leading-relaxed text-then-ink md:text-[22px]"
+                  style={{ textShadow: "0 0 10px #e8ddc8, 0 0 22px #e8ddc8, 0 0 38px #e8ddc8" }}
+                >
                   {pair.then.name} has left a story here.
                 </p>
                 <Bud width={30} />
                 <p
                   className="text-[13px] leading-relaxed text-then-faded"
-                  style={{ textShadow: "0 0 14px #e8ddc8" }}
+                  style={{ textShadow: "0 0 10px #e8ddc8, 0 0 24px #e8ddc8" }}
                 >
                   {viewerHasAnswered
                     ? "You can open them together."
@@ -104,12 +107,18 @@ function Garden() {
             />
 
             {viewerHasAnswered ? (
-              <p className="max-w-[30ch] text-[17px] leading-relaxed text-now-slate md:text-[19px]">
+              <p
+                className="max-w-[30ch] text-[17px] leading-relaxed text-now-slate md:text-[19px]"
+                style={{ textShadow: "0 0 10px #f7f4ec, 0 0 22px #f7f4ec, 0 0 38px #f7f4ec" }}
+              >
                 Your story is on this page.
               </p>
             ) : (
               <div className="flex max-w-[30ch] flex-col items-end gap-4">
-                <p className="text-[17px] leading-relaxed text-now-charcoal md:text-[19px]">
+                <p
+                  className="text-[17px] leading-relaxed text-now-charcoal md:text-[19px]"
+                  style={{ textShadow: "0 0 10px #f7f4ec, 0 0 22px #f7f4ec, 0 0 38px #f7f4ec" }}
+                >
                   Your page is still waiting.
                 </p>
                 <button
