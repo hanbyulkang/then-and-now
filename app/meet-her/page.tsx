@@ -6,6 +6,7 @@ import { useMemo } from "react";
 import { Field } from "@/components/garden/Field";
 import { FlowerMark } from "@/components/garden/Flower";
 import { MobileNavSpacer, Navigation } from "@/components/nav/Navigation";
+import { TornDefs, TornPrint } from "@/components/story/TornPrint";
 import { Panel } from "@/components/ui/Panel";
 import { seedOf } from "@/lib/botany";
 import { useGarden } from "@/lib/state/garden-provider";
@@ -22,7 +23,7 @@ import { flowersOf } from "@/lib/types";
  * share.
  */
 const AGE = 22;
-const HERS = ["Seoul", "First job", "Living away from family", "Unsure about the future"];
+const HERS = ["Chicago", "First job", "Living away from family", "Unsure about the future"];
 const YOURS = ["Seattle", "College", "Living away from family", "Unsure about the future"];
 
 export default function MeetHerPage() {
@@ -33,6 +34,7 @@ export default function MeetHerPage() {
   return (
     <div className="flex min-h-dvh flex-col overflow-x-hidden bg-canvas">
       <Navigation />
+      <TornDefs />
 
       <Field className="animate-page-turn min-h-[600px]">
         <div className="relative z-10 grid flex-1 grid-cols-1 items-center gap-12 px-6 py-14 md:grid-cols-[1fr_auto_1fr] md:gap-6 md:px-[6%]">
@@ -42,21 +44,13 @@ export default function MeetHerPage() {
               {pair.then.name} at {AGE}
             </h1>
             <div className="flex items-start gap-5">
-              <figure
-                className="w-fit shrink-0 border border-bloom-gold/50 bg-[#fbf8f1] p-2.5 shadow-[0_16px_30px_rgba(64,56,47,0.12)]"
-                style={{ transform: "rotate(-1.6deg)" }}
-              >
-                <div className="relative h-[228px] w-[180px] overflow-hidden md:h-[272px] md:w-[214px]">
-                  <Image
-                    src="/assets/photos/grandma-at-22.jpg"
-                    alt={`${pair.then.name} at ${AGE}`}
-                    fill
-                    sizes="214px"
-                    className="archival-photo object-cover"
-                    priority
-                  />
-                </div>
-              </figure>
+              <TornPrint
+                src="/assets/photos/grandma-window-1976.jpg"
+                alt={`${pair.then.name} at ${AGE}`}
+                width={206}
+                height={262}
+                tilt={-1.6}
+              />
               <ul className="flex flex-col gap-3 pt-2">
                 {HERS.map((fact) => (
                   <li

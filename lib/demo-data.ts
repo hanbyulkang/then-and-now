@@ -3,8 +3,11 @@ import type { Conversation, GardenState, Memory, Pair } from "./types";
 /**
  * One family, told consistently across every screen.
  *
- * Grandma Hyun-sook, born Seoul 1954. Ann, born Seattle 2006.
- * Fifty-two years between them.
+ * Grandma, born Savannah 1954 — Atlanta at twelve, Athens at twenty, Chicago at
+ * twenty-two. Ann, born Seattle 2006. Fifty-two years between them.
+ *
+ * Every story here is something a real person could have said out loud, because
+ * the product only works if the words are worth the pause before the flower.
  */
 
 export const GRANDMA_ID = "p_grandma";
@@ -20,10 +23,10 @@ export const DEMO_PAIR: Pair = {
     side: "then",
     relationship: "Grandmother",
     birthYear: 1954,
-    city: "Seoul",
-    preferredLanguage: "ko",
+    city: "Savannah",
+    preferredLanguage: "en",
     avatar: "/assets/avatars/grandma.png",
-    portrait: "/assets/photos/grandma-portrait-1974.jpg",
+    portrait: "/assets/photos/grandma-portrait-1976.jpg",
   },
   now: {
     id: ANN_ID,
@@ -46,8 +49,8 @@ function thenMemory(
     conversationId,
     personId: GRANDMA_ID,
     durationSec: 160,
-    language: "ko",
-    place: "Seoul",
+    language: "en",
+    place: "Athens, GA",
     year: 1974,
     age: 20,
     entities: [],
@@ -65,7 +68,7 @@ function nowMemory(
     personId: ANN_ID,
     durationSec: 75,
     language: "en",
-    place: "Seattle",
+    place: "Seattle, WA",
     year: 2026,
     age: 20,
     entities: [],
@@ -85,15 +88,13 @@ const grandmaHappiness = thenMemory(EVERYDAY_JOY_ID, {
   audioUrl: "/assets/audio/grandma-happiness.webm",
   durationSec: 160,
   transcript:
-    "그때는 학교 끝나고 친구들이랑 떡볶이 먹으러 가는 게 제일 행복했지. 돈은 별로 없었어도 같이 웃고 수다 떨던 그 시간 자체가 꽃 같았단다.",
-  translation:
-    "Back then, going for tteokbokki with my friends after school was what made me happiest. We had almost no money, but the time we spent laughing and talking together — that was the flower.",
-  photoUrl: "/assets/photos/grandma-tteokbokki-1974.jpg",
+    "Walking down to the drugstore counter with my girlfriends after class was the best part of the whole week. We had almost no money between us — one cherry Coke each and we'd sit on those stools until they turned the lights off on us. I can still hear us laughing.",
+  photoUrl: "/assets/photos/grandma-counter-1974.jpg",
   context: "Autumn Semester",
   entities: [
-    { kind: "place", value: "Seoul" },
+    { kind: "place", value: "Athens" },
     { kind: "topic", value: "friendship" },
-    { kind: "object", value: "tteokbokki" },
+    { kind: "object", value: "cherry Coke" },
     { kind: "time", value: "age 20" },
     { kind: "emotion", value: "happiness" },
   ],
@@ -104,7 +105,7 @@ const annHappiness = nowMemory(EVERYDAY_JOY_ID, {
   audioUrl: "/assets/audio/ann-happiness.webm",
   durationSec: 75,
   transcript:
-    "For me, just getting food with my friends after class is probably one of my favorite things. We find this small taco spot near campus and just decompress.",
+    "Honestly, getting food with my friends after class is probably my favorite thing. There's this tiny taco place near campus and we just sit there and decompress for way too long.",
   photoUrl: "/assets/photos/ann-seattle-2026.jpg",
   context: "Sophomore Year",
   entities: [
@@ -139,22 +140,19 @@ const conversations: Conversation[] = [
     memories: {
       [GRANDMA_ID]: thenMemory(LEAVING_HOME_ID, {
         id: "m_grandma_leaving",
-        photoUrl: "/assets/photos/grandma-portrait-1974.jpg",
+        photoUrl: "/assets/photos/grandma-portrait-1976.jpg",
         transcript:
-          "열두 살에 부산에서 서울로 이사 왔어. 기차 안에서 엄마가 싸준 김밥을 먹었는데, 창밖으로 부산이 점점 작아지는 걸 계속 봤단다. 무섭기도 하고 설레기도 했지.",
-        translation:
-          "We moved from Busan to Seoul when I was twelve. On the train I ate the kimbap my mother had packed, and I kept watching Busan get smaller through the window. I was frightened and excited at the same time.",
+          "We moved up to Atlanta the summer I turned twelve. I ate the sandwich my mother packed on the bus and watched the marsh get smaller and smaller out the window the whole way. I was scared and thrilled at the same time and I didn't tell anybody either one.",
         year: 1966,
         age: 12,
-        place: "Busan → Seoul",
+        place: "Savannah → Atlanta",
         durationSec: 138,
         context: "The Move",
         entities: [
-          { kind: "place", value: "Busan" },
-          { kind: "place", value: "Seoul" },
+          { kind: "place", value: "Savannah" },
+          { kind: "place", value: "Atlanta" },
           { kind: "person", value: "Mother" },
-          { kind: "object", value: "kimbap" },
-          { kind: "object", value: "train" },
+          { kind: "object", value: "bus" },
           { kind: "emotion", value: "uncertainty" },
         ],
       }),
@@ -162,7 +160,7 @@ const conversations: Conversation[] = [
         id: "m_ann_leaving",
         photoUrl: "/assets/photos/ann-portrait-2026.jpg",
         transcript:
-          "The first night in my dorm in Seattle I couldn't sleep at all. I kept refreshing the weather app back home like that would help. It was exciting but I felt very far away from everyone.",
+          "The first night in my dorm I couldn't sleep at all. I kept refreshing the weather back home like that would help somehow. It was exciting but I felt very far away from everyone.",
         year: 2024,
         age: 18,
         durationSec: 68,
@@ -178,8 +176,7 @@ const conversations: Conversation[] = [
       theme: "Leaving Home",
       headline: "Different cities.",
       statement: "Similar uncertainty.",
-      thenHighlight: "무섭기도 하고 설레기도 했지",
-      thenGloss: "(frightened and excited at the same time)",
+      thenHighlight: "I was scared and thrilled at the same time",
       nowHighlight: "It was exciting but I felt very far away from everyone",
       followUp: "What did you miss most in the first week?",
     },
@@ -199,16 +196,17 @@ const conversations: Conversation[] = [
       [GRANDMA_ID]: thenMemory(THE_CALL_ID, {
         id: "m_grandma_call",
         heardBefore: "never",
+        photoUrl: "/assets/photos/grandma-window-1976.jpg",
         transcript:
-          "일 끝나고 힘든 날에는 꼭 엄마한테 전화했어. 별 얘기도 안 했는데, 엄마 목소리만 들어도 마음이 놓였단다.",
-        translation:
-          "On hard days after work I always called my mother. We barely said anything, but just hearing her voice settled me.",
+          "After a bad shift I'd use the pay phone in the hallway and call my mother, even though it cost me. We hardly said anything worth saying. Just hearing her voice settled me right down.",
         year: 1976,
         age: 22,
+        place: "Chicago, IL",
         durationSec: 96,
         context: "First Job",
         entities: [
           { kind: "person", value: "Mother" },
+          { kind: "place", value: "Chicago" },
           { kind: "emotion", value: "comfort" },
           { kind: "topic", value: "belonging" },
         ],
@@ -216,7 +214,7 @@ const conversations: Conversation[] = [
       [ANN_ID]: nowMemory(THE_CALL_ID, {
         id: "m_ann_call",
         transcript:
-          "Honestly I call Grandma. She picks up even when it's the middle of the night for her. We don't really talk about anything specific, it just helps.",
+          "Honestly I call Grandma. She picks up even when it's late for her. We don't really talk about anything specific, it just helps.",
         year: 2026,
         age: 20,
         durationSec: 52,
@@ -232,8 +230,7 @@ const conversations: Conversation[] = [
       theme: "The One You Call",
       headline: "Two generations apart.",
       statement: "The same phone call.",
-      thenHighlight: "엄마 목소리만 들어도 마음이 놓였단다",
-      thenGloss: "(just hearing her voice settled me)",
+      thenHighlight: "Just hearing her voice settled me right down",
       nowHighlight: "We don't really talk about anything specific, it just helps",
       followUp: "What did your mother's voice sound like on the phone?",
     },
@@ -252,11 +249,9 @@ const conversations: Conversation[] = [
       [GRANDMA_ID]: thenMemory(BECOMING_ID, {
         id: "m_grandma_becoming",
         heardBefore: "never",
-        photoUrl: "/assets/photos/grandma-library-1974.jpg",
+        photoUrl: "/assets/photos/grandma-college-1974.jpg",
         transcript:
-          "선생님이 되고 싶었어. 아이들이 무슨 생각을 하는지 알고 싶었거든. 결국 다른 길로 갔지만 그 마음은 안 변했어.",
-        translation:
-          "I wanted to be a teacher. I wanted to understand what children were thinking. I ended up on a different path, but that feeling never changed.",
+          "I was going to be a teacher. What I really wanted was to know what children were thinking — they always seemed to be working something out. Life took me another way, but that part of me never changed.",
         year: 1974,
         age: 20,
         durationSec: 112,
@@ -287,8 +282,7 @@ const conversations: Conversation[] = [
       theme: "Understanding People",
       headline: "Different words for it.",
       statement: "Both wanted to understand people.",
-      thenHighlight: "아이들이 무슨 생각을 하는지 알고 싶었거든",
-      thenGloss: "(I wanted to understand what children were thinking)",
+      thenHighlight: "to know what children were thinking",
       nowHighlight: "figuring out why people do what they do",
       followUp: "Who was the first person you tried to understand?",
     },
@@ -311,16 +305,15 @@ const conversations: Conversation[] = [
         id: "m_grandma_recipe",
         heardBefore: "remembered",
         transcript:
-          "엄마한테 처음 배운 건 미역국이었어. 생일에 끓이는 거라고, 물 양이 제일 중요하다고 하셨지.",
-        translation:
-          "The first thing my mother taught me was seaweed soup. She said it was for birthdays, and that the amount of water mattered most.",
+          "My mother taught me her buttermilk biscuits before anything else. Don't work the dough, she said, and get that oven hotter than you think it ought to be.",
         year: 1968,
         age: 14,
+        place: "Atlanta, GA",
         durationSec: 74,
         context: "The Kitchen",
         entities: [
           { kind: "person", value: "Mother" },
-          { kind: "object", value: "miyeokguk" },
+          { kind: "object", value: "biscuits" },
           { kind: "topic", value: "food" },
         ],
       }),
@@ -349,8 +342,7 @@ export const EVERYDAY_JOY_CONNECTION = {
   theme: "Everyday Joy",
   headline: "52 years apart.",
   statement: "Same kind of happiness.",
-  thenHighlight: "떡볶이 먹으러 가는 게",
-  thenGloss: "(getting tteokbokki with my friends after school)",
+  thenHighlight: "Walking down to the drugstore counter with my girlfriends",
   nowHighlight: "getting food with my friends",
   followUp: "What did friendship mean to you at twenty?",
 };
@@ -393,7 +385,10 @@ export function freshGarden(pair: Pair = DEMO_PAIR): GardenState {
           origin: "daily",
         },
         memories: {
-          [grandmaId]: { ...structuredClone(grandmaHappiness), personId: grandmaId },
+          [grandmaId]: {
+            ...structuredClone(grandmaHappiness),
+            personId: grandmaId,
+          },
         },
       },
     ],

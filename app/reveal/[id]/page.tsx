@@ -7,6 +7,7 @@ import { HeardBefore } from "@/components/reveal/HeardBefore";
 import { Meeting } from "@/components/reveal/Meeting";
 import { reached, useReveal } from "@/components/reveal/sequence";
 import { StorySide } from "@/components/story/StorySide";
+import { TornDefs } from "@/components/story/TornPrint";
 import { Navigation } from "@/components/nav/Navigation";
 import { LeafButton, Panel, PanelLabel } from "@/components/ui/Panel";
 import { seedOf } from "@/lib/botany";
@@ -59,6 +60,7 @@ export default function RevealPage() {
     return (
       <div className="flex min-h-dvh flex-col bg-canvas">
         <Navigation />
+      <TornDefs />
         <main className="flex flex-1 items-center justify-center p-8">
           <p className="font-memory text-[20px] italic text-then-faded">
             This page is still waiting for its first story.

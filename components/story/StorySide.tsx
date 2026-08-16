@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { AudioPlayer } from "@/components/audio/AudioPlayer";
 import { HighlightedTranscript } from "@/components/reveal/HighlightedTranscript";
+import { TornPrint } from "./TornPrint";
 import type { Memory, Person } from "@/lib/types";
 
 /**
@@ -61,27 +62,30 @@ export function StorySide({
         </p>
       </header>
 
-      <figure
-        className={`relative w-fit shrink-0 ${
-          isThen
-            ? "border border-bloom-gold/50 bg-[#fbf8f1] p-2.5 shadow-[0_14px_28px_rgba(64,56,47,0.1)]"
-            : "rounded-[8px] bg-white/70 p-2 shadow-[0_12px_30px_rgba(0,0,0,0.05)]"
-        }`}
-        style={{ transform: `rotate(${isThen ? -1.2 : 0.8}deg)` }}
-      >
-        <div
-          className="relative w-[min(44vw,158px)] overflow-hidden"
-          style={{ aspectRatio: "4 / 5", borderRadius: isThen ? 2 : 5 }}
+      {isThen ? (
+        <TornPrint
+          src={memory.photoUrl ?? person.portrait}
+          alt={`${person.name} in ${memory.place}, ${memory.year}`}
+          width={158}
+          height={198}
+          tilt={-1.4}
+        />
+      ) : (
+        <figure
+          className="relative w-fit shrink-0 rounded-[8px] bg-white/70 p-2 shadow-[0_12px_30px_rgba(0,0,0,0.05)]"
+          style={{ transform: "rotate(0.8deg)" }}
         >
-          <Image
-            src={memory.photoUrl ?? person.portrait}
-            alt={`${person.name} in ${memory.place}, ${memory.year}`}
-            fill
-            sizes="158px"
-            className={`object-cover ${isThen ? "archival-photo" : ""}`}
-          />
-        </div>
-      </figure>
+          <div className="relative h-[198px] w-[158px] overflow-hidden rounded-[5px]">
+            <Image
+              src={memory.photoUrl ?? person.portrait}
+              alt={`${person.name} in ${memory.place}, ${memory.year}`}
+              fill
+              sizes="158px"
+              className="object-cover"
+            />
+          </div>
+        </figure>
+      )}
 
       <AudioPlayer memory={memory} side={person.side} />
 

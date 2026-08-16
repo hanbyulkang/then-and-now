@@ -2,55 +2,51 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Seedling } from "@/components/garden/Botanical";
 import { Field } from "@/components/garden/Field";
 import { FlowerMark } from "@/components/garden/Flower";
+import { TornDefs, TornPrint } from "@/components/story/TornPrint";
 import { LeafButton } from "@/components/ui/Panel";
+import { useGarden } from "@/lib/state/garden-provider";
 
 /**
  * The first page.
  *
  * One painted spread, warm where her life is and cooling where yours is, with
- * no line between them. Her photograph is a print with pressed flowers against
- * it; yours is on a screen. Between them the name of the thing, and under it a
- * single seedling in bare earth — the whole garden before anybody has said a
- * word.
+ * no line between them. Her photograph is a print torn out of something and
+ * mounted, with a page of somebody's handwriting showing through behind it and
+ * pressed flowers against it. Yours is on a screen, this year. Between them the
+ * name of the thing and a single seedling in bare earth — the whole garden
+ * before anybody has said a word.
  */
 export default function LandingPage() {
+  const router = useRouter();
+  const { restoreDemoGarden } = useGarden();
+
   return (
     <main className="flex min-h-dvh flex-col bg-canvas">
+      <TornDefs />
       <Field className="min-h-[600px] justify-center">
-        <div className="grid flex-1 grid-cols-1 items-center gap-10 px-6 py-14 md:grid-cols-[1fr_auto_1fr] md:gap-6 md:px-[5%]">
-          {/* Hers: a print, cornered into an album, gone warm. */}
+        <div className="grid flex-1 grid-cols-1 items-center gap-14 px-6 py-16 md:grid-cols-[1fr_auto_1fr] md:gap-6 md:px-[6%]">
           <div className="flex justify-center md:justify-start">
-            <figure
-              className="relative w-fit border border-bloom-gold/50 bg-[#fbf8f1] p-3 shadow-[0_20px_40px_rgba(64,56,47,0.14)] md:p-4"
-              style={{ transform: "rotate(-2deg)" }}
+            <TornPrint
+              src="/assets/photos/grandma-college-1974.jpg"
+              alt="A young woman in a university library, 1974"
+              width={268}
+              height={344}
+              caption="Athens, GA · 1974"
+              tilt={-2.2}
             >
-              <div className="relative h-[248px] w-[196px] overflow-hidden md:h-[348px] md:w-[272px]">
-                <Image
-                  src="/assets/photos/grandma-library-1974.jpg"
-                  alt="A young woman reading in a Seoul library, 1974"
-                  fill
-                  sizes="(max-width: 768px) 196px, 272px"
-                  className="archival-photo object-cover"
-                  priority
-                />
-              </div>
-              <figcaption className="pt-2 text-center text-[10px] uppercase tracking-[0.26em] text-then-faded">
-                Seoul · 1974
-              </figcaption>
-
-              <span className="pointer-events-none absolute -right-9 -top-10">
-                <FlowerMark size={84} seed={3} side="then" />
+              <span className="pointer-events-none absolute -right-10 -top-11">
+                <FlowerMark size={86} seed={3} side="then" />
               </span>
-              <span className="pointer-events-none absolute -bottom-8 -left-9">
+              <span className="pointer-events-none absolute -bottom-6 -left-10">
                 <FlowerMark size={58} seed={12} side="then" />
               </span>
-            </figure>
+            </TornPrint>
           </div>
 
-          {/* The name of it, in the middle where the two worlds meet. */}
           <div className="flex max-w-[32ch] flex-col items-center gap-5 px-2 text-center">
             <h1
               className="font-serif text-[40px] leading-none text-then-ink md:text-[56px]"
@@ -83,26 +79,38 @@ export default function LandingPage() {
                 Start your garden
               </LeafButton>
             </Link>
+
+            {/* For anyone who wants to see one that has already grown. */}
+            <button
+              type="button"
+              onClick={() => {
+                restoreDemoGarden();
+                router.push("/garden");
+              }}
+              className="text-[13px] italic text-then-faded underline-offset-4 transition-colors hover:text-then-ink hover:underline"
+              style={{ textShadow: "0 0 16px #faf7f0" }}
+            >
+              or look around a garden two people already grew →
+            </button>
           </div>
 
-          {/* And hers: on a screen, this year. */}
           <div className="flex justify-center md:justify-end">
             <figure
-              className="relative w-fit rounded-[10px] bg-white/60 p-2.5 shadow-[0_16px_40px_rgba(0,0,0,0.07)] md:p-3"
+              className="relative w-fit rounded-[10px] bg-white/70 p-2.5 shadow-[0_16px_40px_rgba(0,0,0,0.08)] md:p-3"
               style={{ transform: "rotate(1.4deg)" }}
             >
-              <div className="relative h-[248px] w-[196px] overflow-hidden rounded-[6px] md:h-[348px] md:w-[272px]">
+              <div className="relative h-[298px] w-[236px] overflow-hidden rounded-[6px] md:h-[344px] md:w-[268px]">
                 <Image
                   src="/assets/photos/ann-living-2026.jpg"
                   alt="A young woman at home in Seattle, 2026"
                   fill
-                  sizes="(max-width: 768px) 196px, 272px"
+                  sizes="268px"
                   className="object-cover"
                   priority
                 />
               </div>
               <figcaption className="pt-2 text-center text-[10px] uppercase tracking-[0.26em] text-now-slate">
-                Seattle · 2026
+                Seattle, WA · 2026
               </figcaption>
 
               <span className="pointer-events-none absolute -left-10 -top-9">
