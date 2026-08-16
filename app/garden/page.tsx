@@ -34,6 +34,8 @@ function Garden() {
 
   const pair = state.pair;
   const [asking, setAsking] = useState(false);
+  /* The note folds up out of the way when you want to see the garden. */
+  const [noteOpen, setNoteOpen] = useState(true);
   const years = yearsBetween(pair);
 
   return (
@@ -79,32 +81,60 @@ function Garden() {
         ) : status !== "revealed" ? (
           <div className="pointer-events-none relative z-20 flex flex-1 items-start px-5 pt-5 md:items-center md:px-[8%] md:pt-0">
             <Panel className="pointer-events-auto w-full max-w-[300px]">
-              <PanelLabel>Today&apos;s question</PanelLabel>
-              <p className="mt-3 font-serif text-[19px] leading-snug text-then-ink md:text-[21px]">
-                {active.question.text}
-              </p>
+              <div className="flex items-start justify-between gap-4">
+                <PanelLabel>Today&apos;s question</PanelLabel>
+                <button
+                  type="button"
+                  onClick={() => setNoteOpen((v) => !v)}
+                  aria-expanded={noteOpen}
+                  aria-label={
+                    noteOpen
+                      ? "Fold the question away"
+                      : "Open today's question"
+                  }
+                  className="-mr-1 -mt-1 flex size-6 shrink-0 items-center justify-center text-[15px] leading-none text-then-faded transition-colors hover:text-then-ink"
+                >
+                  {noteOpen ? "−" : "+"}
+                </button>
+              </div>
 
-              {viewerHasAnswered ? (
-                <p className="mt-4 text-[12px] leading-relaxed text-then-faded">
-                  You answered
-                  <br />· Waiting for {pair.then.name}
-                </p>
-              ) : (
-                <>
-                  <p className="mt-4 text-[12px] leading-relaxed text-then-faded">
-                    {partnerHasAnswered
-                      ? `${pair.then.name} answered`
-                      : "Nobody has answered yet"}
-                    <br />· Waiting for you
+              {/* Folding on grid rows rather than a measured height: it needs
+                  no layout read, and it animates the same on any content. */}
+              <div
+                className="grid transition-[grid-template-rows] duration-500 ease-[var(--ease-settle)]"
+                style={{ gridTemplateRows: noteOpen ? "1fr" : "0fr" }}
+              >
+                <div
+                  className="overflow-hidden transition-opacity duration-300"
+                  style={{ opacity: noteOpen ? 1 : 0 }}
+                >
+                  <p className="mt-3 font-serif text-[19px] leading-snug text-then-ink md:text-[21px]">
+                    {active.question.text}
                   </p>
-                  <LeafButton
-                    className="mt-4"
-                    onClick={() => router.push("/today")}
-                  >
-                    Answer
-                  </LeafButton>
-                </>
-              )}
+
+                  {viewerHasAnswered ? (
+                    <p className="mt-4 text-[12px] leading-relaxed text-then-faded">
+                      You answered
+                      <br />· Waiting for {pair.then.name}
+                    </p>
+                  ) : (
+                    <>
+                      <p className="mt-4 text-[12px] leading-relaxed text-then-faded">
+                        {partnerHasAnswered
+                          ? `${pair.then.name} answered`
+                          : "Nobody has answered yet"}
+                        <br />· Waiting for you
+                      </p>
+                      <LeafButton
+                        className="mt-4"
+                        onClick={() => router.push("/today")}
+                      >
+                        Answer
+                      </LeafButton>
+                    </>
+                  )}
+                </div>
+              </div>
             </Panel>
           </div>
         ) : null}
