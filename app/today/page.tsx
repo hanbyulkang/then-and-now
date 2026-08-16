@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import { BookSpread, PageHead } from "@/components/book/BookSpread";
-import { Bud } from "@/components/botanical/Bud";
+import { BudMark } from "@/components/garden/Botanical";
 import { Waveform } from "@/components/audio/Waveform";
 import { Icon } from "@/components/ui/Icon";
 import { Navigation } from "@/components/nav/Navigation";
@@ -105,7 +105,9 @@ export default function TodayPage() {
             </blockquote>
 
             <div className="flex items-end gap-5">
-              <Bud width={34} />
+              <svg width="40" height="48" viewBox="-20 -46 40 48" aria-hidden>
+                <BudMark x={0} y={0} length={42} />
+              </svg>
               <p className="max-w-[30ch] text-[13px] leading-relaxed text-then-faded">
                 {pair.then.name} will see this question too. Neither of you sees
                 the other&apos;s page until both are written.

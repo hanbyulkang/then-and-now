@@ -60,6 +60,12 @@ export interface Memory {
   /** "Autumn Semester", "Sophomore Year" — small human context. */
   context: string;
   entities: MemoryEntity[];
+  /**
+   * What the other one said when they first heard it. Not a rating and not a
+   * like — the two answers only record where this memory already stood between
+   * them. "never" means they met a piece of her life for the first time.
+   */
+  heardBefore?: "never" | "remembered";
   createdAt: string;
 }
 
@@ -165,6 +171,18 @@ export function yearsBetween(pair: Pair): number {
 
 export function personById(pair: Pair, id: string): Person {
   return pair.then.id === id ? pair.then : pair.now;
+}
+
+/** The stories one person heard for the first time. */
+export function discoveredBy(
+  state: GardenState,
+  viewerId: string,
+  kind: "never" | "remembered",
+): Memory[] {
+  return state.conversations
+    .flatMap((c) => Object.values(c.memories))
+    .filter((m) => m.personId !== viewerId && m.heardBefore === kind)
+    .sort((a, b) => a.year - b.year);
 }
 
 export function otherPerson(pair: Pair, id: string): Person {

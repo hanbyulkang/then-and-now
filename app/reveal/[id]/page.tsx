@@ -3,40 +3,37 @@
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { BookSpread } from "@/components/book/BookSpread";
-import { FoldBloom } from "@/components/reveal/FoldBloom";
-import { FollowUpBar } from "@/components/reveal/FollowUpBar";
-import { StoryPage } from "@/components/reveal/StoryPage";
-import { atLeast, useRevealSequence } from "@/components/reveal/phases";
+import { HeardBefore } from "@/components/reveal/HeardBefore";
+import { Meeting } from "@/components/reveal/Meeting";
+import { reached, useReveal } from "@/components/reveal/sequence";
+import { MemoryPage } from "@/components/story/MemoryPage";
 import { Navigation } from "@/components/nav/Navigation";
 import { useGarden } from "@/lib/state/garden-provider";
 import type { Connection } from "@/lib/types";
-import { yearsBetween } from "@/lib/types";
 
 /**
- * Reveal.
+ * Two stories, opened together.
  *
- * The book is open at the page where the two of them wrote about the same day.
- * Hers on the left, hers on the right, and for the first few seconds nothing in
- * between — the human words have to land before anything comments on them.
- * Then two stems come up out of the pages, cross over the fold, and a flower
- * opens where they meet.
+ * Her page, your page, and for the first few seconds nothing at all in between
+ * — the words have to land before anything comments on them. Then two stems
+ * come up out of the pages and meet on the binding, and a flower opens that is
+ * half of each of them.
+ *
+ * Afterwards there is one question, and it is not whether you liked it.
  */
 export default function RevealPage() {
   const router = useRouter();
   const { id } = useParams<{ id: string }>();
-  const { state, findConnection, markSeen, askFollowUp } = useGarden();
+  const { state, findConnection, markSeen, markHeard, askFollowUp } =
+    useGarden();
 
   const pair = state.pair;
   const conversation = state.conversations.find((c) => c.id === id);
-
   const [connection, setConnection] = useState<Connection | undefined>(
     conversation?.connection,
   );
   const [looked, setLooked] = useState(false);
-  const [translated, setTranslated] = useState<Record<string, boolean>>({});
 
-  /* Ask whether these two stories share anything before the sequence starts,
-     so the stems never grow toward an empty middle. */
   useEffect(() => {
     let cancelled = false;
     findConnection(id).then((found) => {
@@ -50,11 +47,11 @@ export default function RevealPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
-  const { phase } = useRevealSequence(Boolean(connection));
+  const beat = useReveal(looked);
 
   useEffect(() => {
-    if (atLeast(phase, "followUp")) markSeen(id);
-  }, [phase, id, markSeen]);
+    if (reached(beat, "asked")) markSeen(id);
+  }, [beat, id, markSeen]);
 
   if (!conversation) {
     return (
@@ -71,100 +68,100 @@ export default function RevealPage() {
 
   const thenMemory = conversation.memories[pair.then.id];
   const nowMemory = conversation.memories[pair.now.id];
+  const seed = id.split("").reduce((h, c) => (h * 31 + c.charCodeAt(0)) | 0, 0);
 
   return (
     <div className="flex min-h-dvh flex-col bg-canvas">
       <Navigation />
 
       <p className="sr-only" aria-live="polite">
-        {atLeast(phase, "statement") && connection
+        {reached(beat, "words") && connection
           ? `${connection.headline} ${connection.statement}`
           : "Both stories are open."}
       </p>
 
       <BookSpread
+        className="min-h-[620px]"
         left={
           thenMemory ? (
-            <StoryPage
-              person={pair.then}
-              memory={thenMemory}
-              highlight={connection?.thenHighlight}
-              gloss={
-                atLeast(phase, "highlightThen") ? connection?.thenGloss : undefined
-              }
-              highlightActive={atLeast(phase, "highlightThen")}
-              showTranslation={Boolean(translated[thenMemory.id])}
-              onToggleTranslation={() =>
-                setTranslated((t) => ({
-                  ...t,
-                  [thenMemory.id]: !t[thenMemory.id],
-                }))
-              }
-            />
+            <div className="relative z-20 flex flex-1 flex-col justify-center p-7 md:py-14 md:pl-16 md:pr-[clamp(90px,13vw,200px)]">
+              <MemoryPage
+                person={pair.then}
+                memory={thenMemory}
+                highlight={connection?.thenHighlight}
+                highlightActive={reached(beat, "catchThen")}
+                gloss={
+                  reached(beat, "catchThen") ? connection?.thenGloss : undefined
+                }
+              />
+            </div>
           ) : (
             <span aria-hidden />
           )
         }
         right={
           nowMemory ? (
-            <StoryPage
-              person={pair.now}
-              memory={nowMemory}
-              highlight={connection?.nowHighlight}
-              highlightActive={atLeast(phase, "highlightNow")}
-              showTranslation={Boolean(translated[nowMemory.id])}
-              onToggleTranslation={() =>
-                setTranslated((t) => ({
-                  ...t,
-                  [nowMemory.id]: !t[nowMemory.id],
-                }))
-              }
-            />
+            <div className="relative z-20 flex flex-1 flex-col justify-center p-7 md:py-14 md:pl-[clamp(90px,13vw,200px)] md:pr-16">
+              <MemoryPage
+                person={pair.now}
+                memory={nowMemory}
+                align="right"
+                highlight={connection?.nowHighlight}
+                highlightActive={reached(beat, "catchNow")}
+              />
+            </div>
           ) : (
             <span aria-hidden />
           )
         }
         across={
           connection ? (
-            <FoldBloom
-              phase={phase}
-              connection={connection}
-              yearsApart={yearsBetween(pair)}
+            <Meeting
+              beat={beat}
+              seed={seed}
+              theme={connection.theme}
+              headline={connection.headline}
+              statement={connection.statement}
             />
           ) : null
         }
         atTheFold={
-          connection ? (
-            <FollowUpBar
-              connection={connection}
-              partnerName={pair.then.name}
-              visible={atLeast(phase, "followUpBud")}
-              questionVisible={atLeast(phase, "followUp")}
-              onAsk={() => {
-                askFollowUp(id);
-                router.push(`/garden?bloomed=${id}`);
-              }}
-            />
-          ) : looked ? (
-            /* Nothing shared was found: two stories, kept side by side, and no
-               invented flower between them. */
-            <div className="flex flex-col items-center gap-3 px-6 pb-8 text-center md:pb-10">
-              <p
-                className="font-serif text-[19px] italic text-then-ink md:text-[22px]"
-                style={{ textShadow: "0 0 18px #f2ece0" }}
-              >
-                Two stories, kept side by side.
-              </p>
-              <button
-                type="button"
-                onClick={() => {
-                  markSeen(id);
-                  router.push("/garden");
-                }}
-                className="text-[15px] font-semibold text-bloom-green underline-offset-8 hover:underline"
-              >
-                Back to the garden →
-              </button>
+          reached(beat, "asked") || (looked && !connection) ? (
+            <div className="flex max-w-[46ch] flex-col items-center gap-6 px-6 pb-8 md:pb-11">
+              {/* Whether or not anything was found, you just heard her. */}
+              {thenMemory ? (
+                <HeardBefore
+                  name={pair.then.name}
+                  answer={thenMemory.heardBefore}
+                  onAnswer={(value) => markHeard(thenMemory.id, value)}
+                />
+              ) : null}
+
+              {connection ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    askFollowUp(id);
+                    router.push("/garden");
+                  }}
+                  className="text-[15px] font-semibold text-bloom-green underline-offset-8 transition-colors hover:text-then-ink hover:underline"
+                  style={{ textShadow: "0 0 16px #f2ece0" }}
+                >
+                  A conversation is waiting to bloom →
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => {
+                    markSeen(id);
+                    router.push("/garden");
+                  }}
+                  className="text-[15px] font-semibold text-bloom-green underline-offset-8 hover:underline"
+                  style={{ textShadow: "0 0 16px #f2ece0" }}
+                >
+                  Back to the garden →
+                </button>
+              )}
             </div>
           ) : null
         }

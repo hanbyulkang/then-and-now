@@ -1,100 +1,91 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { Icon } from "@/components/ui/Icon";
 import { useOnboardingDraft } from "@/lib/state/onboarding";
 
-/** 03 — Onboarding: Names. Two fields, written on ruled paper. */
+/**
+ * Two names, written on the page.
+ *
+ * On lines, the way you would write them in the front of a book you were about
+ * to keep together — not into fields in a form.
+ */
 export default function OnboardingNamesPage() {
   const router = useRouter();
   const [draft, update] = useOnboardingDraft();
 
-  const yourName = draft.yourName || "Ann";
-  const theirName = draft.theirName || draft.relationship;
+  const yourName = draft.yourName.trim();
+  const theirName = draft.theirName.trim();
 
   return (
-    <>
+    <main className="flex w-full max-w-[560px] flex-1 flex-col justify-center gap-14 py-16">
+      <div className="flex flex-col gap-3 text-center">
+        <h1 className="font-serif text-[30px] leading-tight text-then-ink md:text-[40px]">
+          Tell us your names.
+        </h1>
+        <p className="font-serif text-[16px] italic text-then-faded md:text-[18px]">
+          This is the beginning of your garden.
+        </p>
+      </div>
+
       <form
-        className="w-full max-w-[640px] rounded-[24px] border border-bloom-gold bg-now-canvas p-7 shadow-[0_16px_16px_rgba(64,56,47,0.06)] md:p-12"
+        className="flex flex-col gap-11"
         onSubmit={(event) => {
           event.preventDefault();
-          update({ yourName, theirName });
+          if (!yourName || !theirName) return;
           router.push("/onboarding/ready");
         }}
       >
-        <div className="flex flex-col items-center gap-3 text-center">
-          <h1 className="font-serif text-[30px] leading-tight text-then-ink md:text-[40px]">
-            Tell us your names.
-          </h1>
-          <p className="text-[15px] text-now-slate md:text-[16px]">
-            This will be the beginning of your garden.
-          </p>
-        </div>
+        <Written
+          label="Your name"
+          value={draft.yourName}
+          placeholder="Ann"
+          onChange={(v) => update({ yourName: v })}
+          autoFocus
+        />
+        <Written
+          label={`${draft.relationship}'s name`}
+          value={draft.theirName}
+          placeholder={draft.relationship}
+          onChange={(v) => update({ theirName: v })}
+        />
 
-        <div className="mt-8 flex flex-col gap-8 md:mt-10">
-          <JournalField
-            label="Your name"
-            icon="leaf"
-            value={draft.yourName}
-            placeholder="Ann"
-            onChange={(v) => update({ yourName: v })}
-          />
-          <JournalField
-            label={`${draft.relationship}'s name`}
-            icon="flower-gold"
-            value={draft.theirName}
-            placeholder={draft.relationship}
-            onChange={(v) => update({ theirName: v })}
-          />
-        </div>
-
-        <div className="mt-8 flex items-center justify-between md:mt-10">
-          <p className="text-[14px] text-now-slate">Step 2 of 3</p>
-          <button
-            type="submit"
-            className="flex items-center gap-2 rounded-[24px] bg-bloom-green py-3.5 pl-9 pr-8 text-[14px] font-semibold text-white transition-colors duration-200 hover:bg-then-sage"
-          >
-            Plant your garden
-            <Icon name="sprout-white" size={16} />
-          </button>
-        </div>
+        <button
+          type="submit"
+          disabled={!yourName || !theirName}
+          className="self-center text-[16px] font-semibold text-bloom-green underline-offset-8 transition-opacity hover:text-then-ink hover:underline disabled:opacity-30"
+        >
+          Plant your garden →
+        </button>
       </form>
-
-      <p className="pt-8 text-center text-[13px] text-now-slate">
-        {yourName} &amp; {theirName}&apos;s garden will be planted in beautiful
-        fertile soil.
-      </p>
-    </>
+    </main>
   );
 }
 
-function JournalField({
+function Written({
   label,
-  icon,
   value,
   placeholder,
   onChange,
+  autoFocus,
 }: {
   label: string;
-  icon: string;
   value: string;
   placeholder: string;
-  onChange: (value: string) => void;
+  onChange(v: string): void;
+  autoFocus?: boolean;
 }) {
   return (
-    <label className="flex w-full flex-col gap-2">
-      <span className="text-[12px] uppercase tracking-wide text-bloom-gold">
+    <label className="flex flex-col gap-3">
+      <span className="text-[11px] uppercase tracking-[0.26em] text-then-faded">
         {label}
       </span>
-      <span className="flex items-center justify-between gap-3 border-b-[1.5px] border-bloom-gold pb-3">
-        <input
-          value={value}
-          onChange={(event) => onChange(event.target.value)}
-          placeholder={placeholder}
-          className="w-full bg-transparent font-memory text-[20px] italic text-then-ink outline-none placeholder:text-then-ink/35 md:text-[22px]"
-        />
-        <Icon name={icon} size={16} />
-      </span>
+      <input
+        value={value}
+        placeholder={placeholder}
+        autoFocus={autoFocus}
+        onChange={(e) => onChange(e.target.value)}
+        className="w-full border-0 border-b border-then-faded/40 bg-transparent pb-2 font-serif text-[26px] text-then-ink outline-none transition-colors placeholder:text-then-faded/40 focus:border-bloom-gold md:text-[30px]"
+      />
     </label>
   );
 }

@@ -1,137 +1,118 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
-import { useMemo, useState } from "react";
-import { AudioPlayer } from "@/components/audio/AudioPlayer";
-import { BookGround, PageYear } from "@/components/book/BookSpread";
-import { NowLeaf, ThenLeaf } from "@/components/garden/Leaf";
-import { SharedFlower } from "@/components/garden/SharedFlower";
+import { useMemo } from "react";
+import { BookGround } from "@/components/book/BookSpread";
+import { Leaf } from "@/components/garden/Botanical";
+import { FlowerMark } from "@/components/garden/Flower";
+import { MemoryPage } from "@/components/story/MemoryPage";
 import { MobileNavSpacer, Navigation } from "@/components/nav/Navigation";
+import { seedOf } from "@/lib/botany";
 import { useGarden } from "@/lib/state/garden-provider";
 import type { Conversation, Memory, Person } from "@/lib/types";
 import { personById } from "@/lib/types";
 
-type Filter = "all" | "then" | "now";
-
-interface Spread {
+/**
+ * Everything you have told each other.
+ *
+ * Not a feed and not a database — the book read straight through. Her life runs
+ * down the left page and yours down the right, the years advancing as you go,
+ * and where two of them turned out to be the same story a stem crosses the fold
+ * between them and carries the flower it opened.
+ *
+ * There is nothing to filter. It is a life, not a table.
+ */
+interface Row {
   id: string;
-  /** Which of the drawn flowers this one opened as. */
   index: number;
-  /** The earlier of the two years — what puts this spread in order. */
   year: number;
   then?: { memory: Memory; person: Person };
   now?: { memory: Memory; person: Person };
   grewInto?: Conversation;
 }
 
-/**
- * Everything you have told each other.
- *
- * The book kept open and read straight through. Her stories run down the left
- * page and yours down the right, and the years advance as you go — set at the
- * head of each entry the way an old book marks them, not plotted on an axis.
- *
- * Where two of them turned out to be the same story, a stem crosses the fold
- * between them.
- */
 export default function StoriesPage() {
   const { state } = useGarden();
-  const [filter, setFilter] = useState<Filter>("all");
   const pair = state.pair;
 
-  const spreads = useMemo<Spread[]>(() => {
-    const rows = state.conversations.map((c, index) => {
-      const sides = Object.values(c.memories).map((memory) => ({
-        memory,
-        person: personById(pair, memory.personId),
-      }));
-      const then = sides.find((s) => s.person.side === "then");
-      const now = sides.find((s) => s.person.side === "now");
-      return {
-        id: c.id,
-        index,
-        year: Math.min(...sides.map((s) => s.memory.year)),
-        then: filter === "now" ? undefined : then,
-        now: filter === "then" ? undefined : now,
-        grewInto: c.connection ? c : undefined,
-      };
-    });
-    return rows
+  const rows = useMemo<Row[]>(() => {
+    return state.conversations
+      .map((c, index) => {
+        const sides = Object.values(c.memories).map((memory) => ({
+          memory,
+          person: personById(pair, memory.personId),
+        }));
+        return {
+          id: c.id,
+          index,
+          year: Math.min(...sides.map((s) => s.memory.year), 9999),
+          then: sides.find((s) => s.person.side === "then"),
+          now: sides.find((s) => s.person.side === "now"),
+          grewInto: c.connection ? c : undefined,
+        };
+      })
       .filter((r) => r.then || r.now)
       .sort((a, b) => a.year - b.year);
-  }, [state.conversations, filter, pair]);
-
-  const filters: { id: Filter; label: string }[] = [
-    { id: "all", label: "Everything" },
-    { id: "then", label: pair.then.name },
-    { id: "now", label: pair.now.name },
-  ];
+  }, [state.conversations, pair]);
 
   return (
     <div className="flex min-h-dvh flex-col bg-canvas">
       <Navigation />
 
       <BookGround>
-        <header className="flex flex-col items-start gap-5 px-7 pb-4 pt-12 md:px-14">
-          <h1 className="max-w-[20ch] font-serif text-[32px] leading-tight text-then-ink md:text-[44px]">
+        <header className="flex flex-col items-center gap-4 px-7 pb-2 pt-14 text-center">
+          <h1 className="max-w-[22ch] font-serif text-[32px] leading-tight text-then-ink md:text-[44px]">
             Everything you&apos;ve told each other
           </h1>
-          <div className="flex flex-wrap gap-6">
-            {filters.map((f) => (
-              <button
-                key={f.id}
-                type="button"
-                onClick={() => setFilter(f.id)}
-                aria-pressed={filter === f.id}
-                className={`text-[14px] underline-offset-8 transition-colors duration-200 ${
-                  filter === f.id
-                    ? "font-semibold text-then-ink underline decoration-bloom-gold decoration-2"
-                    : "text-now-slate hover:text-then-faded"
-                }`}
-              >
-                {f.label}
-              </button>
-            ))}
-          </div>
+          <Link
+            href="/stories/discovered"
+            className="group flex items-center gap-2.5 text-[14px] italic text-then-faded transition-colors hover:text-then-ink"
+          >
+            <svg width="26" height="22" viewBox="-13 -20 26 22" aria-hidden>
+              <Leaf side="then" x={0} y={0} length={20} angle={-120} sway={false} />
+            </svg>
+            Stories I discovered →
+          </Link>
         </header>
 
         <ol className="flex flex-col">
-          {spreads.map((spread) => (
+          {rows.map((row) => (
             <li
-              key={spread.id}
+              key={row.id}
               className="relative grid grid-cols-1 gap-y-14 py-14 md:grid-cols-2 md:py-20"
             >
-              <div className="px-7 md:pl-14 md:pr-[clamp(70px,9vw,130px)]">
-                {spread.then ? (
-                  <Entry {...spread.then} />
+              <div className="px-7 md:pl-14 md:pr-[clamp(70px,9vw,140px)]">
+                {row.then ? (
+                  <MemoryPage person={row.then.person} memory={row.then.memory} />
+                ) : (
+                  <span aria-hidden />
+                )}
+              </div>
+              <div className="px-7 md:pl-[clamp(70px,9vw,140px)] md:pr-14">
+                {row.now ? (
+                  <MemoryPage
+                    person={row.now.person}
+                    memory={row.now.memory}
+                    align="right"
+                  />
                 ) : (
                   <span aria-hidden />
                 )}
               </div>
 
-              <div className="px-7 md:pl-[clamp(70px,9vw,130px)] md:pr-14">
-                {spread.now ? (
-                  <Entry {...spread.now} align="right" />
-                ) : (
-                  <span aria-hidden />
-                )}
-              </div>
-
-              {/* The two of them turned out to be the same story. */}
-              {spread.grewInto?.connection ? (
-                <CrossingStem
-                  href={`/memory/${spread.grewInto.id}`}
-                  theme={spread.grewInto.connection.theme}
-                  variant={spread.index}
-                  paired={Boolean(spread.then && spread.now)}
+              {row.grewInto?.connection ? (
+                <Crossing
+                  href={`/memory/${row.grewInto.id}`}
+                  theme={row.grewInto.connection.theme}
+                  seed={seedOf(row.grewInto.id)}
+                  paired={Boolean(row.then && row.now)}
                 />
               ) : null}
             </li>
           ))}
         </ol>
 
-        {spreads.length === 0 ? (
+        {rows.length === 0 ? (
           <p className="py-28 text-center font-serif text-[22px] italic text-then-faded">
             This page is still waiting for its first story.
           </p>
@@ -147,112 +128,43 @@ export default function StoriesPage() {
   );
 }
 
-function Entry({
-  memory,
-  person,
-  align = "left",
-}: {
-  memory: Memory;
-  person: Person;
-  align?: "left" | "right";
-}) {
-  const isThen = person.side === "then";
-
-  return (
-    <article
-      className={`flex flex-col gap-6 ${align === "right" ? "items-end text-right" : ""}`}
-    >
-      <PageYear
-        side={person.side}
-        year={memory.year}
-        place={`${memory.place} · ${person.name} · Age ${memory.age}`}
-      />
-
-      {memory.photoUrl ? (
-        <figure
-          className={`relative w-fit ${
-            isThen
-              ? "border border-bloom-gold/60 bg-canvas p-2.5 shadow-[0_16px_28px_rgba(64,56,47,0.09)]"
-              : "rounded-[10px] p-2 shadow-[0_14px_34px_rgba(0,0,0,0.04)]"
-          }`}
-          style={{ transform: `rotate(${isThen ? -1.3 : 0.8}deg)` }}
-        >
-          <div
-            className="relative w-[min(64vw,300px)] overflow-hidden"
-            style={{ aspectRatio: "4 / 5", borderRadius: isThen ? 2 : 6 }}
-          >
-            <Image
-              src={memory.photoUrl}
-              alt={`${person.name} in ${memory.place}, ${memory.year}`}
-              fill
-              sizes="300px"
-              className={`object-cover ${isThen ? "archival-photo" : ""}`}
-            />
-          </div>
-        </figure>
-      ) : null}
-
-      <blockquote
-        className={
-          isThen
-            ? "max-w-[40ch] font-memory text-[19px] italic leading-[1.7] text-then-ink md:text-[21px]"
-            : "max-w-[40ch] text-[18px] leading-[1.75] text-now-charcoal md:text-[20px]"
-        }
-      >
-        &ldquo;{memory.transcript}&rdquo;
-      </blockquote>
-
-      <AudioPlayer
-        memory={memory}
-        side={person.side}
-        compact
-        label={`Hear ${person.name} tell it`}
-      />
-    </article>
-  );
-}
-
-/**
- * What the two halves grew into, drawn in the gutter between them: a stem
- * crossing the fold with the flower it opened standing on it.
- */
-function CrossingStem({
+/** What the two halves grew into, standing in the gutter between them. */
+function Crossing({
   href,
   theme,
-  variant,
+  seed,
   paired,
 }: {
   href: string;
   theme: string;
-  variant: number;
-  /** Only one of them told this one, so there is nothing to cross. */
+  seed: number;
   paired: boolean;
 }) {
   return (
     <Link
       href={href}
-      className={`group left-1/2 top-1/2 flex flex-col items-center gap-1.5 ${
+      className={`group flex flex-col items-center gap-1.5 ${
         paired
-          ? "max-md:hidden md:absolute md:-translate-x-1/2 md:-translate-y-1/2"
+          ? "left-1/2 top-1/2 max-md:hidden md:absolute md:-translate-x-1/2 md:-translate-y-1/2"
           : "col-span-full justify-self-center pt-4"
       }`}
     >
       {paired ? (
-        <svg width="196" height="60" viewBox="0 0 196 60" aria-hidden>
+        <svg width="210" height="46" viewBox="0 0 210 46" aria-hidden>
           <path
-            d="M 6 16 C 44 34, 62 50, 98 36 S 150 16, 190 38"
-            stroke="#43392f"
-            strokeWidth="1.6"
+            d="M 6 14 C 48 34, 68 44, 105 32 S 162 12, 204 34"
+            stroke="#a3936f"
+            strokeWidth="2"
             strokeLinecap="round"
             fill="none"
-            opacity={0.55}
+            opacity={0.7}
           />
-          <ThenLeaf x={52} y={34} length={26} angle={-146} />
-          <NowLeaf x={146} y={22} length={24} angle={34} />
+          <Leaf side="then" x={54} y={33} length={28} angle={-148} sway={false} />
+          <Leaf side="now" x={156} y={22} length={26} angle={32} sway={false} />
         </svg>
       ) : null}
 
-      <SharedFlower size={paired ? 62 : 54} variant={variant} />
+      <FlowerMark size={paired ? 78 : 64} seed={seed} />
 
       <span
         className="pt-1 text-[12px] italic text-then-faded transition-colors group-hover:text-then-ink"

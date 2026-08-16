@@ -33,6 +33,11 @@ type Action =
       connection: Connection;
     }
   | { type: "mark-seen"; conversationId: string }
+  | {
+      type: "mark-heard";
+      memoryId: string;
+      heardBefore: "never" | "remembered";
+    }
   | { type: "ask-follow-up"; conversation: Conversation }
   | { type: "set-pair"; pair: Pair };
 
@@ -79,6 +84,25 @@ function reducer(state: GardenState, action: Action): GardenState {
         ),
       };
 
+    case "mark-heard":
+      return {
+        ...state,
+        conversations: state.conversations.map((c) => {
+          const entry = Object.entries(c.memories).find(
+            ([, m]) => m.id === action.memoryId,
+          );
+          if (!entry) return c;
+          const [personId, memory] = entry;
+          return {
+            ...c,
+            memories: {
+              ...c.memories,
+              [personId]: { ...memory, heardBefore: action.heardBefore },
+            },
+          };
+        }),
+      };
+
     case "ask-follow-up":
       return {
         ...state,
@@ -104,6 +128,8 @@ interface GardenContextValue {
   /** Looks for a shared thread. Returns undefined when nothing real is found. */
   findConnection(conversationId: string): Promise<Connection | undefined>;
   markSeen(conversationId: string): void;
+  /** Records where a story already stood between them. Never a rating. */
+  markHeard(memoryId: string, heardBefore: "never" | "remembered"): void;
   askFollowUp(conversationId: string): void;
   startFreshGarden(pair?: Pair): void;
   restoreDemoGarden(): void;
@@ -154,6 +180,13 @@ export function GardenProvider({ children }: { children: ReactNode }) {
   const markSeen = useCallback((conversationId: string) => {
     dispatch({ type: "mark-seen", conversationId });
   }, []);
+
+  const markHeard = useCallback(
+    (memoryId: string, heardBefore: "never" | "remembered") => {
+      dispatch({ type: "mark-heard", memoryId, heardBefore });
+    },
+    [],
+  );
 
   const findConnection = useCallback(
     async (conversationId: string) => {
@@ -233,6 +266,7 @@ export function GardenProvider({ children }: { children: ReactNode }) {
       addMemory,
       findConnection,
       markSeen,
+      markHeard,
       askFollowUp,
       startFreshGarden,
       restoreDemoGarden,
@@ -244,6 +278,7 @@ export function GardenProvider({ children }: { children: ReactNode }) {
     addMemory,
     findConnection,
     markSeen,
+    markHeard,
     askFollowUp,
     startFreshGarden,
     restoreDemoGarden,
