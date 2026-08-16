@@ -43,7 +43,7 @@ export default function MeetHerPage() {
             <h1 className="font-serif text-[26px] text-then-ink md:text-[32px]">
               {pair.then.name} at {AGE}
             </h1>
-            <div className="flex items-start gap-5">
+            <div className="flex flex-col items-center gap-5 sm:flex-row sm:items-start">
               <TornPrint
                 src="/assets/photos/grandma-window-1976.jpg"
                 alt={`${pair.then.name} at ${AGE}`}
@@ -51,7 +51,7 @@ export default function MeetHerPage() {
                 height={262}
                 tilt={-1.6}
               />
-              <ul className="flex flex-col gap-3 pt-2">
+              <ul className="flex flex-col gap-3 pt-2 max-sm:text-center">
                 {HERS.map((fact) => (
                   <li
                     key={fact}
@@ -94,12 +94,12 @@ export default function MeetHerPage() {
             <h2 className="font-serif text-[26px] text-then-ink md:text-[32px]">
               {pair.now.name} at {AGE}
             </h2>
-            <div className="flex items-start gap-5">
-              <ul className="flex flex-col gap-3 pt-2 text-right">
+            <div className="flex flex-col items-center gap-5 sm:flex-row sm:items-start">
+              <ul className="flex flex-col gap-3 pt-2 max-sm:order-2 max-sm:text-center sm:text-right">
                 {YOURS.map((fact) => (
                   <li
                     key={fact}
-                    className="ml-auto max-w-[13ch] text-[13px] leading-snug text-now-slate md:text-[14px]"
+                    className="max-w-[13ch] sm:ml-auto text-[13px] leading-snug text-now-slate md:text-[14px]"
                   >
                     {fact}
                   </li>

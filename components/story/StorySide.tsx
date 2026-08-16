@@ -36,7 +36,7 @@ export function StorySide({
     <article
       className={`flex flex-col gap-4 ${right ? "items-end text-right" : "items-start"}`}
     >
-      <header className={`flex flex-col gap-1 ${right ? "items-end" : ""}`}>
+      <header className={`flex flex-col gap-1 ${right ? "md:items-end" : ""}`}>
         <p
           className={`text-[10px] uppercase tracking-[0.3em] ${
             isThen ? "text-then-faded" : "text-now-slate"
