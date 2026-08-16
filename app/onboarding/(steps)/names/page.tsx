@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { LeafButton } from "@/components/ui/Panel";
 import { useOnboardingDraft } from "@/lib/state/onboarding";
 
 /**
@@ -49,13 +50,13 @@ export default function OnboardingNamesPage() {
           onChange={(v) => update({ theirName: v })}
         />
 
-        <button
+        <LeafButton
           type="submit"
           disabled={!yourName || !theirName}
-          className="self-center text-[16px] font-semibold text-bloom-green underline-offset-8 transition-opacity hover:text-then-ink hover:underline disabled:opacity-30"
+          className="self-center px-7 py-3 text-[14px]"
         >
-          Plant your garden →
-        </button>
+          Plant your garden
+        </LeafButton>
       </form>
     </main>
   );

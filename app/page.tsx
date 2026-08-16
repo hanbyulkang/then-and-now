@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { BookSpread } from "@/components/book/BookSpread";
+import { LeafButton } from "@/components/ui/Panel";
 import { Seedling } from "@/components/garden/Botanical";
 import { FlowerMark } from "@/components/garden/Flower";
 
@@ -103,12 +104,10 @@ export default function LandingPage() {
               <Seedling x={0} y={0} length={72} />
             </svg>
 
-            <Link
-              href="/onboarding/who"
-              className="text-[16px] font-semibold text-bloom-green underline-offset-8 transition-colors hover:text-then-ink hover:underline"
-              style={{ textShadow: "0 0 18px #f2ece0, 0 0 32px #f2ece0" }}
-            >
-              Start your garden →
+            <Link href="/onboarding/who">
+              <LeafButton className="px-7 py-3 text-[14px]">
+                Start your garden
+              </LeafButton>
             </Link>
           </div>
         }

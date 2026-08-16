@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { BookSpread } from "@/components/book/BookSpread";
 import { Seedling } from "@/components/garden/Botanical";
+import { LeafButton } from "@/components/ui/Panel";
 import { DEMO_PAIR, freshGarden } from "@/lib/demo-data";
 import { useGarden } from "@/lib/state/garden-provider";
 import { useOnboardingDraft } from "@/lib/state/onboarding";
@@ -101,17 +102,15 @@ export default function GardenBeginsPage() {
               >
                 &ldquo;{firstQuestion}&rdquo;
               </p>
-              <button
-                type="button"
+              <LeafButton
+                className="mt-2 px-7 py-3 text-[14px]"
                 onClick={() => {
                   startFreshGarden(pair);
                   router.push("/today");
                 }}
-                className="mt-1 text-[16px] font-semibold text-bloom-green underline-offset-8 transition-colors hover:text-then-ink hover:underline"
-                style={{ textShadow: "0 0 16px #f2ece0" }}
               >
-                Plant the first story →
-              </button>
+                Plant the first story
+              </LeafButton>
             </div>
           </div>
         }
