@@ -49,7 +49,7 @@ function Garden() {
         </span>
       </p>
 
-      <Field className="min-h-[520px]">
+      <Field className="min-h-[560px] md:min-h-[520px]">
         <div className="absolute inset-0">
           <GardenPlot
             state={state}
@@ -77,7 +77,7 @@ function Garden() {
             </Panel>
           </div>
         ) : status !== "revealed" ? (
-          <div className="pointer-events-none relative z-20 flex flex-1 items-center px-6 md:px-[8%]">
+          <div className="pointer-events-none relative z-20 flex flex-1 items-start px-5 pt-5 md:items-center md:px-[8%] md:pt-0">
             <Panel className="pointer-events-auto w-full max-w-[300px]">
               <PanelLabel>Today&apos;s question</PanelLabel>
               <p className="mt-3 font-serif text-[19px] leading-snug text-then-ink md:text-[21px]">

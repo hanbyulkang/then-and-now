@@ -234,20 +234,27 @@ export function Garden({
 
   const box = useRef<HTMLDivElement>(null);
   const [height, setHeight] = useState(760);
+  /* On a narrow screen the whole width would shrink a flower to a thumbnail,
+     so the view moves in on the middle of the garden instead of fitting all of
+     it — the same drawing, closer to. */
+  const [view, setView] = useState({ x: 0, w: SCENE_WIDTH });
+
   useEffect(() => {
     const el = box.current;
     if (!el) return;
     const observer = new ResizeObserver(([entry]) => {
       const { width, height: h } = entry.contentRect;
-      if (width > 0) {
-        setHeight(
-          Math.round(Math.min(1500, Math.max(480, (h / width) * SCENE_WIDTH))),
-        );
-      }
+      if (width <= 0) return;
+      const w = width < 560 ? 720 : width < 820 ? 1040 : SCENE_WIDTH;
+      setView({ x: (SCENE_WIDTH - w) / 2, w });
+      setHeight(Math.round(Math.min(1500, Math.max(480, (h / width) * w))));
     });
     observer.observe(el);
     return () => observer.disconnect();
   }, []);
+
+  /* Scene coordinates, as a share of what is actually on screen. */
+  const across = (x: number) => `${((x - view.x) / view.w) * 100}%`;
 
   const scene = useMemo(() => growGarden(state, height), [state, height]);
   const { ground } = scene;
@@ -255,7 +262,7 @@ export function Garden({
   return (
     <div ref={box} className="relative size-full overflow-hidden">
       <svg
-        viewBox={`0 0 ${SCENE_WIDTH} ${scene.height}`}
+        viewBox={`${view.x} 0 ${view.w} ${scene.height}`}
         preserveAspectRatio="none"
         className="absolute inset-0 size-full"
         aria-hidden
@@ -315,7 +322,7 @@ export function Garden({
           onClick={onOpenQuestion}
           className="absolute z-20 -translate-x-1/2 -translate-y-full"
           style={{
-            left: `${(scene.waiting.x / SCENE_WIDTH) * 100}%`,
+            left: across(scene.waiting.x),
             top: `${(scene.waiting.y / scene.height) * 100}%`,
             opacity: grown ? 1 : 0,
             transition: "opacity 900ms ease 900ms",
@@ -336,7 +343,7 @@ export function Garden({
           key={bloom.id}
           className="pointer-events-none absolute -translate-x-1/2 whitespace-nowrap font-serif text-[13px] italic md:text-[15px]"
           style={{
-            left: `${(bloom.x / SCENE_WIDTH) * 100}%`,
+            left: across(bloom.x),
             top: `${((bloom.y + bloom.size * 0.56) / scene.height) * 100}%`,
             color:
               (focused && focused !== bloom.id) || (near && near !== bloom.id)
@@ -366,7 +373,7 @@ export function Garden({
             key={`note-${bloom.id}`}
             className="animate-rise-in pointer-events-none absolute z-30 w-[270px] -translate-x-1/2"
             style={{
-              left: `${Math.min(84, Math.max(16, (bloom.x / SCENE_WIDTH) * 100))}%`,
+              left: `${Math.min(82, Math.max(18, ((bloom.x - view.x) / view.w) * 100))}%`,
               top: `${((bloom.y + bloom.size * 0.66) / scene.height) * 100}%`,
             }}
           >

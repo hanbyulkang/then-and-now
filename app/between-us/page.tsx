@@ -181,35 +181,40 @@ function Entry({
         className="group flex flex-col items-center gap-1 px-4"
         style={{ transform: `translateY(${drift * 0.35}px)` }}
       >
-        {/* The two lines that fed it, coming in from either page. */}
-        <svg
-          width="230"
-          height="30"
-          viewBox="0 0 230 30"
-          className="max-md:hidden"
-          aria-hidden
-        >
-          <path
-            d="M 2 25 C 44 27, 72 12, 112 16"
-            stroke="#a3936f"
-            strokeWidth="1.8"
-            fill="none"
-            strokeLinecap="round"
-            opacity={0.75}
-          />
-          <path
-            d="M 228 25 C 186 27, 158 12, 118 16"
-            stroke="#9aab96"
-            strokeWidth="1.5"
-            fill="none"
-            strokeLinecap="round"
-            opacity={0.75}
-          />
-          <Leaf side="then" x={60} y={23} length={22} angle={-140} sway={false} />
-          <Leaf side="now" x={170} y={23} length={20} angle={-40} sway={false} />
-        </svg>
+        {/* The two stems that fed it come in from either page and meet under
+            the flower, so the flower stands on them rather than beneath them. */}
+        <span className="relative flex items-center justify-center">
+          <svg
+            width="280"
+            height="60"
+            viewBox="0 0 280 60"
+            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 max-md:hidden"
+            aria-hidden
+          >
+            <path
+              d="M 2 50 C 46 52, 92 40, 138 31"
+              stroke="#a3936f"
+              strokeWidth="2"
+              fill="none"
+              strokeLinecap="round"
+              opacity={0.8}
+            />
+            <path
+              d="M 278 50 C 234 52, 188 40, 142 31"
+              stroke="#9aab96"
+              strokeWidth="1.7"
+              fill="none"
+              strokeLinecap="round"
+              opacity={0.8}
+            />
+            <Leaf side="then" x={64} y={48} length={24} angle={-140} sway={false} />
+            <Leaf side="now" x={216} y={48} length={22} angle={-40} sway={false} />
+          </svg>
 
-        <FlowerMark size={size} seed={seed} />
+          <span className="relative">
+            <FlowerMark size={size} seed={seed} />
+          </span>
+        </span>
         <span className="font-serif text-[15px] italic text-then-ink md:text-[17px]">
           {connection.theme}
         </span>
