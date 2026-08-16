@@ -198,6 +198,7 @@ const conversations: Conversation[] = [
     memories: {
       [GRANDMA_ID]: thenMemory(THE_CALL_ID, {
         id: "m_grandma_call",
+        heardBefore: "never",
         transcript:
           "일 끝나고 힘든 날에는 꼭 엄마한테 전화했어. 별 얘기도 안 했는데, 엄마 목소리만 들어도 마음이 놓였단다.",
         translation:
@@ -250,6 +251,7 @@ const conversations: Conversation[] = [
     memories: {
       [GRANDMA_ID]: thenMemory(BECOMING_ID, {
         id: "m_grandma_becoming",
+        heardBefore: "never",
         photoUrl: "/assets/photos/grandma-library-1974.jpg",
         transcript:
           "선생님이 되고 싶었어. 아이들이 무슨 생각을 하는지 알고 싶었거든. 결국 다른 길로 갔지만 그 마음은 안 변했어.",
@@ -307,6 +309,7 @@ const conversations: Conversation[] = [
     memories: {
       [GRANDMA_ID]: thenMemory(RECIPE_ID, {
         id: "m_grandma_recipe",
+        heardBefore: "remembered",
         transcript:
           "엄마한테 처음 배운 건 미역국이었어. 생일에 끓이는 거라고, 물 양이 제일 중요하다고 하셨지.",
         translation:
