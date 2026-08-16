@@ -27,12 +27,15 @@ export function PaperSpread({
   return (
     <section className={`relative flex flex-1 flex-col ${className}`}>
       <div
-        className="paper-grain absolute inset-y-0 left-0 right-1/2 bg-[#e9e0cd]"
+        className="paper-grain absolute inset-x-0 top-0 bottom-1/2 bg-[#e9e0cd] md:inset-y-0 md:bottom-auto md:left-0 md:right-1/2 md:h-auto"
         aria-hidden
       />
-      <div className="absolute inset-y-0 left-1/2 right-0 bg-[#fcfbf8]" aria-hidden />
       <div
-        className="absolute inset-y-0 left-1/2 w-[120px] -translate-x-1/2 bg-[linear-gradient(90deg,rgba(233,224,205,0)_0%,rgba(233,224,205,0.9)_36%,rgba(252,251,248,0.9)_64%,rgba(252,251,248,0)_100%)]"
+        className="absolute inset-x-0 bottom-0 top-1/2 bg-[#fcfbf8] md:inset-y-0 md:left-1/2 md:right-0 md:top-auto"
+        aria-hidden
+      />
+      <div
+        className="absolute inset-x-0 top-1/2 h-[110px] -translate-y-1/2 bg-[linear-gradient(180deg,rgba(233,224,205,0)_0%,rgba(233,224,205,0.9)_36%,rgba(252,251,248,0.9)_64%,rgba(252,251,248,0)_100%)] md:inset-y-0 md:left-1/2 md:top-auto md:h-auto md:w-[120px] md:-translate-x-1/2 md:translate-y-0 md:bg-[linear-gradient(90deg,rgba(233,224,205,0)_0%,rgba(233,224,205,0.9)_36%,rgba(252,251,248,0.9)_64%,rgba(252,251,248,0)_100%)]"
         aria-hidden
       />
       <div className="relative flex flex-1 flex-col">{children}</div>

@@ -62,7 +62,7 @@ export function Meeting({
   });
 
   return (
-    <div className="pointer-events-none absolute inset-0" aria-hidden>
+    <div className="pointer-events-none absolute inset-0 max-md:hidden" aria-hidden>
       {/* What the picture is about to prove, set above it. */}
       <div
         className="absolute inset-x-0 flex flex-col items-center gap-1 px-6 text-center"
