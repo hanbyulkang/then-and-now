@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { BudMark, Leaf, Seedling } from "./Botanical";
 import { HybridFlower, SideFlower } from "./Flower";
 import { PaintDefs, Stem } from "./Paint";
+import { Panel } from "@/components/ui/Panel";
 import { cubicAngle, cubicPoint } from "@/lib/garden-layout";
 import {
   FOLD,
@@ -133,12 +134,16 @@ function BloomBody({
   index,
   dim,
   onOpen,
+  onEnter,
+  onLeave,
 }: {
   bloom: Bloom;
   grown: boolean;
   index: number;
   dim: boolean;
   onOpen(): void;
+  onEnter(): void;
+  onLeave(): void;
 }) {
   const delay = 300 + index * 240;
   return (
@@ -184,6 +189,10 @@ function BloomBody({
         onKeyDown={(e) => {
           if (e.key === "Enter" || e.key === " ") onOpen();
         }}
+        onMouseEnter={onEnter}
+        onMouseLeave={onLeave}
+        onFocus={onEnter}
+        onBlur={onLeave}
         role="button"
         tabIndex={0}
         style={{ cursor: "pointer" }}
@@ -216,6 +225,8 @@ export function Garden({
   focused?: string | null;
 }) {
   const [grown, setGrown] = useState(false);
+  /* What you are leaning toward. */
+  const [near, setNear] = useState<string | null>(null);
   useEffect(() => {
     const t = window.setTimeout(() => setGrown(true), 80);
     return () => window.clearTimeout(t);
@@ -287,8 +298,13 @@ export function Garden({
             bloom={bloom}
             index={i}
             grown={grown}
-            dim={Boolean(focused) && focused !== bloom.id}
+            dim={
+              (Boolean(focused) && focused !== bloom.id) ||
+              (Boolean(near) && near !== bloom.id)
+            }
             onOpen={() => onOpenBloom(bloom.id)}
+            onEnter={() => setNear(bloom.id)}
+            onLeave={() => setNear((v) => (v === bloom.id ? null : v))}
           />
         ))}
       </svg>
@@ -322,7 +338,10 @@ export function Garden({
           style={{
             left: `${(bloom.x / SCENE_WIDTH) * 100}%`,
             top: `${((bloom.y + bloom.size * 0.56) / scene.height) * 100}%`,
-            color: focused && focused !== bloom.id ? "#b9ab92" : "#4a4136",
+            color:
+              (focused && focused !== bloom.id) || (near && near !== bloom.id)
+                ? "#b9ab92"
+                : "#4a4136",
             opacity: grown ? 1 : 0,
             transition: "opacity 900ms ease 1300ms, color 400ms ease",
             textShadow: "0 0 12px #f2ece0, 0 0 22px #f2ece0",
@@ -331,6 +350,61 @@ export function Garden({
           {bloom.theme}
         </span>
       ))}
+
+      {/* What a flower says when you lean toward it: both of them, both
+          places, and the one line they turned out to share. */}
+      {scene.blooms.map((bloom) => {
+        if (near !== bloom.id) return null;
+        const conversation = state.conversations.find((c) => c.id === bloom.id);
+        const connection = conversation?.connection;
+        if (!connection) return null;
+        const hers = conversation?.memories[state.pair.then.id];
+        const yours = conversation?.memories[state.pair.now.id];
+
+        return (
+          <div
+            key={`note-${bloom.id}`}
+            className="animate-rise-in pointer-events-none absolute z-30 w-[270px] -translate-x-1/2"
+            style={{
+              left: `${Math.min(84, Math.max(16, (bloom.x / SCENE_WIDTH) * 100))}%`,
+              top: `${((bloom.y + bloom.size * 0.66) / scene.height) * 100}%`,
+            }}
+          >
+            <Panel className="px-5 py-4 text-left">
+              <h3 className="font-serif text-[19px] leading-tight text-then-ink">
+                {connection.theme}
+              </h3>
+
+              <dl className="mt-2.5 flex flex-col gap-1 text-[11px]">
+                {hers ? (
+                  <div className="flex items-baseline justify-between gap-3">
+                    <dt className="text-then-faded">{state.pair.then.name}</dt>
+                    <dd className="text-then-faded/75">
+                      {hers.place} · {hers.year}
+                    </dd>
+                  </div>
+                ) : null}
+                {yours ? (
+                  <div className="flex items-baseline justify-between gap-3">
+                    <dt className="text-now-slate">{state.pair.now.name}</dt>
+                    <dd className="text-now-slate/75">
+                      {yours.place} · {yours.year}
+                    </dd>
+                  </div>
+                ) : null}
+              </dl>
+
+              <p className="mt-3 border-t border-bloom-gold/25 pt-3 font-serif text-[14px] italic leading-snug text-then-ink">
+                {connection.headline} {connection.statement}
+              </p>
+
+              <p className="mt-2.5 text-[12px] text-bloom-green">
+                Hear this story →
+              </p>
+            </Panel>
+          </div>
+        );
+      })}
     </div>
   );
 }

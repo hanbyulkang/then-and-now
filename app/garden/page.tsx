@@ -63,8 +63,8 @@ function Garden() {
 
         {/* When both are in, the garden stops and says so in the middle of it. */}
         {status === "ready" ? (
-          <div className="relative z-20 flex flex-1 items-center justify-center px-6">
-            <Panel className="flex w-full max-w-[280px] flex-col items-center gap-4 py-8 text-center">
+          <div className="pointer-events-none relative z-20 flex flex-1 items-center justify-center px-6">
+            <Panel className="pointer-events-auto flex w-full max-w-[280px] flex-col items-center gap-4 py-8 text-center">
               <svg width="56" height="66" viewBox="-28 -62 56 66" aria-hidden>
                 <BudMark x={0} y={0} length={58} />
               </svg>
@@ -77,8 +77,8 @@ function Garden() {
             </Panel>
           </div>
         ) : status !== "revealed" ? (
-          <div className="relative z-20 flex flex-1 items-center px-6 md:px-[8%]">
-            <Panel className="w-full max-w-[300px]">
+          <div className="pointer-events-none relative z-20 flex flex-1 items-center px-6 md:px-[8%]">
+            <Panel className="pointer-events-auto w-full max-w-[300px]">
               <PanelLabel>Today&apos;s question</PanelLabel>
               <p className="mt-3 font-serif text-[19px] leading-snug text-then-ink md:text-[21px]">
                 {active.question.text}

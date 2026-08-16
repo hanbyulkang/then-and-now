@@ -21,7 +21,10 @@ import type {
 } from "../types";
 import { conversationStatus, personById } from "../types";
 
-const STORAGE_KEY = "then-and-now:garden:v1";
+/* Bumped when the shape or the seeded family changes: a garden saved against
+   the old one would otherwise come back to life with somebody else's life in
+   it. */
+const STORAGE_KEY = "then-and-now:garden:v2";
 
 type Action =
   | { type: "hydrate"; state: GardenState }
